@@ -1,10 +1,13 @@
 import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Link } from "react-router";
+
 import Badge from "../ui/Badge";
 import Button from "../ui/Button";
 
 function ProductCard({ product }) {
     const {
         name,
+        slug,
         category,
         price,
         comparePrice,
@@ -17,21 +20,21 @@ function ProductCard({ product }) {
 
     return (
         <article className="group overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-            {/* Image */}
+            {/* Product Image */}
             <div className="relative aspect-square overflow-hidden bg-surface-soft">
-                <img
-                    src={image}
-                    alt={name}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                />
+                <Link to={`/products/${slug}`} aria-label={`View ${name}`}>
+                    <img
+                        src={image}
+                        alt={name}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+                </Link>
 
                 {/* Discount */}
                 {discount > 0 && (
                     <div className="absolute left-3 top-3">
-                        <Badge variant="danger">
-                            -{discount}%
-                        </Badge>
+                        <Badge variant="danger">-{discount}%</Badge>
                     </div>
                 )}
 
@@ -45,14 +48,21 @@ function ProductCard({ product }) {
                 </button>
             </div>
 
-            {/* Content */}
+            {/* Product Content */}
             <div className="p-5">
+                {/* Category */}
                 <p className="text-xs font-semibold uppercase tracking-wider text-brand-purple">
                     {category}
                 </p>
 
+                {/* Product Name */}
                 <h2 className="mt-2 text-lg font-bold text-text-primary">
-                    {name}
+                    <Link
+                        to={`/products/${slug}`}
+                        className="transition hover:text-brand-purple"
+                    >
+                        {name}
+                    </Link>
                 </h2>
 
                 {/* Rating */}
@@ -65,9 +75,7 @@ function ProductCard({ product }) {
                         </span>
                     </div>
 
-                    <span className="text-sm text-text-muted">
-                        ({reviews})
-                    </span>
+                    <span className="text-sm text-text-muted">({reviews})</span>
                 </div>
 
                 {/* Price */}
@@ -85,21 +93,14 @@ function ProductCard({ product }) {
 
                 {/* Stock */}
                 <p
-                    className={`mt-2 text-sm font-medium ${stock > 0
-                            ? "text-success"
-                            : "text-danger"
+                    className={`mt-2 text-sm font-medium ${stock > 0 ? "text-success" : "text-danger"
                         }`}
                 >
-                    {stock > 0
-                        ? `${stock} items available`
-                        : "Out of stock"}
+                    {stock > 0 ? `${stock} items available` : "Out of stock"}
                 </p>
 
                 {/* Add to Cart */}
-                <Button
-                    className="mt-4 w-full"
-                    disabled={stock === 0}
-                >
+                <Button className="mt-4 w-full" disabled={stock === 0}>
                     <ShoppingCart className="mr-2 h-4 w-4" />
                     Add to Cart
                 </Button>
