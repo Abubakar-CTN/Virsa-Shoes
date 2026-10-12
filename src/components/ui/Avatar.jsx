@@ -1,0 +1,57 @@
+import { useEffect, useState } from "react";
+
+function getInitials(name = "") {
+    return name
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((part) => part.charAt(0).toUpperCase())
+        .join("");
+}
+
+function Avatar({
+    src,
+    name = "User",
+    alt,
+    size = "md",
+    className = "",
+}) {
+    const [imageFailed, setImageFailed] = useState(!src);
+
+    useEffect(() => {
+        setImageFailed(!src);
+    }, [src]);
+
+    const sizes = {
+        xs: "h-7 w-7 text-[10px]",
+        sm: "h-9 w-9 text-xs",
+        md: "h-11 w-11 text-sm",
+        lg: "h-14 w-14 text-base",
+        xl: "h-20 w-20 text-xl",
+    };
+
+    const sizeClass = sizes[size] || sizes.md;
+
+    if (src && !imageFailed) {
+        return (
+            <img
+                src={src}
+                alt={alt || name}
+                onError={() => setImageFailed(true)}
+                className={`${sizeClass} shrink-0 rounded-full border border-slate-200 object-cover ${className}`}
+            />
+        );
+    }
+
+    return (
+        <span
+            role="img"
+            aria-label={alt || name}
+            className={`inline-flex shrink-0 items-center justify-center rounded-full border border-violet-200 bg-[#F3EBDD] font-bold text-[#5D3D14] ${sizeClass} ${className}`}
+        >
+            {getInitials(name) || "U"}
+        </span>
+    );
+}
+
+export default Avatar;

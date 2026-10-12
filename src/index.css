@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-/* ===============================
+/* =========================================
    VIRSA.SHOE DESIGN TOKENS
-================================ */
+========================================= */
 
 @theme {
     --color-brand-purple: #7c3aed;
@@ -27,14 +27,13 @@
     --color-info: #0ea5e9;
 }
 
-/* ===============================
+/* =========================================
    GLOBAL STYLES
-================================ */
+========================================= */
 
 :root {
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system,
         BlinkMacSystemFont, "Segoe UI", sans-serif;
-
     color: #0f172a;
     background: #f8fafc;
 
@@ -97,9 +96,9 @@ a {
     outline-offset: 3px;
 }
 
-/* ===============================
+/* =========================================
    ANNOUNCEMENT MARQUEE
-================================ */
+========================================= */
 
 .announcement-bar {
     position: relative;
@@ -145,9 +144,9 @@ a {
     }
 }
 
-/* ===============================
+/* =========================================
    PREMIUM NAVBAR
-================================ */
+========================================= */
 
 .premium-nav-shell {
     position: relative;
@@ -304,9 +303,9 @@ a {
     transform: translateX(4px);
 }
 
-/* ===============================
+/* =========================================
    ADMIN AND OWNER DASHBOARDS
-================================ */
+========================================= */
 
 .admin-shell,
 .owner-shell {
@@ -491,7 +490,9 @@ a {
 
 .premium-card {
     animation: premium-card-enter 550ms ease both;
-    transition: transform 240ms ease, box-shadow 240ms ease,
+    transition:
+        transform 240ms ease,
+        box-shadow 240ms ease,
         border-color 240ms ease;
 }
 
@@ -522,6 +523,22 @@ a {
             #0b172b,
             #14355a 56%,
             #39206e);
+}
+
+.admin-welcome-panel::after,
+.owner-welcome-panel::after {
+    position: absolute;
+    z-index: -1;
+    top: -60%;
+    right: 15%;
+    width: 300px;
+    height: 300px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    box-shadow:
+        0 0 0 30px rgba(255, 255, 255, 0.025),
+        0 0 0 65px rgba(255, 255, 255, 0.02);
+    content: "";
 }
 
 .admin-welcome-orb,
@@ -688,9 +705,9 @@ a {
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
 }
 
-/* ===============================
+/* =========================================
    LOGIN AND AUTHENTICATION UI
-================================ */
+========================================= */
 
 .auth-shell {
     background:
@@ -736,7 +753,8 @@ a {
     height: 460px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 50%;
-    box-shadow: 0 0 0 35px rgba(255, 255, 255, 0.025),
+    box-shadow:
+        0 0 0 35px rgba(255, 255, 255, 0.025),
         0 0 0 75px rgba(255, 255, 255, 0.02);
     content: "";
 }
@@ -869,9 +887,9 @@ a {
     transform: translateY(-2px);
 }
 
-/* ===============================
+/* =========================================
    ANIMATIONS
-================================ */
+========================================= */
 
 @keyframes premium-page-enter {
     from {
@@ -921,9 +939,9 @@ a {
     }
 }
 
-/* ===============================
+/* =========================================
    RESPONSIVE STYLES
-================================ */
+========================================= */
 
 @media (min-width: 1024px) {
     .auth-frame {
@@ -972,9 +990,9 @@ a {
     }
 }
 
-/* ===============================
+/* =========================================
    ACCESSIBILITY
-================================ */
+========================================= */
 
 @media (prefers-reduced-motion: reduce) {
     html {
@@ -1024,7 +1042,9 @@ a {
     }
 }
 
-/* Cleaner dashboard details */
+/* =========================================
+   DASHBOARD UTILITY LINKS
+========================================= */
 
 .admin-inline-action,
 .owner-inline-action {
@@ -1103,3 +1123,239 @@ a {
         transform: none;
     }
 }
+
+/* =========================================
+   HERO PRIMARY BUTTON
+========================================= */
+
+.hero-primary-button {
+    display: inline-flex;
+    min-height: 54px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 25px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 14px;
+    background: linear-gradient(110deg,
+            #7c3aed 0%,
+            #4f46e5 55%,
+            #0284c7 100%);
+    color: #ffffff !important;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+    transition:
+        transform 250ms ease,
+        box-shadow 250ms ease,
+        filter 250ms ease;
+}
+
+.hero-primary-button span {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff;
+}
+
+.hero-primary-button svg {
+    flex-shrink: 0;
+    color: #ffffff;
+    transition: transform 250ms ease;
+}
+
+.hero-primary-button:hover {
+    color: #ffffff !important;
+    filter: brightness(1.12);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 32px rgba(79, 70, 229, 0.42);
+}
+
+.hero-primary-button:hover svg {
+    transform: translateX(5px);
+}
+
+.hero-primary-button:focus-visible {
+    outline: 3px solid #7dd3fc;
+    outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .hero-primary-button,
+    .hero-primary-button svg {
+        transition: none;
+    }
+
+    .hero-primary-button:hover {
+        transform: none;
+    }
+}
+
+/* =========================================
+   DAY 2 â€” TYPOGRAPHY SYSTEM
+========================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.025em;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+/* Virsa.Shoe theme tokens */
+:root {
+    --virsa-primary: #78531F;
+    --virsa-primary-hover: #5D3D14;
+    --virsa-indigo: #3D2A1D;
+    --virsa-sky: #D3AE59;
+    --virsa-ink: #33251B;
+    --virsa-surface: #FBF8F1;
+    --virsa-border: #E6D8BC;
+}
+
+/* Lightweight, accessible announcement marquee */
+.virsa-marquee-viewport {
+    width: 100%;
+    overflow: hidden;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+.virsa-marquee-track {
+    display: flex;
+    width: max-content;
+    flex-shrink: 0;
+    animation: virsa-marquee-scroll 32s linear infinite;
+    will-change: transform;
+}
+
+.virsa-marquee-group {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 2rem;
+    padding-right: 2rem;
+    white-space: nowrap;
+    font-size: 10px;
+}
+
+.virsa-marquee-viewport:hover .virsa-marquee-track {
+    animation-play-state: paused;
+}
+
+@keyframes virsa-marquee-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .virsa-marquee-track {
+        animation: none;
+        transform: none;
+    }
+}
+
+
+/* Virsa.Shoe — warm ivory, gold and brown identity */
+:root {
+    --virsa-gold: #C9A34C;
+    --virsa-gold-light: #EAD8A6;
+    --virsa-primary: #78531F;
+    --virsa-primary-hover: #5D3D14;
+    --virsa-coffee: #3D2A1D;
+    --virsa-ivory: #FBF8F1;
+    --virsa-surface: #F7F0E4;
+    --virsa-border: #E6D8BC;
+}
+
+
+
+/* VIRSA.SHOE BUTTON POLISH START */
+
+/* Consistent transitions and keyboard focus */
+:is(button, a, input[type="button"], input[type="submit"]) {
+    transition-property: background-color, background-image, border-color, color, box-shadow, transform;
+    transition-duration: 180ms;
+    transition-timing-function: ease;
+}
+
+:is(button, a, input[type="button"], input[type="submit"]):focus-visible {
+    outline: 2px solid #C9A34C;
+    outline-offset: 3px;
+}
+
+/* Light / outline controls keep their light surface */
+:is(button, a)[class~="border-[#D5C5A5]"],
+:is(button, a)[class~="border-[#E6D8BC]"] {
+    border-color: #D5C5A5 !important;
+}
+
+:is(button, a)[class~="border-[#D5C5A5]"]:hover,
+:is(button, a)[class~="border-[#E6D8BC]"]:hover {
+    border-color: #A7833C !important;
+}
+
+/* Primary buttons: warm chocolate brown, no harsh black or bright gradient */
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-gradient-to-r"],
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#3D2A1D]"],
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#33251B]"],
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#78531F]"],
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#5D3D14]"],
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#6D28D9]"],
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#5B21B6]"],
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#0F172A]"],
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-black"],
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-slate-950"] {
+    background: #654326 !important;
+    background-image: none !important;
+    border-color: #654326 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 5px rgba(61, 42, 29, 0.12) !important;
+}
+
+/* Golden-brown hover */
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-gradient-to-r"]:hover,
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#3D2A1D]"]:hover,
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#33251B]"]:hover,
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#78531F]"]:hover,
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#5D3D14]"]:hover,
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#6D28D9]"]:hover,
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#5B21B6]"]:hover,
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-[#0F172A]"]:hover,
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-black"]:hover,
+:is(button, a, input[type="button"], input[type="submit"])[class~="bg-slate-950"]:hover {
+    background: #87652F !important;
+    background-image: none !important;
+    border-color: #87652F !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 10px rgba(135, 101, 47, 0.20) !important;
+}
+
+/* Disabled buttons remain clearly disabled */
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled {
+    background: #E6DCC9 !important;
+    background-image: none !important;
+    border-color: #D5C5A5 !important;
+    color: #867762 !important;
+    box-shadow: none !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+/* VIRSA.SHOE BUTTON POLISH END */

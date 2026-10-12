@@ -32,12 +32,12 @@ function Login() {
                     <Footprints size={25} />
                 </span>
 
-                <p className="mt-6 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-violet-700">
+                <p className="mt-6 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[#5D3D14]">
                     <Sparkles size={15} />
                     Welcome Back
                 </p>
 
-                <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
+                <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[#3D2A1D] sm:text-4xl">
                     Sign in to your account
                 </h1>
 
@@ -84,7 +84,7 @@ function Login() {
 
                         <Link
                             to="/forgot-password"
-                            className="text-xs font-bold text-violet-700 transition-colors hover:text-blue-700"
+                            className="text-xs font-bold text-[#5D3D14] transition-colors hover:text-blue-700"
                         >
                             Forgot password?
                         </Link>
@@ -110,7 +110,7 @@ function Login() {
                             type="button"
                             onClick={() => setShowPassword((visible) => !visible)}
                             aria-label={showPassword ? "Hide password" : "Show password"}
-                            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-500 transition hover:bg-violet-100 hover:text-violet-700"
+                            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-500 transition hover:bg-[#F3EBDD] hover:text-[#5D3D14]"
                         >
                             {showPassword ? (
                                 <EyeOff size={18} />

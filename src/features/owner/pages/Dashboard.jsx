@@ -64,7 +64,7 @@ function Dashboard() {
     ];
 
     const toneClasses = {
-        violet: "bg-violet-100 text-violet-700",
+        violet: "bg-[#F3EBDD] text-[#5D3D14]",
         blue: "bg-blue-100 text-blue-700",
         amber: "bg-amber-100 text-amber-700",
         sky: "bg-sky-100 text-sky-700",
@@ -74,7 +74,7 @@ function Dashboard() {
         <div className="space-y-8">
             <section className="owner-welcome-panel premium-card">
                 <div className="relative z-10 max-w-2xl">
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-200">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F0E2BF]">
                         Executive Overview
                     </p>
 
@@ -112,7 +112,7 @@ function Dashboard() {
                         Store Overview
                     </p>
 
-                    <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">
+                    <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-[#3D2A1D]">
                         Catalogue and stock
                     </h2>
                 </div>
@@ -139,7 +139,7 @@ function Dashboard() {
                                     {metric.label}
                                 </p>
 
-                                <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
+                                <p className="mt-2 text-3xl font-extrabold tracking-tight text-[#3D2A1D]">
                                     {metric.value}
                                 </p>
 
@@ -155,12 +155,12 @@ function Dashboard() {
             <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
                 <article className="dashboard-panel premium-card">
                     <div className="flex items-start gap-3">
-                        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-violet-100 text-violet-700">
+                        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#F3EBDD] text-[#5D3D14]">
                             <CircleDollarSign size={22} />
                         </span>
 
                         <div>
-                            <h2 className="text-lg font-extrabold text-slate-950">
+                            <h2 className="text-lg font-extrabold text-[#3D2A1D]">
                                 Financial reporting
                             </h2>
 
@@ -199,7 +199,7 @@ function Dashboard() {
                         </span>
 
                         <div>
-                            <h2 className="text-lg font-extrabold text-slate-950">
+                            <h2 className="text-lg font-extrabold text-[#3D2A1D]">
                                 People and access
                             </h2>
 
@@ -212,7 +212,7 @@ function Dashboard() {
                     <div className="mt-6 space-y-3">
                         <Link to="/owner/employees" className="owner-action-row">
                             <span className="flex min-w-0 items-center gap-3">
-                                <Users size={19} className="shrink-0 text-violet-700" />
+                                <Users size={19} className="shrink-0 text-[#5D3D14]" />
                                 <span className="text-sm font-semibold text-slate-800">
                                     Employee management
                                 </span>
@@ -232,7 +232,7 @@ function Dashboard() {
 
                         <Link to="/owner/audit-logs" className="owner-action-row">
                             <span className="flex min-w-0 items-center gap-3">
-                                <FileClock size={19} className="shrink-0 text-violet-700" />
+                                <FileClock size={19} className="shrink-0 text-[#5D3D14]" />
                                 <span className="text-sm font-semibold text-slate-800">
                                     Audit history
                                 </span>
@@ -244,7 +244,7 @@ function Dashboard() {
             </section>
 
             <section className="owner-security-panel premium-card">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/10 text-sky-200">
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/10 text-[#F0E2BF]">
                     <ShieldCheck size={24} />
                 </span>
 

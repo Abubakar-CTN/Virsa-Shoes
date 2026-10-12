@@ -71,7 +71,7 @@ function Dashboard() {
     ];
 
     const toneClasses = {
-        violet: "bg-violet-100 text-violet-700",
+        violet: "bg-[#F3EBDD] text-[#5D3D14]",
         blue: "bg-blue-100 text-blue-700",
         amber: "bg-amber-100 text-amber-700",
         sky: "bg-sky-100 text-sky-700",
@@ -115,11 +115,11 @@ function Dashboard() {
 
             <section>
                 <div className="mb-5">
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-700">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#5D3D14]">
                         At a Glance
                     </p>
 
-                    <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">
+                    <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-[#3D2A1D]">
                         Catalogue and inventory
                     </h2>
                 </div>
@@ -146,7 +146,7 @@ function Dashboard() {
                                     {stat.label}
                                 </p>
 
-                                <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
+                                <p className="mt-2 text-3xl font-extrabold tracking-tight text-[#3D2A1D]">
                                     {stat.value}
                                 </p>
 
@@ -163,7 +163,7 @@ function Dashboard() {
                 <article className="dashboard-panel premium-card">
                     <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
                         <div>
-                            <h2 className="text-lg font-extrabold text-slate-950">
+                            <h2 className="text-lg font-extrabold text-[#3D2A1D]">
                                 Inventory requiring attention
                             </h2>
 
@@ -235,7 +235,7 @@ function Dashboard() {
                             </p>
                             <Link
                                 to="/admin/products/new"
-                                className="mt-4 inline-flex text-sm font-bold text-violet-700 hover:text-blue-700"
+                                className="mt-4 inline-flex text-sm font-bold text-[#5D3D14] hover:text-blue-700"
                             >
                                 Add the first product
                             </Link>
@@ -245,12 +245,12 @@ function Dashboard() {
 
                 <article className="dashboard-panel premium-card">
                     <div className="flex items-center gap-3">
-                        <span className="grid h-11 w-11 place-items-center rounded-xl bg-violet-100 text-violet-700">
+                        <span className="grid h-11 w-11 place-items-center rounded-xl bg-[#F3EBDD] text-[#5D3D14]">
                             <ShoppingCart size={22} />
                         </span>
 
                         <div>
-                            <h2 className="text-lg font-extrabold text-slate-950">
+                            <h2 className="text-lg font-extrabold text-[#3D2A1D]">
                                 Order management
                             </h2>
 
@@ -261,7 +261,7 @@ function Dashboard() {
                     </div>
 
                     <div className="mt-7 rounded-2xl border border-dashed border-slate-300 bg-slate-50/80 px-5 py-8 text-center">
-                        <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-violet-700 shadow-sm">
+                        <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-[#5D3D14] shadow-sm">
                             <ClipboardListIcon />
                         </span>
 

@@ -37,7 +37,7 @@ function AdminLayout() {
 
                     <span>
                         <span className="block text-lg font-extrabold tracking-tight text-white sm:text-xl">
-                            Virsa<span className="text-sky-300">.Shoe</span>
+                            Virsa<span className="text-[#EAD8A6]">.Shoe</span>
                         </span>
 
                         <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-violet-200">
@@ -56,7 +56,7 @@ function AdminLayout() {
                     </Link>
 
                     <span
-                        className="grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-gradient-to-br from-violet-500 to-sky-500 text-sm font-extrabold text-white"
+                        className="grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-gradient-to-br from-violet-500 to-[#D3AE59] text-sm font-extrabold text-white"
                         aria-label="Administrator profile"
                     >
                         A

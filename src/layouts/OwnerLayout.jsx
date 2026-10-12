@@ -45,10 +45,10 @@ function OwnerLayout() {
 
                     <span>
                         <span className="block text-lg font-extrabold tracking-tight text-white sm:text-xl">
-                            Virsa<span className="text-sky-300">.Shoe</span>
+                            Virsa<span className="text-[#EAD8A6]">.Shoe</span>
                         </span>
 
-                        <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-sky-200">
+                        <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#F0E2BF]">
                             Business Management
                         </span>
                     </span>
@@ -76,7 +76,7 @@ function OwnerLayout() {
                 <aside className="owner-sidebar hidden lg:flex">
                     <div className="mb-7 rounded-2xl border border-white/10 bg-white/[0.05] p-4">
                         <div className="flex items-center gap-3">
-                            <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-sky-500 to-violet-600 text-white">
+                            <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-sky-500 to-[#78531F] text-white">
                                 <ShieldCheck size={21} />
                             </div>
 

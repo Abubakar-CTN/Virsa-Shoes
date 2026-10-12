@@ -15,12 +15,12 @@ function AuthLayout() {
                         </span>
 
                         <span className="text-2xl font-extrabold tracking-tight text-white">
-                            Virsa<span className="text-sky-300">.Shoe</span>
+                            Virsa<span className="text-[#EAD8A6]">.Shoe</span>
                         </span>
                     </Link>
 
                     <div className="relative z-10 mt-auto">
-                        <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-sky-200">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#F0E2BF]">
                             <Sparkles size={15} />
                             Step Into Your Own Style
                         </span>
@@ -35,7 +35,7 @@ function AuthLayout() {
                         </p>
 
                         <div className="mt-8 flex items-center gap-3 text-sm font-medium text-slate-200">
-                            <ShieldCheck size={20} className="text-sky-300" />
+                            <ShieldCheck size={20} className="text-[#EAD8A6]" />
                             A modern shopping experience, built for you.
                         </div>
                     </div>
@@ -47,18 +47,18 @@ function AuthLayout() {
 
                 <section className="auth-form-panel">
                     <div className="mb-8 flex items-center justify-between gap-4 lg:hidden">
-                        <Link to="/" className="text-xl font-extrabold tracking-tight text-slate-950">
-                            Virsa<span className="text-violet-600">.Shoe</span>
+                        <Link to="/" className="text-xl font-extrabold tracking-tight text-[#3D2A1D]">
+                            Virsa<span className="text-[#78531F]">.Shoe</span>
                         </Link>
 
-                        <span className="grid h-10 w-10 place-items-center rounded-xl bg-violet-100 text-violet-700">
+                        <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#F3EBDD] text-[#5D3D14]">
                             <Footprints size={21} />
                         </span>
                     </div>
 
                     <Link
                         to="/"
-                        className="auth-back-link mb-7 hidden items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-violet-700 sm:inline-flex"
+                        className="auth-back-link mb-7 hidden items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#5D3D14] sm:inline-flex"
                     >
                         <ArrowLeft size={16} />
                         Back to Store

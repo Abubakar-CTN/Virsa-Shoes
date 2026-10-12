@@ -7,11 +7,11 @@ function PlaceholderPage({
     return (
         <section className="mx-auto flex min-h-[420px] max-w-5xl items-center justify-center px-4 py-12 sm:px-6">
             <div className="w-full rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm sm:p-12">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-100 text-2xl font-black text-violet-700">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F3EBDD] text-2xl font-black text-[#5D3D14]">
                     V
                 </div>
 
-                <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-violet-700">
+                <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-[#5D3D14]">
                     Virsa.Shoe
                 </p>
 

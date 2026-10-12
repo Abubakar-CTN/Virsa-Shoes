@@ -1,0 +1,297 @@
+
+import {
+    ArrowRight,
+    BriefcaseBusiness,
+    CheckCircle2,
+    Footprints,
+    ShieldCheck,
+    Sparkles,
+} from "lucide-react";
+
+import { Link } from "react-router";
+
+const categories = [
+    {
+        title: "Everyday Sneakers",
+        description: "Modern styles and everyday comfort for your daily journey.",
+        number: "01",
+        label: "DAILY ESSENTIALS",
+        href: "/categories/sneakers",
+        icon: Footprints,
+    },
+    {
+        title: "Formal Footwear",
+        description: "Refined footwear for meetings, celebrations and special occasions.",
+        number: "02",
+        label: "CLASSIC COLLECTION",
+        href: "/shop",
+        icon: BriefcaseBusiness,
+    },
+    {
+        title: "Casual Comfort",
+        description: "Relaxed designs that keep every step comfortable and effortless.",
+        number: "03",
+        label: "EVERYDAY COMFORT",
+        href: "/shop",
+        icon: ShieldCheck,
+    },
+];
+
+const benefits = [
+    "Comfort-focused designs",
+    "Styles for every occasion",
+    "Easy collection browsing",
+];
+
+function Home() {
+    return (
+        <div className="min-h-screen overflow-hidden bg-white text-slate-900">
+            {/* HERO SECTION */}
+            <section className="relative isolate overflow-hidden bg-[#0f0b1f] text-white">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -right-32 -top-32 -z-10 h-96 w-96 rounded-full bg-violet-600/25 blur-[100px]"
+                />
+
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -bottom-40 left-1/4 -z-10 h-96 w-96 rounded-full bg-blue-600/20 blur-[100px]"
+                />
+
+                <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-28">
+                    {/* Hero Content */}
+                    <div className="premium-enter">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-300/[0.08] px-4 py-2">
+                            <Sparkles
+                                className="h-4 w-4 text-violet-300"
+                                aria-hidden="true"
+                            />
+
+                            <p className="text-xs font-bold uppercase tracking-[0.22em] text-violet-200 sm:text-sm">
+                                Discover Virsa.Shoe
+                            </p>
+                        </div>
+
+                        <h1 className="mt-7 max-w-2xl text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl">
+                            Step Into Your
+                            <span className="mt-2 block bg-gradient-to-r from-violet-300 via-indigo-300 to-blue-300 bg-clip-text text-transparent">
+                                Own Style.
+                            </span>
+                        </h1>
+
+                        <p className="mt-6 max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
+                            Explore modern footwear designed to complement your everyday
+                            life, personal style and special occasions.
+                        </p>
+
+                        {/* Hero Buttons */}
+                        <div className="mt-8 flex flex-wrap items-center gap-4">
+                            <Link to="/shop" className="hero-primary-button">
+                                <span>Shop Collection</span>
+
+                                <ArrowRight size={19} aria-hidden="true" />
+                            </Link>
+
+                            <Link
+                                to="/categories/sneakers"
+                                className="group inline-flex min-h-[54px] items-center justify-center gap-3 rounded-xl border border-white/20 bg-white/[0.04] px-6 text-sm font-bold text-white transition duration-300 hover:-translate-y-1 hover:border-violet-300/70 hover:bg-violet-300/10 hover:shadow-lg hover:shadow-violet-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                            >
+                                <span>Explore Sneakers</span>
+
+                                <ArrowRight
+                                    size={17}
+                                    className="transition-transform duration-300 group-hover:translate-x-1"
+                                    aria-hidden="true"
+                                />
+                            </Link>
+                        </div>
+
+                        {/* Benefits */}
+                        <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3">
+                            {benefits.map((benefit) => (
+                                <span
+                                    key={benefit}
+                                    className="inline-flex items-center gap-2 text-xs font-medium text-slate-300 sm:text-sm"
+                                >
+                                    <CheckCircle2
+                                        className="h-4 w-4 shrink-0 text-violet-300"
+                                        aria-hidden="true"
+                                    />
+
+                                    {benefit}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Brand Visual */}
+                    <div className="relative mx-auto flex min-h-[300px] w-full max-w-xl items-center justify-center sm:min-h-[390px] lg:min-h-[460px]">
+                        <div
+                            aria-hidden="true"
+                            className="absolute inset-8 rounded-full bg-gradient-to-br from-violet-600/25 to-blue-600/20 blur-3xl"
+                        />
+
+                        <div className="relative w-full overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.09] via-white/[0.035] to-white/[0.02] p-8 shadow-2xl backdrop-blur-sm sm:p-12">
+                            <div
+                                aria-hidden="true"
+                                className="absolute -right-16 -top-16 h-48 w-48 rounded-full border border-white/10"
+                            />
+
+                            <div
+                                aria-hidden="true"
+                                className="absolute -bottom-20 -left-16 h-56 w-56 rounded-full border border-white/10"
+                            />
+
+                            <div className="relative text-center">
+                                <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-[2rem] border border-white/20 bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-600 shadow-2xl shadow-violet-900/40 transition duration-500 hover:rotate-3 hover:scale-105 sm:h-40 sm:w-40">
+                                    <span className="text-5xl font-black tracking-tight text-white sm:text-6xl">
+                                        VS
+                                    </span>
+                                </div>
+
+                                <p className="mt-7 text-sm font-extrabold tracking-[0.3em] text-white">
+                                    VIRSA.SHOE
+                                </p>
+
+                                <p className="mt-3 text-sm text-slate-400">
+                                    Style in every step.
+                                </p>
+
+                                <div className="mx-auto mt-6 h-1 w-20 rounded-full bg-gradient-to-r from-violet-400 to-blue-400" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* COLLECTION SECTION */}
+            <section className="relative isolate overflow-hidden bg-gradient-to-b from-violet-50/70 via-white to-slate-50">
+                {/* Soft background decoration */}
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -left-32 top-20 -z-10 h-72 w-72 rounded-full bg-violet-100/60 blur-3xl"
+                />
+
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -right-32 bottom-0 -z-10 h-72 w-72 rounded-full bg-indigo-100/40 blur-3xl"
+                />
+
+                <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+                    {/* Section Header */}
+                    <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+                        <div>
+                            <div className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-3 py-1.5 shadow-sm">
+                                <span className="h-2 w-2 rounded-full bg-violet-600" />
+
+                                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-violet-800">
+                                    Find Your Fit
+                                </p>
+                            </div>
+
+                            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">
+                                Explore our{" "}
+                                <span className="text-violet-700">collections</span>
+                            </h2>
+
+                            <p className="mt-4 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">
+                                Discover footwear styles suited to your lifestyle and
+                                everyday needs.
+                            </p>
+                        </div>
+
+                        <Link
+                            to="/shop"
+                            className="group inline-flex min-h-11 items-center gap-2 self-start rounded-xl border border-violet-200 bg-white px-4 py-2.5 text-sm font-bold text-violet-800 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-violet-400 hover:bg-violet-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 sm:self-auto"
+                        >
+                            View All Products
+
+                            <ArrowRight
+                                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                                aria-hidden="true"
+                            />
+                        </Link>
+                    </div>
+
+                    {/* Collection Cards */}
+                    <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                        {categories.map((category) => {
+                            const Icon = category.icon;
+
+                            return (
+                                <Link
+                                    key={category.number}
+                                    to={category.href}
+                                    className="group relative isolate flex min-h-[280px] flex-col overflow-hidden rounded-3xl border border-violet-100 bg-white p-6 shadow-[0_8px_30px_rgba(48,24,92,0.035)] transition duration-300 hover:-translate-y-2 hover:border-violet-300 hover:shadow-[0_22px_45px_rgba(91,33,182,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-4 sm:p-8"
+                                >
+                                    {/* Card Background Effects */}
+                                    <div
+                                        aria-hidden="true"
+                                        className="pointer-events-none absolute -right-12 -top-12 -z-10 h-40 w-40 rounded-full bg-violet-100/70 blur-2xl transition duration-500 group-hover:bg-violet-200/70"
+                                    />
+
+                                    <div
+                                        aria-hidden="true"
+                                        className="pointer-events-none absolute -bottom-16 -left-12 -z-10 h-36 w-36 rounded-full bg-indigo-50 blur-2xl transition duration-500 group-hover:bg-indigo-100"
+                                    />
+
+                                    {/* Card Top Row */}
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div>
+                                            <span className="inline-flex rounded-full border border-violet-100 bg-violet-50 px-3 py-1.5 text-[10px] font-extrabold tracking-[0.16em] text-violet-800 sm:text-xs">
+                                                {category.label}
+                                            </span>
+
+                                            <p className="mt-3 text-xs font-semibold tracking-[0.16em] text-slate-400">
+                                                COLLECTION {category.number}
+                                            </p>
+                                        </div>
+
+                                        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-violet-100 bg-white text-violet-700 shadow-sm transition duration-300 group-hover:rotate-6 group-hover:scale-110 group-hover:border-violet-300 group-hover:bg-violet-700 group-hover:text-white">
+                                            <Icon size={21} strokeWidth={1.8} aria-hidden="true" />
+                                        </span>
+                                    </div>
+
+                                    {/* Card Text */}
+                                    <div className="mt-7">
+                                        <h3 className="text-xl font-extrabold tracking-tight text-slate-950 transition-colors duration-300 group-hover:text-violet-800 sm:text-2xl">
+                                            {category.title}
+                                        </h3>
+
+                                        <p className="mt-3 max-w-sm text-sm leading-7 text-slate-600">
+                                            {category.description}
+                                        </p>
+                                    </div>
+
+                                    {/* Card Footer */}
+                                    <div className="mt-auto pt-7">
+                                        <div className="h-px w-full bg-gradient-to-r from-violet-200 via-slate-100 to-transparent" />
+
+                                        <div className="mt-5 flex items-center justify-between gap-3">
+                                            <span className="inline-flex items-center gap-2 text-sm font-bold text-violet-800">
+                                                Explore collection
+
+                                                <ArrowRight
+                                                    size={17}
+                                                    className="transition-transform duration-300 group-hover:translate-x-1.5"
+                                                    aria-hidden="true"
+                                                />
+                                            </span>
+
+                                            <span className="text-xs font-bold tracking-wider text-slate-400">
+                                                {category.number} / 03
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Link>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+}
+
+export default Home;
+

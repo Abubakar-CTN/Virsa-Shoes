@@ -4,7 +4,7 @@ function NotFound() {
     return (
         <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
             <section className="w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm sm:p-12">
-                <p className="text-7xl font-black tracking-tight text-violet-700">
+                <p className="text-7xl font-black tracking-tight text-[#5D3D14]">
                     404
                 </p>
 
