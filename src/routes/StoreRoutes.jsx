@@ -1,5 +1,8 @@
 import StoreLayout from "../layouts/StoreLayout.jsx";
 import Home from "../features/storefront/pages/Home.jsx";
+import TrackOrder from "../features/storefront/pages/TrackOrder.jsx";
+import SizeGuide from "../features/storefront/pages/SizeGuide.jsx";
+import StoreLocator from "../features/storefront/pages/StoreLocator.jsx";
 import PlaceholderPage from "../components/shared/PlaceholderPage.jsx";
 
 export const storeRoutes = {
@@ -108,6 +111,18 @@ export const storeRoutes = {
                     description="Find answers about sizing, delivery, orders and returns."
                 />
             ),
+        },
+        {
+            path: "track-order",
+            element: <TrackOrder />,
+        },
+        {
+            path: "size-guide",
+            element: <SizeGuide />,
+        },
+        {
+            path: "store-locator",
+            element: <StoreLocator />,
         },
     ],
 };

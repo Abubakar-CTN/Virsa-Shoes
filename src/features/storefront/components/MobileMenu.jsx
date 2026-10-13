@@ -1,4 +1,15 @@
-import { ChevronDown, Heart, ShoppingBag, User, X } from "lucide-react";
+import {
+    ChevronDown,
+    CircleHelp,
+    Heart,
+    Mail,
+    MapPin,
+    PackageSearch,
+    Ruler,
+    ShoppingBag,
+    User,
+    X,
+} from "lucide-react";
 import { Link } from "react-router";
 
 import { storefrontNavigation } from "../../../config/navigation.js";
@@ -140,6 +151,28 @@ export default function MobileMenu({ open, onClose }) {
                         <ShoppingBag size={17} aria-hidden="true" />
                         View shopping cart
                     </Link>
+                    <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#E6D8BC] pt-4">
+                        <Link to="/track-order" onClick={onClose} className="flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+                            <PackageSearch size={16} aria-hidden="true" />
+                            Track order
+                        </Link>
+                        <Link to="/size-guide" onClick={onClose} className="flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+                            <Ruler size={16} aria-hidden="true" />
+                            Size guide
+                        </Link>
+                        <Link to="/store-locator" onClick={onClose} className="flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+                            <MapPin size={16} aria-hidden="true" />
+                            Store locator
+                        </Link>
+                        <Link to="/faq" onClick={onClose} className="flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+                            <CircleHelp size={16} aria-hidden="true" />
+                            FAQs
+                        </Link>
+                        <Link to="/contact" onClick={onClose} className="col-span-2 flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+                            <Mail size={16} aria-hidden="true" />
+                            Contact us
+                        </Link>
+                    </div>
                 </div>
             </aside>
         </div>

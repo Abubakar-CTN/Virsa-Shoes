@@ -16,6 +16,9 @@ const footerGroups = [
         title: "HELP & SUPPORT",
         links: [
             { label: "Frequently asked questions", to: "/faq" },
+            { label: "Track your order", to: "/track-order" },
+            { label: "Size guide", to: "/size-guide" },
+            { label: "Store locator", to: "/store-locator" },
             { label: "Contact us", to: "/contact" },
             { label: "About Virsa.Shoe", to: "/about" },
         ],
