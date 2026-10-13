@@ -1,158 +1,137 @@
 import {
-    Activity,
-    BarChart3,
-    Boxes,
-    BriefcaseBusiness,
-    CreditCard,
+    BadgeCheck,
+    Bell,
+    ChartNoAxesCombined,
+    ClipboardCheck,
     FileClock,
-    KeyRound,
+    Landmark,
     LayoutDashboard,
-    Megaphone,
+    LockKeyhole,
     Settings,
     ShieldCheck,
-    Truck,
     Users,
     Wallet,
+    Warehouse,
 } from "lucide-react";
-
 import { Link, NavLink, Outlet } from "react-router";
 
 const navigation = [
-    { label: "Dashboard", to: "/owner", icon: LayoutDashboard, end: true },
-    { label: "Finance", to: "/owner/finance", icon: Wallet },
-    { label: "Profit & Loss", to: "/owner/profit-loss", icon: BarChart3 },
-    { label: "Expenses", to: "/owner/expenses", icon: CreditCard },
-    { label: "Inventory", to: "/owner/inventory", icon: Boxes },
+    { label: "Overview", to: "/owner", icon: LayoutDashboard, end: true },
+    { label: "Finance", to: "/owner/finance", icon: Landmark },
+    { label: "Profit & loss", to: "/owner/profit-loss", icon: ChartNoAxesCombined },
+    { label: "Expenses", to: "/owner/expenses", icon: Wallet },
+    { label: "Inventory", to: "/owner/inventory", icon: Warehouse },
     { label: "Employees", to: "/owner/employees", icon: Users },
-    { label: "Permissions", to: "/owner/roles-permissions", icon: KeyRound },
-    { label: "Audit Logs", to: "/owner/audit-logs", icon: FileClock },
+    { label: "Approvals", to: "/owner/roles-permissions", icon: ClipboardCheck },
+    { label: "Audit logs", to: "/owner/audit-logs", icon: FileClock },
     { label: "Security", to: "/owner/security", icon: ShieldCheck },
-    { label: "Payments", to: "/owner/payments", icon: CreditCard },
-    { label: "Shipping", to: "/owner/shipping", icon: Truck },
-    { label: "Marketing", to: "/owner/marketing", icon: Megaphone },
-    { label: "SEO", to: "/owner/seo", icon: Activity },
-    { label: "Settings", to: "/owner/settings", icon: Settings },
+    { label: "Payments", to: "/owner/payments", icon: BadgeCheck },
+    { label: "Business settings", to: "/owner/settings", icon: Settings },
 ];
 
-function OwnerLayout() {
+function OwnerLinks({ mobile = false }) {
+    return navigation.map((item) => {
+        const Icon = item.icon;
+
+        return (
+            <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) => [
+                    "flex shrink-0 items-center gap-3 rounded-md px-3 py-2.5 text-xs font-medium transition-colors",
+                    mobile ? "whitespace-nowrap" : "w-full",
+                    isActive
+                        ? "bg-[#D5B56A] text-[#33251B]"
+                        : "text-[#E7DCC8] hover:bg-white/10 hover:text-white",
+                ].join(" ")}
+            >
+                <Icon size={16} strokeWidth={1.8} aria-hidden="true" />
+                {item.label}
+            </NavLink>
+        );
+    });
+}
+
+export default function OwnerLayout() {
     return (
-        <div className="owner-shell min-h-screen text-slate-900">
-            <header className="owner-topbar sticky top-0 z-40 flex min-h-[76px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-                <Link to="/owner" className="flex items-center gap-3">
-                    <span className="owner-brand-icon">
-                        <BriefcaseBusiness size={23} />
+        <div className="min-h-screen bg-[#FBF8F1] text-[#33251B] lg:flex">
+            <aside className="hidden w-[256px] shrink-0 bg-[#3D2A1D] text-white lg:flex lg:flex-col">
+                <Link to="/owner" className="border-b border-white/15 px-6 py-6">
+                    <span className="text-xl font-extrabold tracking-[-0.06em] text-white">
+                        VIRSA<span className="text-[#D5B56A]">.SHOE</span>
                     </span>
-
-                    <span>
-                        <span className="block text-lg font-extrabold tracking-tight text-white sm:text-xl">
-                            Virsa<span className="text-[#EAD8A6]">.Shoe</span>
-                        </span>
-
-                        <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#F0E2BF]">
-                            Business Management
-                        </span>
+                    <span className="mt-2 block text-[9px] font-semibold tracking-[0.17em] text-[#D9CBB2]">
+                        OWNER CONTROL
                     </span>
                 </Link>
 
-                <div className="flex items-center gap-3">
-                    <span className="hidden text-xs font-medium text-slate-300 sm:inline">
-                        Owner Workspace
-                    </span>
-
-                    <Link to="/" className="owner-topbar-link">
-                        View Store
-                    </Link>
-
-                    <span
-                        className="grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-gradient-to-br from-sky-500 to-violet-500 text-sm font-extrabold text-white"
-                        aria-label="Owner profile"
-                    >
-                        O
-                    </span>
+                <div className="px-4 pt-6">
+                    <p className="mb-3 px-3 text-[9px] font-bold tracking-[0.16em] text-[#BDA986]">
+                        BUSINESS OVERSIGHT
+                    </p>
+                    <nav className="space-y-1" aria-label="Owner navigation">
+                        <OwnerLinks />
+                    </nav>
                 </div>
-            </header>
 
-            <div className="mx-auto grid max-w-[1700px] lg:grid-cols-[270px_minmax(0,1fr)]">
-                <aside className="owner-sidebar hidden lg:flex">
-                    <div className="mb-7 rounded-2xl border border-white/10 bg-white/[0.05] p-4">
-                        <div className="flex items-center gap-3">
-                            <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-sky-500 to-[#78531F] text-white">
-                                <ShieldCheck size={21} />
-                            </div>
+                <div className="mt-auto border-t border-white/15 p-4">
+                    <div className="rounded-md border border-white/15 bg-white/5 p-3">
+                        <div className="flex items-center gap-2 text-[#E8CC82]">
+                            <LockKeyhole size={14} aria-hidden="true" />
+                            <p className="text-[10px] font-semibold">Owner workspace</p>
+                        </div>
+                        <p className="mt-2 text-[10px] leading-5 text-[#D9CBB2]">
+                            Demonstration only. Server authorization is not connected.
+                        </p>
+                    </div>
+                    <Link to="/" className="mt-4 block px-2 text-xs text-[#E8CC82] hover:underline">
+                        ← Return to storefront
+                    </Link>
+                </div>
+            </aside>
 
-                            <div>
-                                <p className="text-sm font-bold text-white">
-                                    Business Overview
-                                </p>
-                                <p className="mt-1 text-xs text-slate-400">
-                                    Company management
-                                </p>
+            <div className="min-w-0 flex-1">
+                <header className="sticky top-0 z-30 border-b border-[#E6D8BC] bg-white/95 backdrop-blur">
+                    <div className="flex min-h-[70px] items-center justify-between gap-3 px-4 sm:px-7 lg:px-9">
+                        <div>
+                            <p className="text-[9px] font-bold tracking-[0.15em] text-[#9A7A3E]">
+                                VIRSA.SHOE / OWNER
+                            </p>
+                            <h1 className="mt-1 text-lg font-semibold tracking-[-0.035em] text-[#33251B]">
+                                Business control center
+                            </h1>
+                        </div>
+
+                        <div className="flex items-center gap-2 sm:gap-4">
+                            <span className="hidden rounded-full border border-[#E6D8BC] bg-[#FBF8F1] px-3 py-1.5 text-[9px] font-semibold text-[#78531F] sm:inline-flex">
+                                DEMO MODE
+                            </span>
+                            <button
+                                type="button"
+                                aria-label="Owner notifications demo"
+                                className="grid size-9 place-items-center rounded-md border border-[#E6D8BC] text-[#665745] hover:bg-[#F7F0E4]"
+                            >
+                                <Bell size={17} aria-hidden="true" />
+                            </button>
+                            <div className="grid size-9 place-items-center rounded-full bg-[#D5B56A] text-xs font-bold text-[#33251B]" aria-label="Owner demo account">
+                                O
                             </div>
                         </div>
                     </div>
 
-                    <p className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                        Business Control
-                    </p>
-
-                    <nav className="grid gap-1.5" aria-label="Owner navigation">
-                        {navigation.map((item) => {
-                            const Icon = item.icon;
-
-                            return (
-                                <NavLink
-                                    key={item.to}
-                                    to={item.to}
-                                    end={item.end}
-                                    className={({ isActive }) =>
-                                        `owner-nav-link ${isActive ? "owner-nav-active" : ""}`
-                                    }
-                                >
-                                    <Icon size={19} />
-                                    <span>{item.label}</span>
-                                </NavLink>
-                            );
-                        })}
+                    <nav
+                        aria-label="Mobile owner navigation"
+                        className="flex gap-1 overflow-x-auto border-t border-[#F0E7D6] px-3 py-2 lg:hidden"
+                    >
+                        <OwnerLinks mobile />
                     </nav>
+                </header>
 
-                    <div className="owner-sidebar-bottom mt-auto">
-                        <p className="text-xs font-semibold text-slate-200">
-                            Business Oversight
-                        </p>
-                        <p className="mt-2 text-xs leading-5 text-slate-400">
-                            Review operational performance, financial records and
-                            administrative activity.
-                        </p>
-                    </div>
-                </aside>
-
-                <main className="premium-enter min-w-0 p-4 sm:p-6 lg:p-8 xl:p-10">
-                    <div className="mb-5 flex gap-2 overflow-x-auto pb-2 lg:hidden">
-                        {navigation.map((item) => {
-                            const Icon = item.icon;
-
-                            return (
-                                <NavLink
-                                    key={item.to}
-                                    to={item.to}
-                                    end={item.end}
-                                    className={({ isActive }) =>
-                                        `owner-mobile-link ${isActive ? "owner-mobile-active" : ""
-                                        }`
-                                    }
-                                >
-                                    <Icon size={17} />
-                                    {item.label}
-                                </NavLink>
-                            );
-                        })}
-                    </div>
-
+                <main className="mx-auto w-full max-w-[1600px] p-4 sm:p-7 lg:p-9">
                     <Outlet />
                 </main>
             </div>
         </div>
     );
 }
-
-export default OwnerLayout;

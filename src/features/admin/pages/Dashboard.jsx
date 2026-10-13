@@ -1,313 +1,260 @@
-import {
-    Activity,
+﻿import {
+    ArrowDownRight,
     ArrowRight,
     ArrowUpRight,
-    Boxes,
+    CircleAlert,
+    ClipboardList,
     Package,
-    ShoppingCart,
-    Tags,
-    TriangleAlert,
+    ShoppingBag,
+    Users,
 } from "lucide-react";
-
+import {
+    Area,
+    AreaChart,
+    Bar,
+    BarChart,
+    CartesianGrid,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from "recharts";
 import { Link } from "react-router";
-import products from "../../../services/mock/products.js";
 
-const formatPrice = (price) =>
-    `Rs. ${Number(price || 0).toLocaleString("en-PK")}`;
+const weeklySales = [
+    { day: "Mon", sales: 42000, orders: 12 },
+    { day: "Tue", sales: 58000, orders: 17 },
+    { day: "Wed", sales: 49000, orders: 14 },
+    { day: "Thu", sales: 72000, orders: 21 },
+    { day: "Fri", sales: 64000, orders: 19 },
+    { day: "Sat", sales: 91000, orders: 28 },
+    { day: "Sun", sales: 76000, orders: 23 },
+];
 
-function Dashboard() {
-    const totalProducts = products.length;
+const categorySales = [
+    { category: "Sneakers", sales: 42 },
+    { category: "Casual", sales: 31 },
+    { category: "Formal", sales: 24 },
+    { category: "Sandals", sales: 18 },
+];
 
-    const totalStock = products.reduce(
-        (total, product) => total + Math.max(0, Number(product.stock) || 0),
-        0
+const orders = [
+    { id: "VS-24081", customer: "Ayesha Khan", date: "13 Oct 2026", total: 5499, status: "Processing" },
+    { id: "VS-24080", customer: "Hamza Ali", date: "13 Oct 2026", total: 8298, status: "Confirmed" },
+    { id: "VS-24079", customer: "Sara Ahmed", date: "12 Oct 2026", total: 6499, status: "Pending" },
+    { id: "VS-24078", customer: "Usman Tariq", date: "12 Oct 2026", total: 2799, status: "Shipped" },
+];
+
+const stockAlerts = [
+    { name: "City Form Derby", sku: "VS-1003", stock: 9, level: "Low stock" },
+    { name: "Heritage Peshawari", sku: "VS-1006", stock: 0, level: "Out of stock" },
+    { name: "Court Classic", sku: "VS-1002", stock: 12, level: "Monitor" },
+];
+
+function money(value) {
+    return `Rs. ${value.toLocaleString("en-PK")}`;
+}
+
+function StatCard({ title, value, change, positive, icon: Icon, note }) {
+    return (
+        <article className="rounded-lg border border-[#E6D8BC] bg-white p-4 sm:p-5">
+            <div className="flex items-start justify-between gap-3">
+                <p className="text-xs font-medium text-[#806F59]">{title}</p>
+                <span className="grid size-9 place-items-center rounded-md bg-[#F3EBDD] text-[#78531F]">
+                    <Icon size={17} aria-hidden="true" />
+                </span>
+            </div>
+
+            <p className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-[#33251B]">
+                {value}
+            </p>
+
+            <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[10px]">
+                <span className={positive ? "inline-flex items-center gap-1 font-semibold text-[#567044]" : "inline-flex items-center gap-1 font-semibold text-[#A15C3D]"}>
+                    {positive
+                        ? <ArrowUpRight size={13} aria-hidden="true" />
+                        : <ArrowDownRight size={13} aria-hidden="true" />
+                    }
+                    {change}
+                </span>
+                <span className="text-[#9A8A74]">{note}</span>
+            </div>
+        </article>
     );
+}
 
-    const lowStockProducts = products.filter(
-        (product) => Number(product.stock) > 0 && Number(product.stock) <= 10
-    );
-
-    const outOfStockProducts = products.filter(
-        (product) => Number(product.stock) <= 0
-    );
-
-    const categories = new Set(
-        products.map((product) => product.category).filter(Boolean)
-    );
-
-    const inventoryProducts = [...products]
-        .sort((a, b) => Number(a.stock) - Number(b.stock))
-        .slice(0, 5);
-
-    const stats = [
-        {
-            label: "Products",
-            value: totalProducts.toLocaleString("en-PK"),
-            note: "Items in the current catalogue",
-            icon: Package,
-            tone: "violet",
-        },
-        {
-            label: "Units in Stock",
-            value: totalStock.toLocaleString("en-PK"),
-            note: "Combined listed stock quantity",
-            icon: Boxes,
-            tone: "blue",
-        },
-        {
-            label: "Low Stock",
-            value: lowStockProducts.length.toLocaleString("en-PK"),
-            note: "Products with 10 or fewer units",
-            icon: TriangleAlert,
-            tone: "amber",
-        },
-        {
-            label: "Categories",
-            value: categories.size.toLocaleString("en-PK"),
-            note: "Categories represented in the catalogue",
-            icon: Tags,
-            tone: "sky",
-        },
-    ];
-
-    const toneClasses = {
-        violet: "bg-[#F3EBDD] text-[#5D3D14]",
-        blue: "bg-blue-100 text-blue-700",
-        amber: "bg-amber-100 text-amber-700",
-        sky: "bg-sky-100 text-sky-700",
+function Status({ value }) {
+    const classes = {
+        Processing: "bg-[#F5E7C8] text-[#77531B]",
+        Confirmed: "bg-[#E9EFDF] text-[#53683B]",
+        Pending: "bg-[#F6E5D8] text-[#985A34]",
+        Shipped: "bg-[#E9E1D3] text-[#68533C]",
     };
 
     return (
-        <div className="space-y-8">
-            <section className="admin-welcome-panel premium-card">
-                <div className="relative z-10 max-w-2xl">
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-200">
-                        Store Management
-                    </p>
-
-                    <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-                        Store overview
-                    </h1>
-
-                    <p className="mt-4 max-w-xl text-sm leading-6 text-slate-300 sm:text-base">
-                        Monitor your catalogue, keep track of stock levels and manage
-                        store operations from one place.
-                    </p>
-
-                    <div className="mt-6 flex flex-wrap gap-3">
-                        <Link to="/admin/products/new" className="admin-primary-button">
-                            <Package size={17} />
-                            Add Product
-                            <ArrowUpRight size={16} />
-                        </Link>
-
-                        <Link to="/admin/inventory" className="admin-secondary-button">
-                            Review Inventory
-                            <ArrowRight size={16} />
-                        </Link>
-                    </div>
-                </div>
-
-                <div className="admin-welcome-orb" aria-hidden="true">
-                    <Boxes size={74} strokeWidth={1.2} />
-                </div>
-            </section>
-
-            <section>
-                <div className="mb-5">
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#5D3D14]">
-                        At a Glance
-                    </p>
-
-                    <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-[#3D2A1D]">
-                        Catalogue and inventory
-                    </h2>
-                </div>
-
-                <div className="grid gap-5 sm:grid-cols-2 2xl:grid-cols-4">
-                    {stats.map((stat, index) => {
-                        const Icon = stat.icon;
-
-                        return (
-                            <article
-                                key={stat.label}
-                                className="dashboard-stat-card premium-card"
-                                style={{ animationDelay: `${index * 70}ms` }}
-                            >
-                                <div className="flex items-start justify-between gap-3">
-                                    <span
-                                        className={`dashboard-stat-icon ${toneClasses[stat.tone]}`}
-                                    >
-                                        <Icon size={23} />
-                                    </span>
-                                </div>
-
-                                <p className="mt-6 text-sm font-semibold text-slate-500">
-                                    {stat.label}
-                                </p>
-
-                                <p className="mt-2 text-3xl font-extrabold tracking-tight text-[#3D2A1D]">
-                                    {stat.value}
-                                </p>
-
-                                <p className="mt-3 text-xs leading-5 text-slate-500">
-                                    {stat.note}
-                                </p>
-                            </article>
-                        );
-                    })}
-                </div>
-            </section>
-
-            <section className="grid gap-6 xl:grid-cols-[1.3fr_0.9fr]">
-                <article className="dashboard-panel premium-card">
-                    <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-                        <div>
-                            <h2 className="text-lg font-extrabold text-[#3D2A1D]">
-                                Inventory requiring attention
-                            </h2>
-
-                            <p className="mt-1 text-sm text-slate-500">
-                                Products with the lowest listed quantities
-                            </p>
-                        </div>
-
-                        <Link to="/admin/inventory" className="dashboard-text-link">
-                            Full inventory
-                            <ArrowUpRight size={15} />
-                        </Link>
-                    </div>
-
-                    {inventoryProducts.length > 0 ? (
-                        <div className="space-y-2">
-                            {inventoryProducts.map((product) => {
-                                const stock = Math.max(0, Number(product.stock) || 0);
-
-                                const status =
-                                    stock === 0
-                                        ? "Out of stock"
-                                        : stock <= 10
-                                            ? "Low stock"
-                                            : "In stock";
-
-                                const statusClass =
-                                    stock === 0
-                                        ? "bg-red-50 text-red-700"
-                                        : stock <= 10
-                                            ? "bg-amber-50 text-amber-700"
-                                            : "bg-emerald-50 text-emerald-700";
-
-                                return (
-                                    <div
-                                        key={product.id ?? product.slug ?? product.name}
-                                        className="approval-item"
-                                    >
-                                        <div className="min-w-0">
-                                            <p className="truncate text-sm font-bold text-slate-800">
-                                                {product.name}
-                                            </p>
-
-                                            <p className="mt-1 text-xs text-slate-500">
-                                                {product.category || "Footwear"} · {formatPrice(product.price)}
-                                            </p>
-                                        </div>
-
-                                        <div className="shrink-0 text-right">
-                                            <p className="text-sm font-extrabold text-slate-800">
-                                                {stock} units
-                                            </p>
-
-                                            <span
-                                                className={`mt-1 inline-flex rounded-full px-2 py-1 text-[10px] font-bold ${statusClass}`}
-                                            >
-                                                {status}
-                                            </span>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        <div className="rounded-2xl border border-dashed border-slate-300 p-8 text-center">
-                            <Package className="mx-auto h-8 w-8 text-slate-400" />
-                            <p className="mt-3 text-sm font-bold text-slate-800">
-                                No products in the catalogue
-                            </p>
-                            <Link
-                                to="/admin/products/new"
-                                className="mt-4 inline-flex text-sm font-bold text-[#5D3D14] hover:text-blue-700"
-                            >
-                                Add the first product
-                            </Link>
-                        </div>
-                    )}
-                </article>
-
-                <article className="dashboard-panel premium-card">
-                    <div className="flex items-center gap-3">
-                        <span className="grid h-11 w-11 place-items-center rounded-xl bg-[#F3EBDD] text-[#5D3D14]">
-                            <ShoppingCart size={22} />
-                        </span>
-
-                        <div>
-                            <h2 className="text-lg font-extrabold text-[#3D2A1D]">
-                                Order management
-                            </h2>
-
-                            <p className="mt-1 text-sm text-slate-500">
-                                Customer order activity
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="mt-7 rounded-2xl border border-dashed border-slate-300 bg-slate-50/80 px-5 py-8 text-center">
-                        <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-[#5D3D14] shadow-sm">
-                            <ClipboardListIcon />
-                        </span>
-
-                        <h3 className="mt-4 text-sm font-bold text-slate-800">
-                            Order records
-                        </h3>
-
-                        <p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-slate-500">
-                            Customer order information will appear here when order records
-                            are available.
-                        </p>
-
-                        <Link to="/admin/orders" className="admin-inline-action mt-5">
-                            Open Orders
-                            <ArrowRight size={16} />
-                        </Link>
-                    </div>
-
-                    <div className="mt-5 flex items-start gap-3 rounded-xl bg-sky-50 p-4">
-                        <Activity size={18} className="mt-0.5 shrink-0 text-sky-700" />
-
-                        <p className="text-xs leading-5 text-sky-900">
-                            Inventory figures on this page are calculated from the current
-                            product catalogue. Financial and order reports need their own
-                            records.
-                        </p>
-                    </div>
-                </article>
-            </section>
-
-            {outOfStockProducts.length > 0 && (
-                <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-                    <TriangleAlert size={19} className="mt-0.5 shrink-0" />
-                    <p>
-                        <strong>{outOfStockProducts.length}</strong>{" "}
-                        {outOfStockProducts.length === 1 ? "product is" : "products are"}{" "}
-                        currently marked out of stock in the catalogue.
-                    </p>
-                </div>
-            )}
-        </div>
+        <span className={`inline-flex rounded-full px-2.5 py-1 text-[9px] font-semibold ${classes[value] || "bg-[#F3EBDD] text-[#665745]"}`}>
+            {value}
+        </span>
     );
 }
 
-function ClipboardListIcon() {
-    return <ShoppingCart size={22} />;
-}
+export default function AdminDashboard() {
+    return (
+        <div className="space-y-7">
+            <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+                <div>
+                    <p className="text-[10px] font-bold tracking-[0.15em] text-[#9A7A3E]">
+                        TUESDAY / 13 OCTOBER
+                    </p>
+                    <h2 className="mt-2 text-2xl font-semibold tracking-[-0.045em] text-[#33251B] sm:text-3xl">
+                        Store overview
+                    </h2>
+                    <p className="mt-2 text-xs text-[#806F59]">
+                        A snapshot of store activity using illustrative demo data.
+                    </p>
+                </div>
 
-export default Dashboard;
+                <Link
+                    to="/admin/orders"
+                    className="inline-flex min-h-10 w-fit items-center justify-center gap-2 rounded-md bg-[#3D2A1D] px-4 text-xs font-semibold text-white transition-colors hover:bg-[#78531F]"
+                >
+                    View orders
+                    <ArrowRight size={14} aria-hidden="true" />
+                </Link>
+            </section>
+
+            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <StatCard title="Gross sales" value={money(452680)} change="+8.2%" positive note="vs previous period" icon={ShoppingBag} />
+                <StatCard title="Orders" value="134" change="+5.4%" positive note="vs previous period" icon={ClipboardList} />
+                <StatCard title="Active customers" value="1,248" change="+3.1%" positive note="vs previous period" icon={Users} />
+                <StatCard title="Low / empty stock" value="12 items" change="Needs review" positive={false} note="sample alert" icon={Package} />
+            </section>
+
+            <section className="grid min-w-0 gap-5 xl:grid-cols-[1.5fr_1fr]">
+                <article className="min-w-0 rounded-lg border border-[#E6D8BC] bg-white p-4 sm:p-6">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                            <h3 className="text-sm font-semibold text-[#33251B]">Sales over the week</h3>
+                            <p className="mt-1 text-[10px] text-[#9A8A74]">Illustrative gross sales · PKR</p>
+                        </div>
+                        <span className="rounded-md bg-[#F7F0E4] px-3 py-1.5 text-[10px] font-semibold text-[#78531F]">
+                            LAST 7 DAYS
+                        </span>
+                    </div>
+
+                    <div className="mt-5 h-[260px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={weeklySales} margin={{ top: 10, right: 8, left: -12, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="adminSalesFill" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#C9A34C" stopOpacity={0.28} />
+                                        <stop offset="95%" stopColor="#C9A34C" stopOpacity={0.02} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid stroke="#EEE5D5" strokeDasharray="3 3" vertical={false} />
+                                <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fill: "#9A8A74", fontSize: 10 }} />
+                                <YAxis tickLine={false} axisLine={false} tick={{ fill: "#9A8A74", fontSize: 10 }} tickFormatter={(value) => `${value / 1000}k`} />
+                                <Tooltip formatter={(value) => [money(Number(value)), "Sales"]} contentStyle={{ borderRadius: 8, borderColor: "#E6D8BC", fontSize: 11 }} />
+                                <Area type="monotone" dataKey="sales" stroke="#A7833C" strokeWidth={2.5} fill="url(#adminSalesFill)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+                </article>
+
+                <article className="min-w-0 rounded-lg border border-[#E6D8BC] bg-white p-4 sm:p-6">
+                    <div>
+                        <h3 className="text-sm font-semibold text-[#33251B]">Sales by category</h3>
+                        <p className="mt-1 text-[10px] text-[#9A8A74]">Sample units sold</p>
+                    </div>
+
+                    <div className="mt-5 h-[260px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={categorySales} layout="vertical" margin={{ top: 4, right: 12, left: 4, bottom: 4 }}>
+                                <CartesianGrid stroke="#EEE5D5" strokeDasharray="3 3" horizontal={false} />
+                                <XAxis type="number" tickLine={false} axisLine={false} tick={{ fill: "#9A8A74", fontSize: 10 }} />
+                                <YAxis dataKey="category" type="category" width={70} tickLine={false} axisLine={false} tick={{ fill: "#806F59", fontSize: 10 }} />
+                                <Tooltip contentStyle={{ borderRadius: 8, borderColor: "#E6D8BC", fontSize: 11 }} />
+                                <Bar dataKey="sales" name="Units" fill="#78531F" radius={[0, 4, 4, 0]} barSize={18} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </article>
+            </section>
+
+            <section className="grid min-w-0 gap-5 xl:grid-cols-[1.5fr_1fr]">
+                <article className="min-w-0 rounded-lg border border-[#E6D8BC] bg-white">
+                    <div className="flex items-center justify-between gap-3 border-b border-[#E6D8BC] px-4 py-4 sm:px-5">
+                        <div>
+                            <h3 className="text-sm font-semibold text-[#33251B]">Recent orders</h3>
+                            <p className="mt-1 text-[10px] text-[#9A8A74]">Illustrative records</p>
+                        </div>
+
+                        <Link to="/admin/orders" className="text-[10px] font-semibold text-[#78531F] hover:underline">
+                            View all
+                        </Link>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-[550px] text-left">
+                            <thead className="bg-[#FBF8F1] text-[9px] font-semibold tracking-[0.1em] text-[#8C795C]">
+                                <tr>
+                                    <th className="px-4 py-3 sm:px-5">ORDER</th>
+                                    <th className="px-4 py-3">CUSTOMER</th>
+                                    <th className="px-4 py-3">TOTAL</th>
+                                    <th className="px-4 py-3 sm:px-5">STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-[#F0E7D6]">
+                                {orders.map((order) => (
+                                    <tr key={order.id}>
+                                        <td className="px-4 py-4 text-xs font-semibold text-[#4D4033] sm:px-5">{order.id}</td>
+                                        <td className="px-4 py-4 text-xs text-[#665745]">{order.customer}</td>
+                                        <td className="px-4 py-4 text-xs font-medium text-[#33251B]">{money(order.total)}</td>
+                                        <td className="px-4 py-4 sm:px-5"><Status value={order.status} /></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <article className="rounded-lg border border-[#E6D8BC] bg-white">
+                    <div className="border-b border-[#E6D8BC] px-4 py-4 sm:px-5">
+                        <div className="flex items-center gap-2">
+                            <CircleAlert size={16} className="text-[#A7833C]" aria-hidden="true" />
+                            <h3 className="text-sm font-semibold text-[#33251B]">Inventory watch</h3>
+                        </div>
+                        <p className="mt-1 text-[10px] text-[#9A8A74]">Sample stock status</p>
+                    </div>
+
+                    <div className="divide-y divide-[#F0E7D6]">
+                        {stockAlerts.map((item) => (
+                            <div key={item.sku} className="flex items-center justify-between gap-3 px-4 py-4 sm:px-5">
+                                <div className="min-w-0">
+                                    <p className="truncate text-xs font-semibold text-[#4D4033]">{item.name}</p>
+                                    <p className="mt-1 text-[10px] text-[#9A8A74]">{item.sku}</p>
+                                </div>
+                                <div className="shrink-0 text-right">
+                                    <p className="text-xs font-semibold text-[#33251B]">{item.stock} units</p>
+                                    <p className={item.stock === 0 ? "mt-1 text-[9px] font-semibold text-red-700" : "mt-1 text-[9px] text-[#8C795C]"}>
+                                        {item.level}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <Link to="/admin/inventory" className="flex items-center justify-between border-t border-[#E6D8BC] px-4 py-3 text-[10px] font-semibold text-[#78531F] hover:bg-[#FBF8F1] sm:px-5">
+                        Open inventory
+                        <ArrowRight size={14} aria-hidden="true" />
+                    </Link>
+                </article>
+            </section>
+
+            <p className="text-[10px] leading-5 text-[#9A8A74]">
+                Demo notice: Orders, sales, customers and stock above are illustrative.
+                They are not connected to a live store or database.
+            </p>
+        </div>
+    );
+}

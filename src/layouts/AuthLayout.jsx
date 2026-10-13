@@ -1,78 +1,86 @@
-import { ArrowLeft, Footprints, ShieldCheck, Sparkles } from "lucide-react";
-import { Link, Outlet } from "react-router";
+﻿import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { Link } from "react-router";
 
-function AuthLayout() {
+export default function AuthLayout({ children }) {
     return (
-        <main className="auth-shell flex min-h-screen items-center justify-center p-3 sm:p-6 lg:p-10">
-            <div className="auth-frame premium-enter">
-                <section className="auth-showcase hidden lg:flex">
-                    <div className="auth-glow auth-glow-one" />
-                    <div className="auth-glow auth-glow-two" />
+        <main className="min-h-screen bg-[#FBF8F1] lg:grid lg:grid-cols-[1.02fr_0.98fr]">
+            <section className="relative hidden min-h-screen overflow-hidden bg-[#3D2A1D] lg:block">
+                <img
+                    src="https://images.unsplash.com/photo-1614252369475-531eba835eb1?auto=format&fit=crop&w=1500&q=90"
+                    alt="Footwear editorial photograph"
+                    fetchPriority="high"
+                    className="absolute inset-0 h-full w-full object-cover opacity-65"
+                />
 
-                    <Link to="/" className="relative z-10 flex items-center gap-3">
-                        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/15 text-white ring-1 ring-white/25 backdrop-blur">
-                            <Footprints size={25} />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#26170F]/95 via-[#3D2A1D]/35 to-[#3D2A1D]/25" />
+
+                <div className="relative flex min-h-screen flex-col justify-between p-10 xl:p-14">
+                    <Link to="/" className="inline-flex w-fit flex-col text-white">
+                        <span className="text-2xl font-extrabold tracking-[-0.06em]">
+                            VIRSA<span className="text-[#E5C16B]">.SHOE</span>
                         </span>
-
-                        <span className="text-2xl font-extrabold tracking-tight text-white">
-                            Virsa<span className="text-[#EAD8A6]">.Shoe</span>
+                        <span className="mt-1 text-[9px] tracking-[0.2em] text-white/70">
+                            EVERYDAY FOOTWEAR
                         </span>
                     </Link>
 
-                    <div className="relative z-10 mt-auto">
-                        <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#F0E2BF]">
-                            <Sparkles size={15} />
-                            Step Into Your Own Style
-                        </span>
-
-                        <h1 className="mt-6 max-w-lg text-5xl font-extrabold leading-tight tracking-tight text-white">
-                            Every great journey starts with a step.
-                        </h1>
-
-                        <p className="mt-5 max-w-md text-base leading-7 text-slate-300">
-                            Welcome to your Virsa.Shoe account. Explore collections and keep
-                            your shopping journey organized.
+                    <div className="max-w-lg pb-8">
+                        <p className="text-[10px] font-bold tracking-[0.2em] text-[#E8CC82]">
+                            THE VIRSA EDIT
                         </p>
 
-                        <div className="mt-8 flex items-center gap-3 text-sm font-medium text-slate-200">
-                            <ShieldCheck size={20} className="text-[#EAD8A6]" />
-                            A modern shopping experience, built for you.
-                        </div>
-                    </div>
+                        <h1 className="mt-5 text-4xl font-semibold leading-[1.1] tracking-[-0.05em] text-white xl:text-6xl">
+                            Your everyday.
+                            <br />
+                            Your own style.
+                        </h1>
 
-                    <p className="relative z-10 mt-12 text-xs text-slate-400">
-                        © {new Date().getFullYear()} Virsa.Shoe
-                    </p>
-                </section>
+                        <p className="mt-5 max-w-md text-sm leading-7 text-white/75">
+                            Find the pair that feels right for where you are going
+                            and everything you do along the way.
+                        </p>
 
-                <section className="auth-form-panel">
-                    <div className="mb-8 flex items-center justify-between gap-4 lg:hidden">
-                        <Link to="/" className="text-xl font-extrabold tracking-tight text-[#3D2A1D]">
-                            Virsa<span className="text-[#78531F]">.Shoe</span>
+                        <Link
+                            to="/shop"
+                            className="mt-7 inline-flex items-center gap-3 border-b border-[#E8CC82] pb-2 text-xs font-semibold text-white transition-colors hover:text-[#E8CC82]"
+                        >
+                            Explore the collection
+                            <ArrowUpRight size={15} aria-hidden="true" />
                         </Link>
-
-                        <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#F3EBDD] text-[#5D3D14]">
-                            <Footprints size={21} />
-                        </span>
                     </div>
+
+                    <p className="text-[10px] tracking-[0.12em] text-white/60">
+                        A MORE PERSONAL KIND OF FOOTWEAR.
+                    </p>
+                </div>
+            </section>
+
+            <section className="flex min-h-screen flex-col bg-[#FBF8F1] px-5 py-5 sm:px-10 lg:px-12 xl:px-20">
+                <div className="flex items-center justify-between lg:justify-end">
+                    <Link to="/" className="text-lg font-extrabold tracking-[-0.06em] text-[#3D2A1D] lg:hidden">
+                        VIRSA<span className="text-[#A7833C]">.SHOE</span>
+                    </Link>
 
                     <Link
                         to="/"
-                        className="auth-back-link mb-7 hidden items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#5D3D14] sm:inline-flex"
+                        className="inline-flex items-center gap-2 text-xs font-medium text-[#786751] transition-colors hover:text-[#78531F]"
                     >
-                        <ArrowLeft size={16} />
-                        Back to Store
+                        <ArrowLeft size={14} aria-hidden="true" />
+                        Back to store
                     </Link>
+                </div>
 
-                    <Outlet />
+                <div className="flex flex-1 items-center justify-center py-10">
+                    <div className="w-full max-w-[430px]">
+                        {children}
+                    </div>
+                </div>
 
-                    <p className="mt-8 text-center text-xs leading-5 text-slate-400">
-                        Frontend preview · Secure authentication will be connected to the backend later.
-                    </p>
-                </section>
-            </div>
+                <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#E6D8BC] py-4 text-[10px] text-[#8C795C]">
+                    <span>© {new Date().getFullYear()} Virsa.Shoe</span>
+                    <span>Customer account · Demo interface</span>
+                </div>
+            </section>
         </main>
     );
 }
-
-export default AuthLayout;

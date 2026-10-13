@@ -1,181 +1,175 @@
-import { useState } from "react";
-import {
-    ArrowRight,
-    Eye,
-    EyeOff,
-    Footprints,
-    LockKeyhole,
-    Mail,
-    ShieldCheck,
-    Sparkles,
-} from "lucide-react";
-
+﻿import { useState } from "react";
+import { Eye, EyeOff, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-function Login() {
+const loginSchema = z.object({
+    email: z.string().trim().email("Enter a valid email address."),
+    password: z.string().min(8, "Password must contain at least 8 characters."),
+    remember: z.boolean().optional(),
+});
+
+export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
-    const [message, setMessage] = useState("");
+    const [status, setStatus] = useState("");
 
-    function handleSubmit(event) {
-        event.preventDefault();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+            remember: true,
+        },
+    });
 
-        setMessage(
-            "Demo login only. Real authentication will be connected later."
+    function submitLogin() {
+        setStatus(
+            "Your form is valid. Account authentication has not been connected yet.",
         );
     }
 
     return (
-        <div className="login-content">
-            {/* Heading */}
-            <div className="mb-7">
-                <span className="login-heading-icon">
-                    <Footprints size={25} />
-                </span>
+        <div>
+            <p className="text-[10px] font-bold tracking-[0.18em] text-[#977332]">
+                WELCOME BACK
+            </p>
 
-                <p className="mt-6 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[#5D3D14]">
-                    <Sparkles size={15} />
-                    Welcome Back
-                </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-[#33251B] sm:text-4xl">
+                Sign in to your account.
+            </h2>
 
-                <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[#3D2A1D] sm:text-4xl">
-                    Sign in to your account
-                </h1>
+            <p className="mt-3 text-sm leading-6 text-[#776653]">
+                Your saved styles and account details are just ahead.
+            </p>
 
-                <p className="mt-3 text-sm leading-6 text-slate-500">
-                    Continue your footwear journey with Virsa.Shoe.
-                </p>
-            </div>
-
-            {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Email */}
+            <form onSubmit={handleSubmit(submitLogin)} noValidate className="mt-8 space-y-5">
                 <div>
-                    <label
-                        htmlFor="login-email"
-                        className="mb-2 block text-sm font-bold text-slate-700"
-                    >
+                    <label htmlFor="login-email" className="mb-2 block text-xs font-semibold text-[#4D4033]">
                         Email address
                     </label>
 
-                    <div className="login-input-wrap">
-                        <Mail size={19} className="shrink-0 text-slate-400" />
+                    <div className={[
+                        "flex h-12 items-center gap-3 rounded-md border bg-white px-3 transition-colors focus-within:border-[#A7833C]",
+                        errors.email ? "border-red-400" : "border-[#DCCDAE]",
+                    ].join(" ")}>
+                        <Mail size={17} className="shrink-0 text-[#987944]" aria-hidden="true" />
 
                         <input
                             id="login-email"
-                            name="email"
                             type="email"
                             autoComplete="email"
                             placeholder="you@example.com"
-                            required
-                            className="login-input"
+                            aria-invalid={Boolean(errors.email)}
+                            aria-describedby={errors.email ? "login-email-error" : undefined}
+                            {...register("email")}
+                            className="min-w-0 flex-1 bg-transparent text-sm text-[#33251B] outline-none placeholder:text-[#B0A18A]"
                         />
                     </div>
+
+                    {errors.email && (
+                        <p id="login-email-error" role="alert" className="mt-2 text-xs text-red-700">
+                            {errors.email.message}
+                        </p>
+                    )}
                 </div>
 
-                {/* Password */}
                 <div>
                     <div className="mb-2 flex items-center justify-between gap-3">
-                        <label
-                            htmlFor="login-password"
-                            className="text-sm font-bold text-slate-700"
-                        >
+                        <label htmlFor="login-password" className="text-xs font-semibold text-[#4D4033]">
                             Password
                         </label>
 
-                        <Link
-                            to="/forgot-password"
-                            className="text-xs font-bold text-[#5D3D14] transition-colors hover:text-blue-700"
-                        >
+                        <Link to="/forgot-password" className="text-[11px] font-semibold text-[#78531F] hover:underline">
                             Forgot password?
                         </Link>
                     </div>
 
-                    <div className="login-input-wrap">
-                        <LockKeyhole
-                            size={19}
-                            className="shrink-0 text-slate-400"
-                        />
+                    <div className={[
+                        "flex h-12 items-center gap-3 rounded-md border bg-white px-3 transition-colors focus-within:border-[#A7833C]",
+                        errors.password ? "border-red-400" : "border-[#DCCDAE]",
+                    ].join(" ")}>
+                        <LockKeyhole size={17} className="shrink-0 text-[#987944]" aria-hidden="true" />
 
                         <input
                             id="login-password"
-                            name="password"
                             type={showPassword ? "text" : "password"}
                             autoComplete="current-password"
                             placeholder="Enter your password"
-                            required
-                            className="login-input"
+                            aria-invalid={Boolean(errors.password)}
+                            aria-describedby={errors.password ? "login-password-error" : undefined}
+                            {...register("password")}
+                            className="min-w-0 flex-1 bg-transparent text-sm text-[#33251B] outline-none placeholder:text-[#B0A18A]"
                         />
 
                         <button
                             type="button"
-                            onClick={() => setShowPassword((visible) => !visible)}
+                            onClick={() => setShowPassword((value) => !value)}
                             aria-label={showPassword ? "Hide password" : "Show password"}
-                            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-500 transition hover:bg-[#F3EBDD] hover:text-[#5D3D14]"
+                            className="grid size-8 place-items-center rounded-md text-[#8C795C] hover:bg-[#F7F0E4] hover:text-[#78531F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A7833C]"
                         >
-                            {showPassword ? (
-                                <EyeOff size={18} />
-                            ) : (
-                                <Eye size={18} />
-                            )}
+                            {showPassword
+                                ? <EyeOff size={17} aria-hidden="true" />
+                                : <Eye size={17} aria-hidden="true" />
+                            }
                         </button>
                     </div>
+
+                    {errors.password && (
+                        <p id="login-password-error" role="alert" className="mt-2 text-xs text-red-700">
+                            {errors.password.message}
+                        </p>
+                    )}
                 </div>
 
-                {/* Remember Me */}
-                <label className="flex cursor-pointer items-center gap-3 text-sm text-slate-600">
+                <label className="flex items-center gap-2.5 text-xs text-[#776653]">
                     <input
-                        name="remember"
                         type="checkbox"
-                        className="h-4 w-4 accent-violet-600"
+                        {...register("remember")}
+                        className="size-4 rounded accent-[#78531F]"
                     />
-
-                    Remember me on this device
+                    Keep me signed in on this device
                 </label>
 
-                {/* Submit */}
-                <button type="submit" className="login-submit-button group">
-                    <span>Sign In</span>
-
-                    <ArrowRight
-                        size={19}
-                        className="transition-transform duration-300 group-hover:translate-x-1"
-                    />
+                <button
+                    type="submit"
+                    className="flex h-12 w-full items-center justify-center rounded-md bg-[#3D2A1D] px-5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#78531F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A34C] focus-visible:ring-offset-2"
+                >
+                    Sign in
                 </button>
 
-                {message && (
-                    <p
-                        role="status"
-                        aria-live="polite"
-                        className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm leading-6 text-sky-800"
-                    >
-                        {message}
+                {status && (
+                    <p role="status" className="border border-[#DCCDAE] bg-white p-3 text-xs leading-5 text-[#5D3D14]">
+                        {status}
                     </p>
                 )}
             </form>
 
-            {/* Registration Link */}
-            <div className="my-7 flex items-center gap-3">
-                <span className="h-px flex-1 bg-slate-200" />
-
-                <span className="text-xs font-medium text-slate-400">
-                    NEW TO VIRSA.SHOE?
-                </span>
-
-                <span className="h-px flex-1 bg-slate-200" />
+            <div className="my-7 flex items-center gap-3 text-[10px] text-[#9A8A74]">
+                <span className="h-px flex-1 bg-[#E6D8BC]" />
+                YOUR VIRSA ACCOUNT
+                <span className="h-px flex-1 bg-[#E6D8BC]" />
             </div>
 
-            <Link to="/register" className="login-register-button">
-                Create an Account
-                <ArrowRight size={17} />
-            </Link>
+            <div className="flex items-start gap-3 rounded-md border border-[#E6D8BC] bg-white p-4">
+                <ShieldCheck size={19} className="mt-0.5 shrink-0 text-[#977332]" aria-hidden="true" />
+                <p className="text-[11px] leading-5 text-[#776653]">
+                    This is the frontend sign-in experience. Real accounts, secure
+                    sessions and password recovery need the backend authentication phase.
+                </p>
+            </div>
 
-            {/* Notice */}
-            <p className="mt-6 flex items-center justify-center gap-2 text-xs leading-5 text-slate-400">
-                <ShieldCheck size={16} className="shrink-0 text-emerald-600" />
-                Frontend demo. No password is sent to a server.
+            <p className="mt-7 text-center text-sm text-[#776653]">
+                New to Virsa.Shoe?{" "}
+                <Link to="/register" className="font-semibold text-[#78531F] hover:underline">
+                    Create an account
+                </Link>
             </p>
         </div>
     );
 }
-
-export default Login;
