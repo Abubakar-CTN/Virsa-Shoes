@@ -16,7 +16,7 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: false,
-        image: "/images/products/urban-runner-x1.jpg",
+        image: "/images/shoes/sneaker-white.jpg",
     },
 
     {
@@ -36,7 +36,7 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: false,
-        image: "/images/products/classic-leather-pro.jpg",
+        image: "/images/shoes/formal-pattern.jpg",
     },
 
     {
@@ -56,7 +56,7 @@ const products = [
         isFeatured: false,
         isPopular: true,
         isNew: true,
-        image: "/images/products/street-flex.jpg",
+        image: "/images/shoes/formal-lifestyle.jpg",
     },
 
     {
@@ -76,7 +76,7 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: true,
-        image: "/images/products/aero-sport-max.jpg",
+        image: "/images/shoes/running-black.jpg",
     },
 
     {
@@ -96,7 +96,7 @@ const products = [
         isFeatured: false,
         isPopular: false,
         isNew: true,
-        image: "/images/products/daily-comfort.jpg",
+        image: "/images/shoes/leather-sandals.jpg",
     },
 
     {
@@ -116,7 +116,7 @@ const products = [
         isFeatured: true,
         isPopular: false,
         isNew: false,
-        image: "/images/products/royal-derby.jpg",
+        image: "/images/shoes/brown-dress.jpg",
     },
 
     {
@@ -136,7 +136,7 @@ const products = [
         isFeatured: false,
         isPopular: true,
         isNew: true,
-        image: "/images/products/cloud-walk.jpg",
+        image: "/images/shoes/formal-classic.jpg",
     },
 
     {
@@ -156,7 +156,7 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: true,
-        image: "/images/products/elite-street-pro.jpg",
+        image: "/images/shoes/formal-dark.jpg",
     },
 ];
 

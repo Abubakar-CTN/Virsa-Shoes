@@ -1,3 +1,4 @@
+import Day4FinishSections, { TrustBar } from "../components/Day4FinishSections.jsx";
 import { useState } from "react";
 import {
     ArrowRight,
@@ -8,35 +9,50 @@ import {
     Star,
 } from "lucide-react";
 import { Link } from "react-router";
+import ProductCollectionSection from "../components/ProductCollectionSection.jsx";
 
 const categories = [
     {
         name: "Everyday Sneakers",
-        description: "Easygoing styles for every day.",
-        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85",
+        description: "Clean styles for everyday plans.",
+        image: "/images/shoes/sneaker-white.jpg",
         to: "/categories/sneakers",
         number: "01",
     },
     {
         name: "Formal & Work",
-        description: "A sharper step for every occasion.",
-        image: "https://images.unsplash.com/photo-1614252369475-531eba835eb1?auto=format&fit=crop&w=900&q=85",
+        description: "Classic footwear for sharper occasions.",
+        image: "/images/shoes/formal-classic.jpg",
         to: "/categories/formal",
         number: "02",
     },
     {
-        name: "Off-Duty Comfort",
-        description: "Relaxed footwear, considered.",
-        image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=85",
-        to: "/categories/casual",
+        name: "Running & Training",
+        description: "Sport-inspired everyday footwear.",
+        image: "/images/shoes/running-black.jpg",
+        to: "/categories/sports",
         number: "03",
     },
     {
-        name: "Sandals & Slides",
-        description: "Keep your everyday simple.",
-        image: "https://images.unsplash.com/photo-1603487742131-4160ec999306?auto=format&fit=crop&w=900&q=85",
+        name: "Leather Sandals",
+        description: "Relaxed styles for warmer days.",
+        image: "/images/shoes/leather-sandals.jpg",
         to: "/categories/sandals",
         number: "04",
+    },
+    {
+        name: "Classic Leather",
+        description: "Timeless brown leather styles.",
+        image: "/images/shoes/brown-dress.jpg",
+        to: "/categories/formal",
+        number: "05",
+    },
+    {
+        name: "Occasion Sandals",
+        description: "Statement footwear for special plans.",
+        image: "/images/shoes/women-sandals.jpg",
+        to: "/categories/sandals",
+        number: "06",
     },
 ];
 
@@ -48,7 +64,8 @@ const products = [
         price: 5499,
         comparePrice: 6999,
         badge: "THE EVERYDAY EDIT",
-        image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=85",
+        image: "/images/shoes/sneaker-white.jpg",
+        isPopular: true,
     },
     {
         slug: "court-classic",
@@ -56,7 +73,9 @@ const products = [
         category: "CLEAN & VERSATILE",
         price: 4899,
         badge: "CLEAN CLASSIC",
-        image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=900&q=85",
+        image: "/images/shoes/running-black.jpg",
+        isNew: true,
+        isPopular: true,
     },
     {
         slug: "city-form-loafer",
@@ -64,15 +83,65 @@ const products = [
         category: "SMART EVERYDAY",
         price: 6499,
         badge: "ELEVATED ESSENTIAL",
-        image: "https://images.unsplash.com/photo-1614252369475-531eba835eb1?auto=format&fit=crop&w=900&q=85",
+        image: "/images/shoes/formal-classic.jpg",
+        isPopular: true,
     },
     {
         slug: "weekend-slide",
         name: "Weekend Slide",
         category: "OFF-DUTY COMFORT",
         price: 2799,
+        comparePrice: 3299,
         badge: "EASY DAYS",
-        image: "https://images.unsplash.com/photo-1603487742131-4160ec999306?auto=format&fit=crop&w=900&q=85",
+        image: "/images/shoes/leather-sandals.jpg",
+        isNew: true,
+    },
+    {
+        slug: "classic-leather-pro",
+        name: "Classic Leather Pro",
+        category: "FORMAL FOOTWEAR",
+        price: 7499,
+        comparePrice: 8999,
+        badge: "CLASSIC LEATHER",
+        image: "/images/shoes/formal-pattern.jpg",
+        isPopular: true,
+    },
+    {
+        slug: "royal-derby",
+        name: "Royal Derby",
+        category: "PREMIUM FORMAL",
+        price: 8299,
+        comparePrice: 9999,
+        badge: "TIMELESS STYLE",
+        image: "/images/shoes/brown-dress.jpg",
+    },
+    {
+        slug: "aero-sport-max",
+        name: "Aero Sport Max",
+        category: "SPORT-INSPIRED",
+        price: 6299,
+        badge: "ACTIVE STYLE",
+        image: "/images/shoes/running-black.jpg",
+        isNew: true,
+        isPopular: true,
+    },
+    {
+        slug: "evening-muse-sandal",
+        name: "Evening Muse Sandal",
+        category: "OCCASION FOOTWEAR",
+        price: 4299,
+        badge: "OCCASION EDIT",
+        image: "/images/shoes/women-sandals.jpg",
+        isNew: true,
+    },
+    {
+        slug: "heritage-oxford",
+        name: "Heritage Oxford",
+        category: "CLASSIC FORMAL",
+        price: 6999,
+        badge: "THE CLASSICS",
+        image: "/images/shoes/formal-dark.jpg",
+        isPopular: true,
     },
 ];
 
@@ -182,7 +251,7 @@ function ProductCard({ product }) {
                 </Link>
 
                 <span className="absolute left-3 top-3 max-w-[75%] bg-white/95 px-2 py-1.5 text-[8px] font-semibold tracking-[0.1em] text-[#334155] sm:left-4 sm:top-4 sm:text-[9px]">
-                    {product.badge}
+                    {product.comparePrice ? "SELECTED OFFER" : product.badge}
                 </span>
 
                 <button
@@ -316,7 +385,7 @@ export default function Home() {
 
                         <div className="relative aspect-[5/4.4] overflow-hidden rounded-2xl bg-[#EADCBF]">
                             <img
-                                src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=1500&q=90"
+                                src="/images/shoes/sneaker-white.jpg"
                                 alt="Close-up of contemporary everyday footwear"
                                 fetchPriority="high"
                                 loading="eager"
@@ -344,11 +413,13 @@ export default function Home() {
 
                         <div className="mt-3 flex items-center justify-between gap-3 text-[9px] font-medium tracking-[0.1em] text-slate-500 sm:text-[10px]">
                             <span>STYLE, WITHOUT THE NOISE.</span>
-                            <span>VIRSA.SHOE · 01 / 04</span>
+                            <span>VIRSA.SHOE ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· 01 / 04</span>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <TrustBar />
 
             <section
                 aria-label="Brand approach"
@@ -426,7 +497,7 @@ export default function Home() {
                     <div className="order-1 grid grid-cols-[1.15fr_0.85fr] items-end gap-3 sm:gap-5 lg:order-2">
                         <div className="aspect-[4/5] overflow-hidden bg-[#E6D8BC]">
                             <img
-                                src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=900&q=85"
+                                src="/images/shoes/formal-dark.jpg"
                                 alt="Classic footwear in a neutral product setting"
                                 loading="lazy"
                                 className="h-full w-full object-cover"
@@ -436,7 +507,7 @@ export default function Home() {
                         <div className="space-y-3 sm:space-y-5">
                             <div className="aspect-[4/4.5] overflow-hidden bg-[#EADCBF]">
                                 <img
-                                    src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=85"
+                                    src="/images/shoes/women-sandals.jpg"
                                     alt="Contemporary fashion footwear"
                                     loading="lazy"
                                     className="h-full w-full object-cover"
@@ -486,6 +557,37 @@ export default function Home() {
                 </p>
             </section>
 
+            <ProductCollectionSection
+                eyebrow="JUST ARRIVED"
+                title="Fresh arrivals for every day."
+                description="Explore a fresh edit of sample footwear styles."
+                products={products.filter((product) => product.isNew)}
+                linkTo="/shop?sort=new"
+                linkText="View new arrivals"
+                renderProduct={(product) => <ProductCard product={product} />}
+            />
+
+            <ProductCollectionSection
+                eyebrow="EVERYDAY FAVOURITES"
+                title="Styles worth exploring."
+                description="Discover versatile styles for everyday plans."
+                products={products.filter((product) =>
+                    ["urban-runner-x1", "city-form-loafer", "court-classic"].includes(product.slug)
+                )}
+                linkTo="/shop?sort=popular"
+                linkText="Explore favourites"
+                renderProduct={(product) => <ProductCard product={product} />}
+            />
+
+            <ProductCollectionSection
+                eyebrow="SELECTED OFFERS"
+                title="The sale edit."
+                description="Sample discounted products from the demonstration collection. Prices must be verified before launch."
+                products={products.filter((product) => product.comparePrice)}
+                linkTo="/shop?sale=true"
+                linkText="Explore offers"
+                renderProduct={(product) => <ProductCard product={product} />}
+            />
             <section className="mx-5 sm:mx-8 lg:mx-10">
                 <div className="relative mx-auto max-w-[1360px] overflow-hidden bg-[#3D2A1D]">
                     <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
@@ -514,7 +616,7 @@ export default function Home() {
 
                         <div className="relative min-h-[240px] overflow-hidden bg-[#1E293B] sm:min-h-[330px] lg:min-h-[400px]">
                             <img
-                                src="https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=1200&q=85"
+                                src="/images/shoes/formal-lifestyle.jpg"
                                 alt="Footwear from an editorial product collection"
                                 loading="lazy"
                                 className="absolute inset-0 h-full w-full object-cover opacity-85"
@@ -576,6 +678,7 @@ export default function Home() {
                     </p>
                 )}
             </section>
+            <Day4FinishSections />
         </div>
     );
 }
