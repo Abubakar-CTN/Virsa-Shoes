@@ -1,8 +1,16 @@
+
 import StoreLayout from "../layouts/StoreLayout.jsx";
+
 import Home from "../features/storefront/pages/Home.jsx";
+import ProductDetails from "../features/storefront/pages/ProductDetails.jsx";
 import TrackOrder from "../features/storefront/pages/TrackOrder.jsx";
 import SizeGuide from "../features/storefront/pages/SizeGuide.jsx";
 import StoreLocator from "../features/storefront/pages/StoreLocator.jsx";
+
+import Shop from "../features/catalog/pages/Shop.jsx";
+import Search from "../features/catalog/pages/Search.jsx";
+import Category from "../features/catalog/pages/Category.jsx";
+
 import PlaceholderPage from "../components/shared/PlaceholderPage.jsx";
 
 export const storeRoutes = {
@@ -15,39 +23,19 @@ export const storeRoutes = {
         },
         {
             path: "shop",
-            element: (
-                <PlaceholderPage
-                    title="Shop All Footwear"
-                    description="Explore sneakers, formal shoes, casual footwear and more."
-                />
-            ),
+            element: <Shop />,
         },
         {
             path: "categories/:slug",
-            element: (
-                <PlaceholderPage
-                    title="Footwear Categories"
-                    description="Category browsing will be implemented in the catalog phase."
-                />
-            ),
+            element: <Category />,
         },
         {
             path: "search",
-            element: (
-                <PlaceholderPage
-                    title="Search Products"
-                    description="Product search and suggestions will be added later."
-                />
-            ),
+            element: <Search />,
         },
         {
             path: "products/:slug",
-            element: (
-                <PlaceholderPage
-                    title="Product Details"
-                    description="Product information, sizes, colors and buying options."
-                />
-            ),
+            element: <ProductDetails />,
         },
         {
             path: "cart",
