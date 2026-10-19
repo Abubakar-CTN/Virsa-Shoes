@@ -1,0 +1,29 @@
+﻿// Paste this property inside the Street Mesh Runner product object.
+// Keep the existing sizes array and other product fields.
+
+colorVariants: [
+    {
+        color: "Black",
+        images: [
+            "/images/shoes/variants/street-mesh-runner-black-01.jpg",
+            "/images/shoes/variants/street-mesh-runner-black-02.jpg",
+        ],
+        stock: 6,
+    },
+    {
+        color: "White",
+        images: [
+            "/images/shoes/variants/street-mesh-runner-white-01.jpg",
+            "/images/shoes/variants/street-mesh-runner-white-02.jpg",
+        ],
+        stock: 5,
+    },
+    {
+        color: "Blue",
+        images: [
+            "/images/shoes/variants/street-mesh-runner-blue-01.jpg",
+            "/images/shoes/variants/street-mesh-runner-blue-02.jpg",
+        ],
+        stock: 6,
+    },
+],

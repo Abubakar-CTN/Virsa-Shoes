@@ -1,0 +1,129 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Virsa.Shoe Image Quality Check</title>
+<style>
+body {
+    margin: 0;
+    padding: 24px;
+    font-family: Arial, sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
+}
+h1 { font-size: 24px; }
+p { color: #475569; }
+.item {
+    margin: 24px 0;
+    padding: 18px;
+    background: white;
+    border: 1px solid #e2e8f0;
+}
+.comparison {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+img {
+    display: block;
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    background: #f1f5f9;
+}
+h2 { font-size: 16px; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+    body { padding: 12px; }
+    .comparison { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<h1>Virsa.Shoe — Image Quality Comparison</h1>
+<p>Left: Original image | Right: Optimized preview</p>
+<section class="item">
+<h2>sneaker-white.jpg</h2>
+<div class="comparison">
+<div>
+<p>Original</p>
+<img src="../public/images/shoes/sneaker-white.jpg" alt="Original sneaker-white.jpg">
+</div>
+<div>
+<p>Optimized preview</p>
+<img src="sneaker-white.jpg" alt="Optimized sneaker-white.jpg">
+</div>
+</div>
+</section><section class="item">
+<h2>formal-dark.jpg</h2>
+<div class="comparison">
+<div>
+<p>Original</p>
+<img src="../public/images/shoes/formal-dark.jpg" alt="Original formal-dark.jpg">
+</div>
+<div>
+<p>Optimized preview</p>
+<img src="formal-dark.jpg" alt="Optimized formal-dark.jpg">
+</div>
+</div>
+</section><section class="item">
+<h2>brown-dress.jpg</h2>
+<div class="comparison">
+<div>
+<p>Original</p>
+<img src="../public/images/shoes/brown-dress.jpg" alt="Original brown-dress.jpg">
+</div>
+<div>
+<p>Optimized preview</p>
+<img src="brown-dress.jpg" alt="Optimized brown-dress.jpg">
+</div>
+</div>
+</section><section class="item">
+<h2>formal-lifestyle.jpg</h2>
+<div class="comparison">
+<div>
+<p>Original</p>
+<img src="../public/images/shoes/formal-lifestyle.jpg" alt="Original formal-lifestyle.jpg">
+</div>
+<div>
+<p>Optimized preview</p>
+<img src="formal-lifestyle.jpg" alt="Optimized formal-lifestyle.jpg">
+</div>
+</div>
+</section><section class="item">
+<h2>formal-pattern.jpg</h2>
+<div class="comparison">
+<div>
+<p>Original</p>
+<img src="../public/images/shoes/formal-pattern.jpg" alt="Original formal-pattern.jpg">
+</div>
+<div>
+<p>Optimized preview</p>
+<img src="formal-pattern.jpg" alt="Optimized formal-pattern.jpg">
+</div>
+</div>
+</section><section class="item">
+<h2>running-black.jpg</h2>
+<div class="comparison">
+<div>
+<p>Original</p>
+<img src="../public/images/shoes/running-black.jpg" alt="Original running-black.jpg">
+</div>
+<div>
+<p>Optimized preview</p>
+<img src="running-black.jpg" alt="Optimized running-black.jpg">
+</div>
+</div>
+</section><section class="item">
+<h2>formal-classic.jpg</h2>
+<div class="comparison">
+<div>
+<p>Original</p>
+<img src="../public/images/shoes/formal-classic.jpg" alt="Original formal-classic.jpg">
+</div>
+<div>
+<p>Optimized preview</p>
+<img src="formal-classic.jpg" alt="Optimized formal-classic.jpg">
+</div>
+</div>
+</section></body></html>

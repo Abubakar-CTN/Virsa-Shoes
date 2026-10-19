@@ -1,7 +1,8 @@
+import { lazy, Suspense } from "react";
 /* eslint-disable react-refresh/only-export-components */
 import { Link } from "react-router";
-import OwnerLayout from "../layouts/OwnerLayout.jsx";
-import Dashboard from "../features/owner/pages/Dashboard.jsx";
+
+
 
 function OwnerSection({ title, description }) {
     return (
@@ -18,6 +19,31 @@ function OwnerSection({ title, description }) {
         </section>
     );
 }
+
+const RouteChunkFallback = () => (
+    <div
+        role="status"
+        aria-live="polite"
+        className="flex min-h-24 items-center justify-center text-sm text-slate-600"
+    >
+        Loading Virsa.Shoe...
+    </div>
+);
+
+const OwnerLayoutLazy = lazy(() => import("../layouts/OwnerLayout.jsx"));
+const OwnerLayout = (routeProps) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <OwnerLayoutLazy {...routeProps} />
+    </Suspense>
+);
+
+const DashboardLazy = lazy(() => import("../features/owner/pages/Dashboard.jsx"));
+const Dashboard = (routeProps) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <DashboardLazy {...routeProps} />
+    </Suspense>
+);
+
 
 export const ownerRoutes = {
     path: "/owner",

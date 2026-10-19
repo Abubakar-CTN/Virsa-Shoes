@@ -1,6 +1,7 @@
+import { lazy, Suspense } from "react";
 /* eslint-disable react-refresh/only-export-components */
-import AuthLayout from "../layouts/AuthLayout.jsx";
-import Login from "../features/auth/pages/Login.jsx";
+
+
 import { Link } from "react-router";
 
 function AuthSecondaryPage({ title, description }) {
@@ -27,6 +28,31 @@ function AuthSecondaryPage({ title, description }) {
         </div>
     );
 }
+
+const RouteChunkFallback = () => (
+    <div
+        role="status"
+        aria-live="polite"
+        className="flex min-h-24 items-center justify-center text-sm text-slate-600"
+    >
+        Loading Virsa.Shoe...
+    </div>
+);
+
+const AuthLayoutLazy = lazy(() => import("../layouts/AuthLayout.jsx"));
+const AuthLayout = (routeProps) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <AuthLayoutLazy {...routeProps} />
+    </Suspense>
+);
+
+const LoginLazy = lazy(() => import("../features/auth/pages/Login.jsx"));
+const Login = (routeProps) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <LoginLazy {...routeProps} />
+    </Suspense>
+);
+
 
 export const authRoutes = [
     {

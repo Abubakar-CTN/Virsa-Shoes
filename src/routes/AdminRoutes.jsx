@@ -1,7 +1,8 @@
+import { lazy, Suspense } from "react";
 /* eslint-disable react-refresh/only-export-components */
 import { Link } from "react-router";
-import AdminLayout from "../layouts/AdminLayout.jsx";
-import Dashboard from "../features/admin/pages/Dashboard.jsx";
+
+
 
 function AdminSection({ title, description }) {
     return (
@@ -18,6 +19,31 @@ function AdminSection({ title, description }) {
         </section>
     );
 }
+
+const RouteChunkFallback = () => (
+    <div
+        role="status"
+        aria-live="polite"
+        className="flex min-h-24 items-center justify-center text-sm text-slate-600"
+    >
+        Loading Virsa.Shoe...
+    </div>
+);
+
+const AdminLayoutLazy = lazy(() => import("../layouts/AdminLayout.jsx"));
+const AdminLayout = (routeProps) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <AdminLayoutLazy {...routeProps} />
+    </Suspense>
+);
+
+const DashboardLazy = lazy(() => import("../features/admin/pages/Dashboard.jsx"));
+const Dashboard = (routeProps) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <DashboardLazy {...routeProps} />
+    </Suspense>
+);
+
 
 export const adminRoutes = {
     path: "/admin",

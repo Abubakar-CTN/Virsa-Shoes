@@ -1,21 +1,22 @@
-
 import StoreLayout from "../layouts/StoreLayout.jsx";
-
-import Home from "../features/storefront/pages/Home.jsx";
-import ProductDetails from "../features/storefront/pages/ProductDetails.jsx";
-import TrackOrder from "../features/storefront/pages/TrackOrder.jsx";
-import SizeGuide from "../features/storefront/pages/SizeGuide.jsx";
-import StoreLocator from "../features/storefront/pages/StoreLocator.jsx";
-
-import Shop from "../features/catalog/pages/Shop.jsx";
-import Search from "../features/catalog/pages/Search.jsx";
-import Category from "../features/catalog/pages/Category.jsx";
-
 import PlaceholderPage from "../components/shared/PlaceholderPage.jsx";
+
+import {
+    Category,
+    Home,
+    ProductDetails,
+    Search,
+    Shop,
+    SizeGuide,
+    StoreLocator,
+    TrackOrder,
+    Wishlist,
+} from "./StoreRouteElements.jsx";
 
 export const storeRoutes = {
     path: "/",
     element: <StoreLayout />,
+
     children: [
         {
             index: true,
@@ -48,12 +49,7 @@ export const storeRoutes = {
         },
         {
             path: "wishlist",
-            element: (
-                <PlaceholderPage
-                    title="My Wishlist"
-                    description="Your saved footwear will appear here."
-                />
-            ),
+            element: <Wishlist />,
         },
         {
             path: "checkout",
