@@ -1,8 +1,11 @@
+
 import StoreLayout from "../layouts/StoreLayout.jsx";
 import PlaceholderPage from "../components/shared/PlaceholderPage.jsx";
 
 import {
+    Cart,
     Category,
+    Checkout,
     Home,
     ProductDetails,
     Search,
@@ -40,12 +43,7 @@ export const storeRoutes = {
         },
         {
             path: "cart",
-            element: (
-                <PlaceholderPage
-                    title="Shopping Cart"
-                    description="Review products before proceeding to checkout."
-                />
-            ),
+            element: <Cart />,
         },
         {
             path: "wishlist",
@@ -53,12 +51,7 @@ export const storeRoutes = {
         },
         {
             path: "checkout",
-            element: (
-                <PlaceholderPage
-                    title="Secure Checkout"
-                    description="Customer information, delivery and payment interface."
-                />
-            ),
+            element: <Checkout />,
         },
         {
             path: "account/profile",
