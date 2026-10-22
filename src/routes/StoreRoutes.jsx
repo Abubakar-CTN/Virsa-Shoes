@@ -1,13 +1,18 @@
+import { Navigate } from "react-router";
 
 import StoreLayout from "../layouts/StoreLayout.jsx";
 import PlaceholderPage from "../components/shared/PlaceholderPage.jsx";
 
 import {
+    Addresses,
     Cart,
     Category,
     Checkout,
     Home,
+    OrderDetails,
+    Orders,
     ProductDetails,
+    Profile,
     Search,
     Shop,
     SizeGuide,
@@ -53,15 +58,36 @@ export const storeRoutes = {
             path: "checkout",
             element: <Checkout />,
         },
+
+        // Account entry points
+        {
+            path: "account",
+            element: <Navigate to="/account/profile" replace />,
+        },
+        {
+            path: "customer",
+            element: <Navigate to="/account/profile" replace />,
+        },
+
+        // Customer Account
         {
             path: "account/profile",
-            element: (
-                <PlaceholderPage
-                    title="My Profile"
-                    description="Manage your customer profile and account settings."
-                />
-            ),
+            element: <Profile />,
         },
+        {
+            path: "account/addresses",
+            element: <Addresses />,
+        },
+        {
+            path: "account/orders",
+            element: <Orders />,
+        },
+        {
+            path: "account/orders/:orderId",
+            element: <OrderDetails />,
+        },
+
+        // Brand Information
         {
             path: "about",
             element: (
@@ -89,6 +115,8 @@ export const storeRoutes = {
                 />
             ),
         },
+
+        // Customer Services
         {
             path: "track-order",
             element: <TrackOrder />,

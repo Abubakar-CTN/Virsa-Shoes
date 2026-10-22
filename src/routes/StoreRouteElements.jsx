@@ -1,19 +1,63 @@
-﻿
-import { lazy, Suspense } from "react";
+﻿import { lazy, Suspense } from "react";
 
 const RouteChunkFallback = () => (
     <div
         role="status"
         aria-live="polite"
-        className="flex min-h-screen items-center justify-center text-sm text-slate-600"
+        className="flex min-h-40 items-center justify-center bg-surface-muted px-4 text-sm text-text-secondary"
     >
         Loading Virsa.Shoe...
     </div>
 );
 
+// Home
 export { default as Home } from "../features/storefront/pages/Home.jsx";
 
-// Cart — lazy-loaded when the cart route is opened.
+// Customer Profile
+const ProfileLazy = lazy(
+    () => import("../features/account/pages/Profile.jsx")
+);
+
+export const Profile = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <ProfileLazy {...props} />
+    </Suspense>
+);
+
+// Customer Addresses
+const AddressesLazy = lazy(
+    () => import("../features/account/pages/Addresses.jsx")
+);
+
+export const Addresses = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <AddressesLazy {...props} />
+    </Suspense>
+);
+
+// Customer Orders
+const OrdersLazy = lazy(
+    () => import("../features/account/pages/Orders.jsx")
+);
+
+export const Orders = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <OrdersLazy {...props} />
+    </Suspense>
+);
+
+// Customer Order Details
+const OrderDetailsLazy = lazy(
+    () => import("../features/account/pages/OrderDetails.jsx")
+);
+
+export const OrderDetails = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <OrderDetailsLazy {...props} />
+    </Suspense>
+);
+
+// Cart
 const CartLazy = lazy(
     () => import("../features/cart/pages/Cart.jsx")
 );
@@ -24,7 +68,7 @@ export const Cart = (props) => (
     </Suspense>
 );
 
-// Checkout — lazy-loaded when the checkout route is opened.
+// Checkout
 const CheckoutLazy = lazy(
     () => import("../features/checkout/pages/Checkout.jsx")
 );
