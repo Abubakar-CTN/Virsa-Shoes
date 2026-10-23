@@ -1,0 +1,66 @@
+/* Virsa.Shoe Admin — readable, consistent typography */
+
+#virsa-admin-workspace {
+    color: #0f172a;
+    background: #f8fafc;
+    color-scheme: light;
+}
+
+/* Shared design tokens used by Admin pages */
+#virsa-admin-workspace .text-text-primary:not(:hover):not(:focus-visible) {
+    color: #0f172a !important;
+}
+
+#virsa-admin-workspace .text-text-secondary:not(:hover):not(:focus-visible) {
+    color: #64748b !important;
+}
+
+/* Improve commonly used low-contrast muted text */
+#virsa-admin-workspace .text-slate-400:not(:hover):not(:focus-visible),
+#virsa-admin-workspace .text-slate-500:not(:hover):not(:focus-visible),
+#virsa-admin-workspace .text-gray-400:not(:hover):not(:focus-visible),
+#virsa-admin-workspace .text-gray-500:not(:hover):not(:focus-visible) {
+    color: #64748b !important;
+}
+
+/* Consistent Admin form readability */
+#virsa-admin-workspace input,
+#virsa-admin-workspace select,
+#virsa-admin-workspace textarea {
+    color: #0f172a;
+}
+
+#virsa-admin-workspace input::placeholder,
+#virsa-admin-workspace textarea::placeholder {
+    color: #64748b;
+    opacity: 1;
+}
+
+#virsa-admin-workspace input:disabled,
+#virsa-admin-workspace select:disabled,
+#virsa-admin-workspace textarea:disabled {
+    color: #64748b;
+    cursor: not-allowed;
+}
+
+/* Keep keyboard navigation clearly visible */
+#virsa-admin-workspace button:focus-visible,
+#virsa-admin-workspace a:focus-visible,
+#virsa-admin-workspace input:focus-visible,
+#virsa-admin-workspace select:focus-visible,
+#virsa-admin-workspace textarea:focus-visible {
+    outline-color: #6d28d9;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    #virsa-admin-workspace *,
+    #virsa-admin-workspace *::before,
+    #virsa-admin-workspace *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
