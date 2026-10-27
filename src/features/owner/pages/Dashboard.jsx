@@ -12,16 +12,8 @@ import {
     Wallet,
     Warehouse,
 } from "lucide-react";
-import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
 import { Link } from "react-router";
+
 import { getProducts } from "../../../services/productStore.js";
 import { mockCustomerOrders } from "../../../services/mock/orders.js";
 
@@ -133,7 +125,7 @@ function readOrders() {
                 }
             }
         } catch {
-            // Use sample orders if saved data is unavailable.
+            // Use fallback orders if saved data is unavailable.
         }
     }
 
@@ -260,6 +252,64 @@ function StatusBadge({ status }) {
         >
             {status || "Unknown"}
         </span>
+    );
+}
+
+/**
+ * Lightweight inventory chart using native HTML and CSS.
+ * No chart library is required.
+ */
+function OwnerInventoryChart({ data }) {
+    const maxUnits = Math.max(
+        1,
+        ...data.map((item) => Math.max(0, numberValue(item.units))),
+    );
+
+    return (
+        <div
+            className="mt-5 space-y-4"
+            aria-label="Inventory by category"
+        >
+            {data.map((item) => {
+                const units = Math.max(0, numberValue(item.units));
+                const percentage = Math.min(
+                    100,
+                    Math.max(0, (units / maxUnits) * 100),
+                );
+
+                return (
+                    <div key={item.category} className="space-y-2">
+                        <div className="flex items-center justify-between gap-3">
+                            <span className="min-w-0 truncate text-xs font-medium text-slate-700">
+                                {item.category}
+                            </span>
+
+                            <span className="shrink-0 text-xs font-semibold tabular-nums text-slate-600">
+                                {units.toLocaleString("en-PK")}
+                            </span>
+                        </div>
+
+                        <div
+                            role="progressbar"
+                            aria-label={`${item.category} inventory units`}
+                            aria-valuemin={0}
+                            aria-valuemax={maxUnits}
+                            aria-valuenow={units}
+                            className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100"
+                        >
+                            <div
+                                className="h-full rounded-full bg-violet-700 transition-[width]"
+                                style={{ width: `${percentage}%` }}
+                            />
+                        </div>
+                    </div>
+                );
+            })}
+
+            <p className="pt-1 text-[11px] text-slate-500">
+                Bars compare stock units across the displayed categories.
+            </p>
+        </div>
     );
 }
 
@@ -433,8 +483,8 @@ export default function OwnerDashboard() {
                     </h1>
 
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-                        Monitor inventory, order records and owner decisions from
-                        one business workspace.
+                        Monitor inventory, order records and owner decisions
+                        from one business workspace.
                     </p>
                 </div>
 
@@ -509,6 +559,7 @@ export default function OwnerDashboard() {
                     <span className="grid size-10 place-items-center rounded-lg bg-slate-100 text-slate-700">
                         <Boxes size={20} aria-hidden="true" />
                     </span>
+
                     <div>
                         <p className="text-xs text-slate-500">Units in stock</p>
                         <p className="mt-1 text-xl font-bold text-slate-900">
@@ -521,6 +572,7 @@ export default function OwnerDashboard() {
                     <span className="grid size-10 place-items-center rounded-lg bg-amber-100 text-amber-800">
                         <CircleAlert size={20} aria-hidden="true" />
                     </span>
+
                     <div>
                         <p className="text-xs text-amber-900">
                             Low-stock products
@@ -535,6 +587,7 @@ export default function OwnerDashboard() {
                     <span className="grid size-10 place-items-center rounded-lg bg-rose-100 text-rose-800">
                         <Package size={20} aria-hidden="true" />
                     </span>
+
                     <div>
                         <p className="text-xs text-rose-900">
                             Out-of-stock products
@@ -568,60 +621,7 @@ export default function OwnerDashboard() {
                     </div>
 
                     {categoryData.length > 0 ? (
-                        <div className="mt-5 h-64 min-w-0">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    data={categoryData}
-                                    layout="vertical"
-                                    margin={{
-                                        top: 5,
-                                        right: 10,
-                                        left: 5,
-                                        bottom: 5,
-                                    }}
-                                >
-                                    <CartesianGrid
-                                        stroke="#E2E8F0"
-                                        strokeDasharray="3 3"
-                                        horizontal={false}
-                                    />
-                                    <XAxis
-                                        type="number"
-                                        allowDecimals={false}
-                                        tick={{
-                                            fill: "#64748B",
-                                            fontSize: 10,
-                                        }}
-                                        tickLine={false}
-                                        axisLine={false}
-                                    />
-                                    <YAxis
-                                        type="category"
-                                        dataKey="category"
-                                        width={100}
-                                        tick={{
-                                            fill: "#475569",
-                                            fontSize: 10,
-                                        }}
-                                        tickLine={false}
-                                        axisLine={false}
-                                    />
-                                    <Tooltip
-                                        formatter={(value) => [
-                                            Number(value).toLocaleString("en-PK"),
-                                            "Units",
-                                        ]}
-                                    />
-                                    <Bar
-                                        dataKey="units"
-                                        name="Units"
-                                        fill="#7C3AED"
-                                        radius={[0, 5, 5, 0]}
-                                        maxBarSize={25}
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
+                        <OwnerInventoryChart data={categoryData} />
                     ) : (
                         <p className="mt-5 rounded-lg bg-slate-50 p-6 text-sm text-slate-500">
                             No catalogue data available.
@@ -712,8 +712,8 @@ export default function OwnerDashboard() {
                     </div>
 
                     <p className="border-t border-slate-100 pt-3 text-[10px] leading-5 text-slate-500">
-                        Prototype only: decisions do not authorize real business
-                        operations.
+                        Prototype only: decisions do not authorize real
+                        business operations.
                     </p>
                 </article>
             </section>
@@ -745,7 +745,11 @@ export default function OwnerDashboard() {
 
                                 return (
                                     <div
-                                        key={product.id ?? product.sku ?? product.name}
+                                        key={
+                                            product.id ??
+                                            product.sku ??
+                                            product.name
+                                        }
                                         className="flex items-center justify-between gap-3 py-3"
                                     >
                                         <div className="min-w-0">
@@ -793,7 +797,8 @@ export default function OwnerDashboard() {
                                 Recent orders
                             </h2>
                             <p className="mt-1 text-xs text-slate-500">
-                                Available order records; sample data may be included
+                                Available order records; sample data may be
+                                included
                             </p>
                         </div>
 
@@ -810,7 +815,10 @@ export default function OwnerDashboard() {
                         <div className="mt-4 space-y-1">
                             {recentOrders.map((order, index) => (
                                 <div
-                                    key={order.id || `${order.placedAt}-${index}`}
+                                    key={
+                                        order.id ||
+                                        `${order.placedAt}-${index}`
+                                    }
                                     className="flex flex-wrap items-center justify-between gap-3 rounded-lg px-2 py-3 hover:bg-slate-50"
                                 >
                                     <div className="min-w-0">
@@ -820,7 +828,9 @@ export default function OwnerDashboard() {
                                         <p className="mt-1 text-[10px] text-slate-500">
                                             {order.placedAt &&
                                                 Number.isFinite(
-                                                    new Date(order.placedAt).getTime(),
+                                                    new Date(
+                                                        order.placedAt,
+                                                    ).getTime(),
                                                 )
                                                 ? new Date(
                                                     order.placedAt,
@@ -882,11 +892,12 @@ export default function OwnerDashboard() {
                             Data and security notice
                         </p>
                         <p className="mt-1 text-xs leading-5 text-slate-600">
-                            Inventory uses the current browser catalogue. Order values
-                            may come from sample records. Real revenue, profit,
-                            expenses and purchase-cost valuation are not connected.
-                            Approval and audit records are stored locally; secure
-                            server-side authorization is not connected.
+                            Inventory uses the current browser catalogue. Order
+                            values may come from sample records. Real revenue,
+                            profit, expenses and purchase-cost valuation are not
+                            connected. Approval and audit records are stored
+                            locally; secure server-side authorization is not
+                            connected.
                         </p>
                     </div>
                 </div>

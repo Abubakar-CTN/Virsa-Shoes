@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import {
     ArrowLeft,
@@ -136,7 +135,8 @@ export default function ProductDetails() {
     const [quantity, setQuantity] = useState(1);
     const [recentlyViewed, setRecentlyViewed] = useState([]);
 
-    // Reset selections when the product changes and update browsing history.
+    // Reset selections and update browsing history when the product changes.
+    // RouteMeta.jsx centrally manages the document title and page metadata.
     useEffect(() => {
         if (!product) {
             setRecentlyViewed([]);
@@ -148,9 +148,6 @@ export default function ProductDetails() {
         setSelectedSize(String(product.sizes?.[0] ?? "9"));
         setSelectedColor(initialVariant?.color ?? "");
         setQuantity(1);
-
-        const previousTitle = document.title;
-        document.title = `${product.name} | VIRSA.SHOE`;
 
         try {
             const storedHistory = JSON.parse(
@@ -187,10 +184,6 @@ export default function ProductDetails() {
         } catch {
             setRecentlyViewed([]);
         }
-
-        return () => {
-            document.title = previousTitle;
-        };
     }, [product]);
 
     if (!product) {

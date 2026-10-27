@@ -109,6 +109,7 @@ function getProductMeta(pathname) {
             title: "Product Not Found | Virsa.Shoe",
             description:
                 "This footwear product could not be found. Explore the Virsa.Shoe shop to discover other styles.",
+            notFound: true,
         };
     }
 
@@ -117,6 +118,7 @@ function getProductMeta(pathname) {
         description:
             product.description ||
             `Discover ${product.name} by ${product.brand || "Virsa"}. Explore product details and available options at Virsa.Shoe.`,
+        notFound: false,
     };
 }
 
@@ -164,6 +166,7 @@ function applyMetadata(pathname) {
     );
 
     const productMeta = getProductMeta(pathname);
+
     const defaultMeta =
         DEFAULT_META[pathname] ||
         productMeta || {
@@ -185,8 +188,12 @@ function applyMetadata(pathname) {
             ? ownerMeta.description.trim()
             : defaultMeta.description;
 
+    const isMissingProduct = productMeta?.notFound === true;
+
     const shouldNoindex =
-        isPrivate || ownerMeta?.status === "Noindex";
+        isPrivate ||
+        isMissingProduct ||
+        ownerMeta?.status === "Noindex";
 
     document.title = title;
 
