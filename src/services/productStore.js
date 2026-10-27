@@ -1,5 +1,6 @@
 
 import products from "./mock/products.js";
+import { recordProductChanges } from "./adminActivityStore.js";
 
 const STORAGE_KEY = "virsa.catalogue.v1";
 const UPDATE_EVENT = "virsa:products-updated";
@@ -128,6 +129,7 @@ export function saveProducts(nextProducts) {
         throw new Error("The product catalogue contains invalid records.");
     }
 
+    const previousProducts = getProducts();
     replaceProducts(nextProducts);
 
     let persisted = false;
@@ -145,6 +147,7 @@ export function saveProducts(nextProducts) {
         }
     }
 
+    recordProductChanges(previousProducts, getProducts());
     emitProductsUpdated();
 
     return {

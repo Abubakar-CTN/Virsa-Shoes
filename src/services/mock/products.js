@@ -1,4 +1,4 @@
-
+﻿
 const products = [
     {
         id: 1,
@@ -16,11 +16,11 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: false,
-        image: "/images/shoes/sneaker-white.jpg",
+        image: "/images/shoes/sneaker-white.webp",
         colorVariants: [
             {
                 color: "White",
-                images: ["/images/shoes/sneaker-white.jpg"],
+                images: ["/images/shoes/sneaker-white.webp"],
                 stock: 18,
             },
         ],
@@ -41,11 +41,11 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: false,
-        image: "/images/shoes/formal-pattern.jpg",
+        image: "/images/shoes/formal-pattern.webp",
         colorVariants: [
             {
                 color: "Brown",
-                images: ["/images/shoes/formal-pattern.jpg"],
+                images: ["/images/shoes/formal-pattern.webp"],
                 stock: 12,
             },
         ],
@@ -66,11 +66,11 @@ const products = [
         isFeatured: false,
         isPopular: true,
         isNew: true,
-        image: "/images/shoes/formal-lifestyle.jpg",
+        image: "/images/shoes/formal-lifestyle.webp",
         colorVariants: [
             {
                 color: "Blue",
-                images: ["/images/shoes/formal-lifestyle.jpg"],
+                images: ["/images/shoes/formal-lifestyle.webp"],
                 stock: 25,
             },
         ],
@@ -91,11 +91,11 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: true,
-        image: "/images/shoes/running-black.jpg",
+        image: "/images/shoes/running-black.webp",
         colorVariants: [
             {
                 color: "Black",
-                images: ["/images/shoes/running-black.jpg"],
+                images: ["/images/shoes/running-black.webp"],
                 stock: 20,
             },
         ],
@@ -116,11 +116,11 @@ const products = [
         isFeatured: false,
         isPopular: false,
         isNew: true,
-        image: "/images/shoes/leather-sandals.jpg",
+        image: "/images/shoes/leather-sandals.webp",
         colorVariants: [
             {
                 color: "White",
-                images: ["/images/shoes/leather-sandals.jpg"],
+                images: ["/images/shoes/leather-sandals.webp"],
                 stock: 30,
             },
         ],
@@ -141,11 +141,11 @@ const products = [
         isFeatured: true,
         isPopular: false,
         isNew: false,
-        image: "/images/shoes/brown-dress.jpg",
+        image: "/images/shoes/brown-dress.webp",
         colorVariants: [
             {
                 color: "Brown",
-                images: ["/images/shoes/brown-dress.jpg"],
+                images: ["/images/shoes/brown-dress.webp"],
                 stock: 9,
             },
         ],
@@ -166,11 +166,11 @@ const products = [
         isFeatured: false,
         isPopular: true,
         isNew: true,
-        image: "/images/shoes/formal-classic.jpg",
+        image: "/images/shoes/formal-classic.webp",
         colorVariants: [
             {
                 color: "Grey",
-                images: ["/images/shoes/formal-classic.jpg"],
+                images: ["/images/shoes/formal-classic.webp"],
                 stock: 16,
             },
         ],
@@ -191,11 +191,11 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: true,
-        image: "/images/shoes/formal-dark.jpg",
+        image: "/images/shoes/formal-dark.webp",
         colorVariants: [
             {
                 color: "Black",
-                images: ["/images/shoes/formal-dark.jpg"],
+                images: ["/images/shoes/formal-dark.webp"],
                 stock: 6,
             },
         ],
@@ -215,11 +215,11 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: true,
-        image: "/images/shoes/black-loafers.jpg",
+        image: "/images/shoes/black-loafers.webp",
         colorVariants: [
             {
                 color: "Black",
-                images: ["/images/shoes/black-loafers.jpg"],
+                images: ["/images/shoes/black-loafers.webp"],
                 stock: 14,
             },
         ],
@@ -238,11 +238,11 @@ const products = [
         isFeatured: true,
         isPopular: false,
         isNew: false,
-        image: "/images/shoes/black-buckle-formal.jpg",
+        image: "/images/shoes/black-buckle-formal.webp",
         colorVariants: [
             {
                 color: "Black",
-                images: ["/images/shoes/black-buckle-formal.jpg"],
+                images: ["/images/shoes/black-buckle-formal.webp"],
                 stock: 11,
             },
         ],
@@ -262,11 +262,11 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: true,
-        image: "/images/shoes/brown-oxford.jpg",
+        image: "/images/shoes/brown-oxford.webp",
         colorVariants: [
             {
                 color: "Brown",
-                images: ["/images/shoes/brown-oxford.jpg"],
+                images: ["/images/shoes/brown-oxford.webp"],
                 stock: 10,
             },
         ],
@@ -285,11 +285,11 @@ const products = [
         isFeatured: false,
         isPopular: false,
         isNew: true,
-        image: "/images/shoes/olive-heel.jpg",
+        image: "/images/shoes/olive-heel.webp",
         colorVariants: [
             {
                 color: "Olive",
-                images: ["/images/shoes/olive-heel.jpg"],
+                images: ["/images/shoes/olive-heel.webp"],
                 stock: 8,
             },
         ],
@@ -309,11 +309,11 @@ const products = [
         isFeatured: false,
         isPopular: true,
         isNew: true,
-        image: "/images/shoes/brown-sandals-detail.jpg",
+        image: "/images/shoes/brown-sandals-detail.webp",
         colorVariants: [
             {
                 color: "Brown",
-                images: ["/images/shoes/brown-sandals-detail.jpg"],
+                images: ["/images/shoes/brown-sandals-detail.webp"],
                 stock: 19,
             },
         ],
@@ -332,11 +332,11 @@ const products = [
         isFeatured: false,
         isPopular: true,
         isNew: false,
-        image: "/images/shoes/black-womens-flats.jpg",
+        image: "/images/shoes/black-womens-flats.webp",
         colorVariants: [
             {
                 color: "Black",
-                images: ["/images/shoes/black-womens-flats.jpg"],
+                images: ["/images/shoes/black-womens-flats.webp"],
                 stock: 13,
             },
         ],
@@ -356,11 +356,11 @@ const products = [
         isFeatured: false,
         isPopular: false,
         isNew: true,
-        image: "/images/shoes/beige-platform-sandals.jpg",
+        image: "/images/shoes/beige-platform-sandals.webp",
         colorVariants: [
             {
                 color: "Beige",
-                images: ["/images/shoes/beige-platform-sandals.jpg"],
+                images: ["/images/shoes/beige-platform-sandals.webp"],
                 stock: 16,
             },
         ],
@@ -381,29 +381,29 @@ const products = [
         isFeatured: true,
         isPopular: true,
         isNew: true,
-        image: "/images/shoes/variants/street-mesh-runner-black-01.jpg",
+        image: "/images/shoes/variants/street-mesh-runner-black-01.webp",
         colorVariants: [
             {
                 color: "Black",
                 images: [
-                    "/images/shoes/variants/street-mesh-runner-black-01.jpg",
-                    "/images/shoes/variants/street-mesh-runner-black-02.jpg",
+                    "/images/shoes/variants/street-mesh-runner-black-01.webp",
+                    "/images/shoes/variants/street-mesh-runner-black-02.webp",
                 ],
                 stock: 6,
             },
             {
                 color: "White",
                 images: [
-                    "/images/shoes/variants/street-mesh-runner-white-01.jpg",
-                    "/images/shoes/variants/street-mesh-runner-white-02.jpg",
+                    "/images/shoes/variants/street-mesh-runner-white-01.webp",
+                    "/images/shoes/variants/street-mesh-runner-white-02.webp",
                 ],
                 stock: 5,
             },
             {
                 color: "Blue",
                 images: [
-                    "/images/shoes/variants/street-mesh-runner-blue-01.jpg",
-                    "/images/shoes/variants/street-mesh-runner-blue-02.jpg",
+                    "/images/shoes/variants/street-mesh-runner-blue-01.webp",
+                    "/images/shoes/variants/street-mesh-runner-blue-02.webp",
                 ],
                 stock: 6,
             },
@@ -424,11 +424,11 @@ const products = [
         isFeatured: true,
         isPopular: false,
         isNew: true,
-        image: "/images/shoes/white-sneakers-floor.jpg",
+        image: "/images/shoes/white-sneakers-floor.webp",
         colorVariants: [
             {
                 color: "White",
-                images: ["/images/shoes/white-sneakers-floor.jpg"],
+                images: ["/images/shoes/white-sneakers-floor.webp"],
                 stock: 21,
             },
         ],

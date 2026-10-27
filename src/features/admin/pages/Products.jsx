@@ -309,16 +309,25 @@ function ProductFormModal({
     );
 }
 
-export default function Products() {
+export default function Products({ initialCreate = false } = {}) {
     const [products, setProducts] = useState(() => getProducts());
     const [search, setSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [stockFilter, setStockFilter] = useState("all");
     const [sortBy, setSortBy] = useState("name");
-    const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(initialCreate);
     const [editingProduct, setEditingProduct] = useState(null);
     const [form, setForm] = useState(EMPTY_FORM);
     const [notice, setNotice] = useState("");
+
+    useEffect(() => {
+        setModalOpen(initialCreate);
+
+        if (initialCreate) {
+            setEditingProduct(null);
+            setForm({ ...EMPTY_FORM });
+        }
+    }, [initialCreate]);
 
     useEffect(() => {
         function syncProducts(event) {
@@ -761,7 +770,7 @@ export default function Products() {
                                     }
                                     className="min-h-11 w-full rounded-xl border border-border bg-surface px-3 text-xs font-medium text-text-primary outline-none focus:border-brand-purple sm:min-w-36"
                                 >
-                                    <option value="name">Name: A–Z</option>
+                                    <option value="name">Name: Aâ€“Z</option>
                                     <option value="price-low">
                                         Price: low to high
                                     </option>

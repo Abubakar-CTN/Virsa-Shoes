@@ -1,0 +1,87 @@
+import { useEffect } from "react";
+import { X } from "lucide-react";
+
+function Drawer({
+    open = false,
+    onClose,
+    title = "Menu",
+    position = "right",
+    children,
+    className = "",
+    closeOnBackdrop = true,
+}) {
+    useEffect(() => {
+        if (!open) return undefined;
+
+        const previousOverflow = document.body.style.overflow;
+
+        function handleKeyDown(event) {
+            if (event.key === "Escape") {
+                onClose?.();
+            }
+        }
+
+        document.body.style.overflow = "hidden";
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [open, onClose]);
+
+    if (!open) return null;
+
+    const positionClass =
+        position === "left"
+            ? "left-0 -translate-x-0"
+            : position === "bottom"
+                ? "inset-x-0 bottom-0 max-h-[85vh] w-full rounded-t-3xl"
+                : position === "top"
+                    ? "inset-x-0 top-0 w-full rounded-b-3xl"
+                    : "right-0 translate-x-0";
+
+    const sizeClass =
+        position === "top" || position === "bottom"
+            ? ""
+            : "h-full w-full max-w-md";
+
+    return (
+        <div className="fixed inset-0 z-[100]">
+            <button
+                type="button"
+                tabIndex={-1}
+                aria-label="Close drawer backdrop"
+                onClick={closeOnBackdrop ? onClose : undefined}
+                className="absolute inset-0 h-full w-full cursor-default bg-[#3D2A1D]/55 backdrop-blur-sm"
+            />
+
+            <aside
+                role="dialog"
+                aria-modal="true"
+                aria-label={title}
+                className={`absolute ${positionClass} ${sizeClass} overflow-y-auto border border-slate-200 bg-white shadow-2xl ${position === "left" || position === "right"
+                        ? "animate-in"
+                        : ""
+                    } ${className}`}
+            >
+                <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-slate-100 bg-white/95 px-5 py-4 backdrop-blur">
+                    <h2 className="text-lg font-bold text-slate-900">{title}</h2>
+
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        aria-label="Close drawer"
+                        className="grid h-10 w-10 place-items-center rounded-xl text-slate-500 transition hover:bg-violet-50 hover:text-[#5D3D14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+                    >
+                        <X size={20} />
+                    </button>
+                </div>
+
+                <div className="p-5">{children}</div>
+            </aside>
+        </div>
+    );
+}
+
+export default Drawer;

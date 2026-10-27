@@ -1,5 +1,4 @@
-﻿
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import {
     Activity,
     AlertTriangle,
@@ -16,7 +15,7 @@ import {
     X,
 } from "lucide-react";
 import { Link, NavLink, Outlet } from "react-router";
-import products from "../services/mock/products.js";
+import { getProducts } from "../services/productStore.js";
 import "../features/admin/admin-theme.css";
 
 const LOW_STOCK_LIMIT = 10;
@@ -33,7 +32,28 @@ const navigation = [
     { label: "Settings", to: "/admin/settings", icon: Settings },
 ];
 
-function NavigationLinks({ mobile = false }) {
+function getStock(product) {
+    if (
+        product.stock !== undefined &&
+        product.stock !== null &&
+        product.stock !== "" &&
+        Number.isFinite(Number(product.stock))
+    ) {
+        return Math.max(0, Number(product.stock));
+    }
+
+    if (Array.isArray(product.colorVariants)) {
+        return product.colorVariants.reduce(
+            (total, variant) =>
+                total + Math.max(0, Number(variant.stock) || 0),
+            0,
+        );
+    }
+
+    return 0;
+}
+
+function NavigationLinks({ mobile = false, onNavigate }) {
     return navigation.map((item) => {
         const Icon = item.icon;
 
@@ -42,14 +62,15 @@ function NavigationLinks({ mobile = false }) {
                 key={item.to}
                 to={item.to}
                 end={item.end}
+                onClick={onNavigate}
                 className={({ isActive }) =>
                     [
-                        "flex min-h-11 shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-colors duration-200",
-                        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600",
+                        "flex min-h-11 shrink-0 items-center gap-3 rounded-md px-3 py-2.5 text-xs font-medium transition-colors duration-200",
+                        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-500",
                         mobile ? "whitespace-nowrap" : "w-full",
                         isActive
-                            ? "!bg-violet-700 !text-white shadow-sm shadow-violet-900/20 ring-1 ring-inset ring-white/15"
-                            : "!bg-transparent !text-slate-600 hover:!bg-violet-50 hover:!text-violet-800",
+                            ? "!bg-violet-600 !text-white shadow-sm shadow-violet-900/30 ring-1 ring-inset ring-white/15"
+                            : "!bg-transparent !text-slate-300 hover:!bg-violet-500/20 hover:!text-white",
                     ].join(" ")
                 }
             >
@@ -59,6 +80,7 @@ function NavigationLinks({ mobile = false }) {
                     aria-hidden="true"
                     className="shrink-0"
                 />
+
                 <span>{item.label}</span>
             </NavLink>
         );
@@ -100,7 +122,7 @@ function NotificationPanel({
                     type="button"
                     onClick={onClose}
                     aria-label="Close notifications"
-                    className="grid size-8 shrink-0 place-items-center rounded-lg text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600"
+                    className="grid size-8 shrink-0 place-items-center rounded-lg text-slate-600 transition hover:bg-violet-50 hover:text-violet-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600"
                 >
                     <X size={17} aria-hidden="true" />
                 </button>
@@ -110,21 +132,18 @@ function NotificationPanel({
                 <>
                     <div className="max-h-80 divide-y divide-slate-100 overflow-y-auto">
                         {notifications.map((product) => {
-                            const stock = Math.max(
-                                0,
-                                Number(product.stock) || 0,
-                            );
+                            const stock = getStock(product);
                             const outOfStock = stock === 0;
 
                             return (
                                 <div
                                     key={product.id}
-                                    className="flex items-start gap-3 px-4 py-3.5"
+                                    className="flex items-start gap-3 px-4 py-3.5 transition-colors hover:bg-violet-50/60"
                                 >
                                     <div
                                         className={`grid size-9 shrink-0 place-items-center rounded-xl ${outOfStock
-                                            ? "bg-red-50 text-red-700"
-                                            : "bg-amber-50 text-amber-800"
+                                                ? "bg-rose-50 text-rose-700"
+                                                : "bg-amber-50 text-amber-800"
                                             }`}
                                     >
                                         <AlertTriangle
@@ -140,17 +159,21 @@ function NotificationPanel({
 
                                         <p
                                             className={`mt-1 text-xs font-medium ${outOfStock
-                                                ? "text-red-700"
-                                                : "text-amber-800"
+                                                    ? "text-rose-700"
+                                                    : "text-amber-800"
                                                 }`}
                                         >
                                             {outOfStock
                                                 ? "Out of stock"
-                                                : `Only ${stock} units remaining`}
+                                                : `Only ${stock} ${stock === 1
+                                                    ? "unit"
+                                                    : "units"
+                                                } remaining`}
                                         </p>
 
                                         <p className="mt-1 text-[10px] text-slate-500">
-                                            {product.category || "Uncategorised"}
+                                            {product.category ||
+                                                "Uncategorised"}
                                         </p>
                                     </div>
                                 </div>
@@ -202,25 +225,18 @@ function NotificationPanel({
 }
 
 export default function AdminLayout() {
-    const [catalogue, setCatalogue] = useState(() => [...products]);
+    const [catalogue, setCatalogue] = useState(() => getProducts());
     const [notificationsOpen, setNotificationsOpen] = useState(false);
     const [readNotificationIds, setReadNotificationIds] = useState(
         () => new Set(),
     );
+    const notificationRef = useRef(null);
 
     const notifications = useMemo(
         () =>
             catalogue
-                .filter(
-                    (product) =>
-                        Math.max(0, Number(product.stock) || 0) <=
-                        LOW_STOCK_LIMIT,
-                )
-                .sort(
-                    (a, b) =>
-                        (Number(a.stock) || 0) -
-                        (Number(b.stock) || 0),
-                ),
+                .filter((product) => getStock(product) <= LOW_STOCK_LIMIT)
+                .sort((a, b) => getStock(a) - getStock(b)),
         [catalogue],
     );
 
@@ -235,8 +251,9 @@ export default function AdminLayout() {
             setCatalogue(
                 Array.isArray(latestProducts)
                     ? latestProducts
-                    : [...products],
+                    : getProducts(),
             );
+
             setReadNotificationIds(new Set());
         }
 
@@ -256,16 +273,24 @@ export default function AdminLayout() {
     useEffect(() => {
         if (!notificationsOpen) return undefined;
 
+        function handleOutsideClick(event) {
+            if (!notificationRef.current?.contains(event.target)) {
+                setNotificationsOpen(false);
+            }
+        }
+
         function handleEscape(event) {
             if (event.key === "Escape") {
                 setNotificationsOpen(false);
             }
         }
 
-        window.addEventListener("keydown", handleEscape);
+        document.addEventListener("mousedown", handleOutsideClick);
+        document.addEventListener("keydown", handleEscape);
 
         return () => {
-            window.removeEventListener("keydown", handleEscape);
+            document.removeEventListener("mousedown", handleOutsideClick);
+            document.removeEventListener("keydown", handleEscape);
         };
     }, [notificationsOpen]);
 
@@ -275,35 +300,38 @@ export default function AdminLayout() {
         );
     }
 
+    function closeNotifications() {
+        setNotificationsOpen(false);
+    }
+
     return (
         <div
             id="virsa-admin-workspace"
             className="min-h-screen bg-slate-50 text-slate-900 lg:flex"
         >
-            {/* Desktop sidebar */}
-            <aside className="hidden w-[248px] shrink-0 border-r border-slate-200 bg-white lg:flex lg:flex-col">
+            <aside className="hidden w-[256px] shrink-0 border-r border-slate-800 bg-slate-950 text-white lg:flex lg:flex-col">
                 <Link
                     to="/admin"
-                    className="group relative border-b border-slate-200 px-6 py-6 focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-violet-600"
+                    className="border-b border-white/15 px-6 py-6 focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-violet-500"
                     aria-label="Virsa.Shoe Admin Dashboard"
                 >
                     <span className="text-xl font-extrabold tracking-[-0.06em]">
-                        <span className="text-violet-700">VIRSA</span>
-                        <span className="text-slate-900">.SHOE</span>
+                        <span className="text-white">VIRSA</span>
+                        <span className="text-violet-400">.SHOE</span>
                     </span>
 
-                    <span className="mt-2 block text-[10px] font-semibold tracking-[0.15em] text-slate-600">
+                    <span className="mt-2 block text-[9px] font-semibold tracking-[0.17em] text-slate-400">
                         ADMINISTRATION
                     </span>
 
                     <span
                         aria-hidden="true"
-                        className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-violet-700 via-sky-500 to-slate-300"
+                        className="hidden"
                     />
                 </Link>
 
                 <div className="px-4 pt-6">
-                    <p className="mb-3 px-3 text-[10px] font-bold tracking-[0.14em] text-slate-600">
+                    <p className="mb-3 px-3 text-[9px] font-bold tracking-[0.16em] text-slate-500">
                         STORE OPERATIONS
                     </p>
 
@@ -315,20 +343,20 @@ export default function AdminLayout() {
                     </nav>
                 </div>
 
-                <div className="mt-auto border-t border-slate-200 p-4">
-                    <div className="rounded-xl border border-violet-100 bg-gradient-to-br from-violet-50 to-white p-3">
-                        <p className="text-xs font-bold text-slate-900">
+                <div className="mt-auto border-t border-white/15 p-4">
+                    <div className="rounded-md border border-white/10 bg-white/5 p-3">
+                        <p className="text-xs font-bold text-white">
                             Operations workspace
                         </p>
 
-                        <p className="mt-1.5 text-xs leading-5 text-slate-600">
+                        <p className="mt-1.5 text-xs leading-5 text-slate-400">
                             Manage your catalogue, inventory and store operations.
                         </p>
                     </div>
 
                     <Link
                         to="/"
-                        className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold !text-violet-800 transition-colors hover:!bg-violet-50 hover:!text-violet-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600"
+                        className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold !text-slate-300 transition-colors hover:!bg-violet-500/20 hover:!text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-500"
                     >
                         <span aria-hidden="true">←</span>
                         Return to storefront
@@ -336,13 +364,12 @@ export default function AdminLayout() {
                 </div>
             </aside>
 
-            {/* Main workspace */}
             <div className="min-w-0 flex-1">
-                <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
-                    <div className="flex min-h-[70px] items-center justify-between gap-3 px-4 sm:px-7 lg:px-9">
+                <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 shadow-sm shadow-slate-900/[0.02] backdrop-blur-xl">
+                    <div className="flex min-h-[76px] items-center justify-between gap-3 px-4 sm:px-7 lg:px-9">
                         <div className="min-w-0">
                             <p className="text-[10px] font-bold tracking-[0.14em]">
-                                <span className="text-violet-800">
+                                <span className="text-violet-700">
                                     VIRSA.SHOE
                                 </span>
 
@@ -355,13 +382,17 @@ export default function AdminLayout() {
                                 </span>
                             </p>
 
-                            <h2 className="mt-1 text-lg font-bold tracking-[-0.035em] text-slate-900">
+                            <h1 className="mt-1 truncate text-lg font-bold tracking-[-0.035em] text-slate-950">
                                 Store operations
-                            </h2>
+                            </h1>
+
+                            <p className="mt-1 hidden text-xs text-slate-500 sm:block">
+                                Products, inventory and daily operations
+                            </p>
                         </div>
 
                         <div className="flex shrink-0 items-center gap-2 sm:gap-4">
-                            <div className="relative">
+                            <div ref={notificationRef} className="relative">
                                 <button
                                     type="button"
                                     onClick={() =>
@@ -375,9 +406,9 @@ export default function AdminLayout() {
                                     aria-expanded={notificationsOpen}
                                     aria-controls="admin-notifications-panel"
                                     title="Open inventory notifications"
-                                    className={`relative grid size-10 place-items-center rounded-xl border transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 ${notificationsOpen
-                                        ? "border-violet-200 bg-violet-50 !text-violet-800"
-                                        : "border-slate-200 bg-white !text-slate-600 hover:!border-violet-200 hover:!bg-violet-50 hover:!text-violet-800"
+                                    className={`relative grid size-10 place-items-center rounded-xl border transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 sm:size-11 ${notificationsOpen
+                                            ? "border-violet-200 bg-violet-50 text-violet-800"
+                                            : "border-slate-200 bg-white text-slate-600 hover:border-violet-200 hover:bg-violet-50 hover:text-violet-800"
                                         }`}
                                 >
                                     <Bell size={18} aria-hidden="true" />
@@ -385,7 +416,7 @@ export default function AdminLayout() {
                                     {unreadCount > 0 && (
                                         <span
                                             aria-hidden="true"
-                                            className="absolute -right-1 -top-1 grid min-h-5 min-w-5 place-items-center rounded-full border-2 border-white bg-red-600 px-1 text-[9px] font-bold text-white"
+                                            className="absolute -right-1 -top-1 grid min-h-5 min-w-5 place-items-center rounded-full border-2 border-white bg-rose-600 px-1 text-[9px] font-bold text-white"
                                         >
                                             {unreadCount > 9
                                                 ? "9+"
@@ -399,27 +430,37 @@ export default function AdminLayout() {
                                         notifications={notifications}
                                         unreadCount={unreadCount}
                                         onMarkAllRead={markAllRead}
-                                        onClose={() =>
-                                            setNotificationsOpen(false)
-                                        }
+                                        onClose={closeNotifications}
                                     />
                                 )}
                             </div>
 
+                            <div className="hidden h-9 w-px bg-slate-200 sm:block" />
+
                             <div
-                                className="grid size-10 place-items-center rounded-full border border-violet-200 bg-violet-50 text-xs font-bold text-violet-800"
+                                className="grid size-10 place-items-center rounded-full border border-violet-100 bg-gradient-to-br from-violet-100 to-indigo-100 text-xs font-bold text-violet-800"
                                 role="img"
                                 aria-label="Admin account"
+                                title="Admin account"
                             >
                                 A
+                            </div>
+
+                            <div className="hidden sm:block">
+                                <p className="text-xs font-bold text-slate-900">
+                                    Admin
+                                </p>
+
+                                <p className="mt-0.5 text-[10px] text-slate-500">
+                                    Store operations
+                                </p>
                             </div>
                         </div>
                     </div>
 
-                    {/* Mobile sidebar navigation */}
                     <nav
                         aria-label="Mobile admin navigation"
-                        className="flex gap-1 overflow-x-auto border-t border-slate-200 px-3 py-2 lg:hidden"
+                        className="flex gap-1 overflow-x-auto border-t border-slate-800 bg-slate-950 px-3 py-2 lg:hidden"
                     >
                         <NavigationLinks mobile />
                     </nav>
@@ -432,3 +473,7 @@ export default function AdminLayout() {
         </div>
     );
 }
+
+
+
+

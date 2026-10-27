@@ -1,4 +1,4 @@
-
+﻿
 import { ArrowUpRight, Heart, Star } from "lucide-react";
 import { Link } from "react-router";
 
@@ -16,7 +16,7 @@ export default function ProductCard({
     const imageSrc =
         product.image ||
         product.images?.[0] ||
-        "/images/shoes/day5-neutral-sneaker.jpg";
+        "/images/shoes/day5-neutral-sneaker.webp";
 
     const inStock = Number(product.stock) > 0;
 
@@ -40,7 +40,7 @@ export default function ProductCard({
                             if (!image.dataset.fallbackApplied) {
                                 image.dataset.fallbackApplied = "true";
                                 image.src =
-                                    "/images/shoes/day5-neutral-sneaker.jpg";
+                                    "/images/shoes/day5-neutral-sneaker.webp";
                             }
                         }}
                         className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
@@ -146,7 +146,7 @@ export default function ProductCard({
                 {Array.isArray(product.colors) &&
                     product.colors.length > 0 && (
                         <p className="mt-1.5 text-xs text-slate-500">
-                            {product.colors.join(" · ")}
+                            {product.colors.join(" Â· ")}
                         </p>
                     )}
 

@@ -1,4 +1,4 @@
-
+﻿
 import { useMemo, useState } from "react";
 import {
     ArrowRight,
@@ -94,7 +94,7 @@ export default function Shop() {
                     category,
                     image:
                         product?.image ||
-                        "/images/shoes/day5-neutral-sneaker.jpg",
+                        "/images/shoes/day5-neutral-sneaker.webp",
                     description:
                         collectionDescriptions[category] ||
                         `Explore our ${category.toLowerCase()} collection.`,
@@ -247,7 +247,7 @@ export default function Shop() {
                     <div className="relative mx-auto grid min-h-[290px] w-full max-w-[580px] grid-cols-[0.85fr_1.15fr] gap-3 sm:min-h-[360px] sm:gap-4">
                         <div className="mt-8 overflow-hidden bg-[#E2E8F0] sm:mt-12">
                             <img
-                                src="/images/shoes/day5-white-sneaker.jpg"
+                                src="/images/shoes/day5-white-sneaker.webp"
                                 alt="White sneaker from the Virsa footwear collection"
                                 loading="eager"
                                 className="size-full object-cover"
@@ -256,7 +256,7 @@ export default function Shop() {
 
                         <div className="relative overflow-hidden bg-[#E2E8F0]">
                             <img
-                                src="/images/shoes/day5-editorial.jpg"
+                                src="/images/shoes/day5-editorial.webp"
                                 alt="Editorial footwear selection"
                                 loading="eager"
                                 className="size-full object-cover"

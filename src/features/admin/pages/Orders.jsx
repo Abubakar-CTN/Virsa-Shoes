@@ -14,6 +14,7 @@ import {
     X,
 } from "lucide-react";
 import { mockCustomerOrders } from "../../../services/mock/orders.js";
+import { recordOrderChanges } from "../../../services/adminActivityStore.js";
 
 const STORAGE_KEY = "virsa.admin.orders.v1";
 const UPDATE_EVENT = "virsa:orders-updated";
@@ -96,6 +97,7 @@ function readOrders() {
 }
 
 function persistOrders(orders) {
+    const previousOrders = readOrders();
     let persisted = false;
 
     if (typeof window !== "undefined") {
@@ -109,6 +111,7 @@ function persistOrders(orders) {
             // The current page can still display the in-memory update.
         }
 
+        recordOrderChanges(previousOrders, orders);
         window.dispatchEvent(
             new CustomEvent(UPDATE_EVENT, {
                 detail: { orders: cloneOrders(orders) },
@@ -397,11 +400,11 @@ function OrderDetailsModal({
                                                     : "",
                                             ]
                                                 .filter(Boolean)
-                                                .join(" · ") || "Variant unavailable"}
+                                                .join(" Â· ") || "Variant unavailable"}
                                         </p>
 
                                         <p className="mt-1 text-xs text-text-secondary">
-                                            Qty: {Number(item.quantity) || 0} ×{" "}
+                                            Qty: {Number(item.quantity) || 0} Ã—{" "}
                                             {money(item.unitPrice)}
                                         </p>
                                     </div>

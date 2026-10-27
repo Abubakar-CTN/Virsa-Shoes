@@ -1,0 +1,1074 @@
+import { useEffect, useMemo, useState } from "react";
+import {
+    ArrowDownToLine,
+    CalendarDays,
+    CircleUserRound,
+    Mail,
+    MapPin,
+    Pencil,
+    Phone,
+    Plus,
+    Search,
+    ShoppingBag,
+    Trash2,
+    UserCheck,
+    Users,
+    Wallet,
+    X,
+} from "lucide-react";
+
+const STORAGE_KEY = "virsa-admin-customers-v2";
+
+// Fictional sample records for frontend development.
+// These are not real customer accounts or live store data.
+const INITIAL_CUSTOMERS = [
+    {
+        id: "CUS-1001",
+        name: "Muhammad Abdullah Siddiqui",
+        email: "abdullah.siddiqui@example.com",
+        phone: "+92 300 000 1001",
+        city: "Lahore, Punjab",
+        orders: 6,
+        spent: 38940,
+        status: "Active",
+        lastOrder: "2026-10-24",
+    },
+    {
+        id: "CUS-1002",
+        name: "Ayesha Fatima Khan",
+        email: "ayesha.fatima@example.com",
+        phone: "+92 300 000 1002",
+        city: "Karachi, Sindh",
+        orders: 4,
+        spent: 24490,
+        status: "Active",
+        lastOrder: "2026-10-23",
+    },
+    {
+        id: "CUS-1003",
+        name: "Muhammad Hamza Qureshi",
+        email: "hamza.qureshi@example.com",
+        phone: "+92 300 000 1003",
+        city: "Multan, Punjab",
+        orders: 5,
+        spent: 32750,
+        status: "Active",
+        lastOrder: "2026-10-22",
+    },
+    {
+        id: "CUS-1004",
+        name: "Maryam Noor Sheikh",
+        email: "maryam.noor@example.com",
+        phone: "+92 300 000 1004",
+        city: "Islamabad, ICT",
+        orders: 2,
+        spent: 12998,
+        status: "Active",
+        lastOrder: "2026-10-21",
+    },
+    {
+        id: "CUS-1005",
+        name: "Abdul Rehman Malik",
+        email: "abdul.rehman@example.com",
+        phone: "+92 300 000 1005",
+        city: "Faisalabad, Punjab",
+        orders: 3,
+        spent: 18750,
+        status: "Active",
+        lastOrder: "2026-10-20",
+    },
+    {
+        id: "CUS-1006",
+        name: "Hafsa Zahra Iqbal",
+        email: "hafsa.iqbal@example.com",
+        phone: "+92 300 000 1006",
+        city: "Rawalpindi, Punjab",
+        orders: 0,
+        spent: 0,
+        status: "Inactive",
+        lastOrder: "",
+    },
+    {
+        id: "CUS-1007",
+        name: "Usman Tariq Hussain",
+        email: "usman.tariq@example.com",
+        phone: "+92 300 000 1007",
+        city: "Bahawalpur, Punjab",
+        orders: 5,
+        spent: 32750,
+        status: "Active",
+        lastOrder: "2026-10-18",
+    },
+    {
+        id: "CUS-1008",
+        name: "Zainab Ahmed Chughtai",
+        email: "zainab.ahmed@example.com",
+        phone: "+92 300 000 1008",
+        city: "Gujranwala, Punjab",
+        orders: 1,
+        spent: 5499,
+        status: "Active",
+        lastOrder: "2026-10-17",
+    },
+    {
+        id: "CUS-1009",
+        name: "Bilal Ahmed Raza",
+        email: "bilal.raza@example.com",
+        phone: "+92 300 000 1009",
+        city: "Sahiwal, Punjab",
+        orders: 0,
+        spent: 0,
+        status: "Inactive",
+        lastOrder: "",
+    },
+    {
+        id: "CUS-1010",
+        name: "Sana Iqbal",
+        email: "sana.iqbal@example.com",
+        phone: "+92 300 000 1010",
+        city: "Peshawar, Khyber Pakhtunkhwa",
+        orders: 4,
+        spent: 21980,
+        status: "Active",
+        lastOrder: "2026-10-15",
+    },
+    {
+        id: "CUS-1011",
+        name: "Ibrahim Ali Siddiqui",
+        email: "ibrahim.ali@example.com",
+        phone: "+92 300 000 1011",
+        city: "Hyderabad, Sindh",
+        orders: 2,
+        spent: 10998,
+        status: "Active",
+        lastOrder: "2026-10-12",
+    },
+    {
+        id: "CUS-1012",
+        name: "Fatima Zahid",
+        email: "fatima.zahid@example.com",
+        phone: "+92 300 000 1012",
+        city: "Quetta, Balochistan",
+        orders: 1,
+        spent: 6490,
+        status: "Active",
+        lastOrder: "2026-10-10",
+    },
+];
+
+const EMPTY_FORM = {
+    name: "",
+    email: "",
+    phone: "",
+    city: "",
+    orders: "0",
+    spent: "0",
+    status: "Active",
+    lastOrder: "",
+};
+
+const formatMoney = (amount) =>
+    `Rs ${new Intl.NumberFormat("en-PK", {
+        maximumFractionDigits: 0,
+    }).format(Number(amount) || 0)}`;
+
+const formatDate = (value) => {
+    if (!value) return "No orders yet";
+
+    return new Intl.DateTimeFormat("en-PK", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    }).format(new Date(`${value}T00:00:00`));
+};
+
+function getNextCustomerId(customers) {
+    const highestId = customers.reduce((highest, customer) => {
+        const match = String(customer.id).match(/^CUS-(\d+)$/);
+        return match ? Math.max(highest, Number(match[1])) : highest;
+    }, 1000);
+
+    return `CUS-${highestId + 1}`;
+}
+
+function CustomerAvatar({ name }) {
+    const initials = name
+        .trim()
+        .split(/\s+/)
+        .map((part) => part[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
+
+    return (
+        <div
+            className="grid size-10 shrink-0 place-items-center rounded-xl border border-violet-100 bg-gradient-to-br from-violet-100 to-indigo-100 text-xs font-extrabold text-violet-800"
+            aria-hidden="true"
+        >
+            {initials || "CU"}
+        </div>
+    );
+}
+
+function StatusBadge({ status }) {
+    const active = status === "Active";
+
+    return (
+        <span
+            className={[
+                "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold ring-1 ring-inset",
+                active
+                    ? "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+                    : "bg-slate-100 text-slate-600 ring-slate-500/15",
+            ].join(" ")}
+        >
+            <span
+                className={[
+                    "size-1.5 rounded-full",
+                    active ? "bg-emerald-500" : "bg-slate-400",
+                ].join(" ")}
+            />
+            {status}
+        </span>
+    );
+}
+
+function SummaryCard({ title, value, description, icon: Icon, iconClass }) {
+    return (
+        <article className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/[0.03] transition-shadow hover:shadow-md hover:shadow-indigo-950/[0.05]">
+            <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                    <p className="text-xs font-semibold text-slate-500">
+                        {title}
+                    </p>
+                    <p className="mt-2 break-words text-2xl font-extrabold tracking-tight text-slate-950">
+                        {value}
+                    </p>
+                    <p className="mt-1.5 text-[11px] leading-5 text-slate-500">
+                        {description}
+                    </p>
+                </div>
+                <div
+                    className={`grid size-11 shrink-0 place-items-center rounded-xl ${iconClass}`}
+                >
+                    <Icon size={20} aria-hidden="true" />
+                </div>
+            </div>
+        </article>
+    );
+}
+
+function CustomerFormModal({ customer, onClose, onSave }) {
+    const [form, setForm] = useState(() => ({
+        ...EMPTY_FORM,
+        ...(customer || {}),
+        orders: String(customer?.orders ?? 0),
+        spent: String(customer?.spent ?? 0),
+    }));
+
+    function updateField(field, value) {
+        setForm((current) => ({ ...current, [field]: value }));
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        onSave({
+            ...form,
+            name: form.name.trim(),
+            email: form.email.trim(),
+            phone: form.phone.trim(),
+            city: form.city.trim(),
+            orders: Math.max(0, Number(form.orders) || 0),
+            spent: Math.max(0, Number(form.spent) || 0),
+        });
+    }
+
+    const inputClass =
+        "mt-1.5 min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 py-2.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-500/10";
+
+    return (
+        <div
+            className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-slate-950/60 p-4 backdrop-blur-sm"
+            onClick={(event) => {
+                if (event.target === event.currentTarget) onClose();
+            }}
+        >
+            <form
+                onSubmit={handleSubmit}
+                aria-labelledby="customer-form-title"
+                className="my-auto w-full max-w-2xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-950/25"
+            >
+                <div className="flex items-start justify-between gap-4 bg-gradient-to-r from-slate-950 via-indigo-950 to-violet-900 p-5 text-white sm:p-6">
+                    <div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.17em] text-violet-200">
+                            Customer management
+                        </p>
+                        <h2
+                            id="customer-form-title"
+                            className="mt-1.5 text-xl font-extrabold"
+                        >
+                            {customer ? "Edit customer" : "Add customer"}
+                        </h2>
+                        <p className="mt-1 text-xs leading-5 text-indigo-100">
+                            Enter customer information for this browser.
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        aria-label="Close customer form"
+                        className="grid size-9 shrink-0 place-items-center rounded-xl border border-white/15 bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    >
+                        <X size={17} />
+                    </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 sm:p-6">
+                    <label className="text-xs font-bold text-slate-700">
+                        Full name *
+                        <input
+                            required
+                            autoFocus
+                            maxLength={100}
+                            value={form.name}
+                            onChange={(event) =>
+                                updateField("name", event.target.value)
+                            }
+                            placeholder="Customer full name"
+                            className={inputClass}
+                        />
+                    </label>
+
+                    <label className="text-xs font-bold text-slate-700">
+                        Email address *
+                        <input
+                            required
+                            type="email"
+                            maxLength={150}
+                            value={form.email}
+                            onChange={(event) =>
+                                updateField("email", event.target.value)
+                            }
+                            placeholder="name@example.com"
+                            className={inputClass}
+                        />
+                    </label>
+
+                    <label className="text-xs font-bold text-slate-700">
+                        Phone number *
+                        <input
+                            required
+                            type="tel"
+                            maxLength={30}
+                            value={form.phone}
+                            onChange={(event) =>
+                                updateField("phone", event.target.value)
+                            }
+                            placeholder="+92 3XX XXXXXXX"
+                            className={inputClass}
+                        />
+                    </label>
+
+                    <label className="text-xs font-bold text-slate-700">
+                        City and province *
+                        <input
+                            required
+                            maxLength={100}
+                            value={form.city}
+                            onChange={(event) =>
+                                updateField("city", event.target.value)
+                            }
+                            placeholder="Lahore, Punjab"
+                            className={inputClass}
+                        />
+                    </label>
+
+                    <label className="text-xs font-bold text-slate-700">
+                        Number of orders
+                        <input
+                            type="number"
+                            min="0"
+                            step="1"
+                            value={form.orders}
+                            onChange={(event) =>
+                                updateField("orders", event.target.value)
+                            }
+                            className={inputClass}
+                        />
+                    </label>
+
+                    <label className="text-xs font-bold text-slate-700">
+                        Total spend (PKR)
+                        <input
+                            type="number"
+                            min="0"
+                            step="1"
+                            value={form.spent}
+                            onChange={(event) =>
+                                updateField("spent", event.target.value)
+                            }
+                            className={inputClass}
+                        />
+                    </label>
+
+                    <label className="text-xs font-bold text-slate-700">
+                        Account status
+                        <select
+                            value={form.status}
+                            onChange={(event) =>
+                                updateField("status", event.target.value)
+                            }
+                            className={inputClass}
+                        >
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </label>
+
+                    <label className="text-xs font-bold text-slate-700">
+                        Last order date
+                        <input
+                            type="date"
+                            value={form.lastOrder}
+                            onChange={(event) =>
+                                updateField("lastOrder", event.target.value)
+                            }
+                            className={inputClass}
+                        />
+                    </label>
+                </div>
+
+                <div className="flex flex-col-reverse gap-3 border-t border-slate-100 bg-slate-50/70 p-5 sm:flex-row sm:justify-end sm:px-6">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="min-h-11 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="min-h-11 rounded-xl bg-gradient-to-r from-violet-700 to-indigo-700 px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-indigo-900/15 transition hover:from-violet-800 hover:to-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600"
+                    >
+                        {customer ? "Save changes" : "Add customer"}
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+}
+
+function CustomerDetails({ customer, onClose }) {
+    if (!customer) return null;
+
+    const details = [
+        { label: "Email address", value: customer.email, icon: Mail },
+        { label: "Phone number", value: customer.phone, icon: Phone },
+        { label: "City", value: customer.city, icon: MapPin },
+        {
+            label: "Last order",
+            value: formatDate(customer.lastOrder),
+            icon: CalendarDays,
+        },
+    ];
+
+    return (
+        <div
+            className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-slate-950/55 p-4 backdrop-blur-sm"
+            onClick={(event) => {
+                if (event.target === event.currentTarget) onClose();
+            }}
+        >
+            <section
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="customer-details-title"
+                className="my-auto w-full max-w-lg overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-950/20"
+            >
+                <div className="flex items-start justify-between gap-3 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900 p-6 text-white">
+                    <div className="flex min-w-0 items-center gap-3">
+                        <div className="rounded-2xl bg-white p-1">
+                            <CustomerAvatar name={customer.name} />
+                        </div>
+                        <div className="min-w-0">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-violet-200">
+                                Customer profile
+                            </p>
+                            <h2
+                                id="customer-details-title"
+                                className="mt-1 break-words text-lg font-extrabold"
+                            >
+                                {customer.name}
+                            </h2>
+                            <p className="mt-1 text-xs text-indigo-100">
+                                {customer.id}
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        aria-label="Close customer details"
+                        className="grid size-9 shrink-0 place-items-center rounded-xl border border-white/15 bg-white/10 text-white transition hover:bg-white/20"
+                    >
+                        <X size={17} />
+                    </button>
+                </div>
+
+                <div className="space-y-5 p-5 sm:p-6">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                        <StatusBadge status={customer.status} />
+                        <span className="text-xs font-medium text-slate-500">
+                            ID: {customer.id}
+                        </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="rounded-2xl border border-violet-100 bg-violet-50/70 p-4">
+                            <ShoppingBag size={18} className="text-violet-700" />
+                            <p className="mt-3 text-xl font-extrabold text-slate-950">
+                                {customer.orders}
+                            </p>
+                            <p className="mt-1 text-xs text-slate-600">
+                                Total orders
+                            </p>
+                        </div>
+                        <div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
+                            <Wallet size={18} className="text-indigo-700" />
+                            <p className="mt-3 break-words text-lg font-extrabold text-slate-950">
+                                {formatMoney(customer.spent)}
+                            </p>
+                            <p className="mt-1 text-xs text-slate-600">
+                                Total spend
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        {details.map(({ label, value, icon: Icon }) => (
+                            <div key={label} className="flex items-start gap-3">
+                                <div className="grid size-9 shrink-0 place-items-center rounded-xl bg-slate-100 text-slate-600">
+                                    <Icon size={16} />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-[11px] font-medium text-slate-500">
+                                        {label}
+                                    </p>
+                                    <p className="mt-1 break-words text-sm font-semibold text-slate-800">
+                                        {value}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="w-full rounded-xl bg-gradient-to-r from-violet-700 to-indigo-700 px-4 py-3 text-sm font-bold text-white shadow-md shadow-indigo-900/15 transition hover:from-violet-800 hover:to-indigo-800"
+                    >
+                        Close details
+                    </button>
+                </div>
+            </section>
+        </div>
+    );
+}
+
+export default function Customers() {
+    const [customers, setCustomers] = useState(() => {
+        try {
+            const saved = window.localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed)) return parsed;
+            }
+        } catch {
+            // Fall back to the bundled sample records if storage is unavailable.
+        }
+
+        return INITIAL_CUSTOMERS;
+    });
+
+    const [search, setSearch] = useState("");
+    const [statusFilter, setStatusFilter] = useState("all");
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [editingCustomer, setEditingCustomer] = useState(null);
+    const [formOpen, setFormOpen] = useState(false);
+
+    useEffect(() => {
+        try {
+            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(customers));
+        } catch {
+            // The page remains usable if browser storage is disabled or full.
+        }
+    }, [customers]);
+
+    const filteredCustomers = useMemo(() => {
+        const term = search.trim().toLowerCase();
+
+        return customers.filter((customer) => {
+            const searchableValues = [
+                customer.name,
+                customer.email,
+                customer.phone,
+                customer.city,
+                customer.id,
+            ];
+
+            const matchesSearch =
+                !term ||
+                searchableValues.some((value) =>
+                    String(value || "").toLowerCase().includes(term),
+                );
+
+            const matchesStatus =
+                statusFilter === "all" ||
+                customer.status.toLowerCase() === statusFilter;
+
+            return matchesSearch && matchesStatus;
+        });
+    }, [customers, search, statusFilter]);
+
+    const activeCount = customers.filter(
+        (customer) => customer.status === "Active",
+    ).length;
+
+    const repeatCount = customers.filter(
+        (customer) => Number(customer.orders) > 1,
+    ).length;
+
+    const totalSpend = customers.reduce(
+        (total, customer) => total + (Number(customer.spent) || 0),
+        0,
+    );
+
+    function openCreateForm() {
+        setEditingCustomer(null);
+        setFormOpen(true);
+    }
+
+    function openEditForm(customer) {
+        setEditingCustomer(customer);
+        setFormOpen(true);
+    }
+
+    function saveCustomer(values) {
+        if (editingCustomer) {
+            setCustomers((current) =>
+                current.map((customer) =>
+                    customer.id === editingCustomer.id
+                        ? { ...customer, ...values }
+                        : customer,
+                ),
+            );
+
+            setSelectedCustomer((current) =>
+                current?.id === editingCustomer.id
+                    ? { ...current, ...values }
+                    : current,
+            );
+        } else {
+            setCustomers((current) => [
+                ...current,
+                {
+                    ...values,
+                    id: getNextCustomerId(current),
+                },
+            ]);
+        }
+
+        setFormOpen(false);
+        setEditingCustomer(null);
+    }
+
+    function deleteCustomer(customer) {
+        const confirmed = window.confirm(
+            `Delete ${customer.name} (${customer.id}) from this browser's customer list?`,
+        );
+
+        if (!confirmed) return;
+
+        setCustomers((current) =>
+            current.filter((item) => item.id !== customer.id),
+        );
+
+        if (selectedCustomer?.id === customer.id) {
+            setSelectedCustomer(null);
+        }
+    }
+
+    function exportCustomers() {
+        const columns = [
+            "Customer ID",
+            "Name",
+            "Email",
+            "Phone",
+            "City",
+            "Orders",
+            "Total Spend (PKR)",
+            "Status",
+            "Last Order",
+        ];
+
+        const rows = filteredCustomers.map((customer) => [
+            customer.id,
+            customer.name,
+            customer.email,
+            customer.phone,
+            customer.city,
+            customer.orders,
+            customer.spent,
+            customer.status,
+            customer.lastOrder,
+        ]);
+
+        const escapeCell = (value) =>
+            `"${String(value ?? "").replace(/"/g, '""')}"`;
+
+        const csv = [columns, ...rows]
+            .map((row) => row.map(escapeCell).join(","))
+            .join("\r\n");
+
+        const blob = new Blob(["\uFEFF", csv], {
+            type: "text/csv;charset=utf-8;",
+        });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "virsa-customers.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+    }
+
+    return (
+        <div className="mx-auto w-full max-w-[1500px] space-y-6">
+            <section className="relative overflow-hidden rounded-3xl border border-indigo-900/10 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900 p-6 text-white shadow-xl shadow-indigo-950/10 sm:p-8">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -right-12 -top-20 size-64 rounded-full bg-violet-500/20 blur-3xl"
+                />
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -bottom-28 right-1/3 size-60 rounded-full bg-sky-400/10 blur-3xl"
+                />
+
+                <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+                    <div className="max-w-2xl">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-violet-100">
+                            <Users size={13} />
+                            Customer relationships
+                        </div>
+                        <h2 className="mt-4 text-2xl font-extrabold tracking-tight sm:text-3xl">
+                            Customer Management
+                        </h2>
+                        <p className="mt-2 max-w-xl text-sm leading-6 text-indigo-100">
+                            Manage customer profiles, order activity and
+                            spending in one place.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3">
+                        <button
+                            type="button"
+                            onClick={openCreateForm}
+                            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-extrabold text-indigo-950 shadow-md shadow-black/10 transition hover:bg-violet-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                        >
+                            <Plus size={17} />
+                            Add customer
+                        </button>
+                        <button
+                            type="button"
+                            onClick={exportCustomers}
+                            disabled={filteredCustomers.length === 0}
+                            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-bold text-white transition hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            <ArrowDownToLine size={17} />
+                            Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div className="relative z-10 mt-6 flex flex-wrap items-center gap-2 text-[11px] text-indigo-100">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200/20 bg-amber-200/10 px-3 py-1.5 font-bold text-amber-100">
+                        Sample data
+                    </span>
+                    <span>
+                        Fictional Pakistani customer examples; not live accounts.
+                    </span>
+                </div>
+            </section>
+
+            <section
+                aria-label="Customer summary"
+                className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+            >
+                <SummaryCard
+                    title="Total customers"
+                    value={customers.length}
+                    description="Profiles saved in this browser"
+                    icon={Users}
+                    iconClass="bg-violet-50 text-violet-700"
+                />
+                <SummaryCard
+                    title="Active customers"
+                    value={activeCount}
+                    description="Currently marked active"
+                    icon={UserCheck}
+                    iconClass="bg-emerald-50 text-emerald-700"
+                />
+                <SummaryCard
+                    title="Repeat customers"
+                    value={repeatCount}
+                    description="More than one recorded order"
+                    icon={ShoppingBag}
+                    iconClass="bg-sky-50 text-sky-700"
+                />
+                <SummaryCard
+                    title="Total customer spend"
+                    value={formatMoney(totalSpend)}
+                    description="Combined sample order spend"
+                    icon={Wallet}
+                    iconClass="bg-indigo-50 text-indigo-700"
+                />
+            </section>
+
+            <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm shadow-slate-900/[0.03]">
+                <div className="flex flex-col gap-4 border-b border-slate-100 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                        <h3 className="text-base font-extrabold text-slate-950">
+                            Customer directory
+                        </h3>
+                        <p className="mt-1 text-xs leading-5 text-slate-500">
+                            Search, filter, add or update customer records.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                        <label className="relative block min-w-0 sm:w-72">
+                            <span className="sr-only">Search customers</span>
+                            <Search
+                                size={16}
+                                aria-hidden="true"
+                                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                            />
+                            <input
+                                type="search"
+                                value={search}
+                                onChange={(event) =>
+                                    setSearch(event.target.value)
+                                }
+                                placeholder="Name, email, city or ID"
+                                className="min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 py-2.5 pl-10 pr-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-500/10"
+                            />
+                        </label>
+
+                        <label className="relative block sm:w-40">
+                            <span className="sr-only">
+                                Filter by customer status
+                            </span>
+                            <select
+                                value={statusFilter}
+                                onChange={(event) =>
+                                    setStatusFilter(event.target.value)
+                                }
+                                className="min-h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-500/10"
+                            >
+                                <option value="all">All statuses</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 sm:px-6">
+                    <p className="text-xs text-slate-500">
+                        Showing{" "}
+                        <span className="font-bold text-slate-800">
+                            {filteredCustomers.length}
+                        </span>{" "}
+                        of {customers.length} customers
+                    </p>
+
+                    {(search || statusFilter !== "all") && (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setSearch("");
+                                setStatusFilter("all");
+                            }}
+                            className="text-xs font-bold text-violet-700 transition hover:text-indigo-800"
+                        >
+                            Clear filters
+                        </button>
+                    )}
+                </div>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full min-w-[1050px] border-collapse text-left">
+                        <thead>
+                            <tr className="border-y border-slate-100 bg-slate-50/80">
+                                {[
+                                    "Customer",
+                                    "Location",
+                                    "Orders",
+                                    "Total spend",
+                                    "Last order",
+                                    "Status",
+                                    "Actions",
+                                ].map((heading) => (
+                                    <th
+                                        key={heading}
+                                        className="px-4 py-3.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500 first:pl-6 last:pr-6"
+                                    >
+                                        {heading}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+
+                        <tbody className="divide-y divide-slate-100">
+                            {filteredCustomers.map((customer) => (
+                                <tr
+                                    key={customer.id}
+                                    className="transition-colors hover:bg-violet-50/30"
+                                >
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                            <CustomerAvatar name={customer.name} />
+                                            <div className="min-w-0">
+                                                <p className="max-w-[230px] text-sm font-bold text-slate-900">
+                                                    {customer.name}
+                                                </p>
+                                                <p className="mt-1 text-xs text-slate-500">
+                                                    {customer.email}
+                                                </p>
+                                                <p className="mt-1 text-[10px] font-semibold text-violet-700">
+                                                    {customer.id}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-4">
+                                        <div className="flex max-w-[210px] items-start gap-1.5 text-xs font-medium text-slate-600">
+                                            <MapPin
+                                                size={13}
+                                                className="mt-0.5 shrink-0 text-slate-400"
+                                            />
+                                            {customer.city}
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-4 text-sm font-bold tabular-nums text-slate-800">
+                                        {customer.orders}
+                                    </td>
+                                    <td className="whitespace-nowrap px-4 py-4 text-sm font-bold tabular-nums text-slate-900">
+                                        {formatMoney(customer.spent)}
+                                    </td>
+                                    <td className="whitespace-nowrap px-4 py-4 text-xs text-slate-600">
+                                        {formatDate(customer.lastOrder)}
+                                    </td>
+                                    <td className="px-4 py-4">
+                                        <StatusBadge status={customer.status} />
+                                    </td>
+                                    <td className="px-4 py-4">
+                                        <div className="flex items-center gap-1.5">
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    setSelectedCustomer(customer)
+                                                }
+                                                aria-label={`View ${customer.name}`}
+                                                title="View details"
+                                                className="grid size-9 place-items-center rounded-lg border border-violet-100 bg-violet-50 text-violet-800 transition hover:bg-violet-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600"
+                                            >
+                                                <CircleUserRound size={16} />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    openEditForm(customer)
+                                                }
+                                                aria-label={`Edit ${customer.name}`}
+                                                title="Edit customer"
+                                                className="grid size-9 place-items-center rounded-lg border border-sky-100 bg-sky-50 text-sky-800 transition hover:bg-sky-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+                                            >
+                                                <Pencil size={15} />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    deleteCustomer(customer)
+                                                }
+                                                aria-label={`Delete ${customer.name}`}
+                                                title="Delete customer"
+                                                className="grid size-9 place-items-center rounded-lg border border-rose-100 bg-rose-50 text-rose-700 transition hover:bg-rose-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
+                                            >
+                                                <Trash2 size={15} />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                {filteredCustomers.length === 0 && (
+                    <div className="px-5 py-14 text-center sm:px-8">
+                        <div className="mx-auto grid size-12 place-items-center rounded-2xl bg-violet-50 text-violet-700">
+                            <CircleUserRound size={23} />
+                        </div>
+                        <h4 className="mt-4 text-sm font-bold text-slate-900">
+                            No customers found
+                        </h4>
+                        <p className="mx-auto mt-1 max-w-sm text-xs leading-5 text-slate-500">
+                            Try another search term or clear your selected
+                            filters.
+                        </p>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setSearch("");
+                                setStatusFilter("all");
+                            }}
+                            className="mt-4 rounded-xl bg-gradient-to-r from-violet-700 to-indigo-700 px-4 py-2.5 text-xs font-bold text-white transition hover:from-violet-800 hover:to-indigo-800"
+                        >
+                            Reset filters
+                        </button>
+                    </div>
+                )}
+
+                <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 bg-slate-50/60 px-5 py-3.5 sm:px-6">
+                    <span className="size-2 rounded-full bg-amber-400" />
+                    <p className="text-[11px] leading-5 text-slate-500">
+                        Sample records are saved only in this browser. They are
+                        not connected to a live database or customer account.
+                    </p>
+                </div>
+            </section>
+
+            {formOpen && (
+                <CustomerFormModal
+                    key={editingCustomer?.id || "new-customer"}
+                    customer={editingCustomer}
+                    onClose={() => {
+                        setFormOpen(false);
+                        setEditingCustomer(null);
+                    }}
+                    onSave={saveCustomer}
+                />
+            )}
+
+            <CustomerDetails
+                customer={selectedCustomer}
+                onClose={() => setSelectedCustomer(null)}
+            />
+        </div>
+    );
+}

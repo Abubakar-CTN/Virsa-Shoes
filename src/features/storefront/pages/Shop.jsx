@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 import {
     ArrowDownUp,
     ArrowRight,
@@ -20,10 +20,10 @@ const categories = [...new Set(products.map((product) => product.category))].sor
 const availableSizes = [...new Set(products.flatMap((product) => product.sizes))].sort((a, b) => Number(a) - Number(b));
 
 const browseTiles = [
-    { title: "Everyday sneakers", subtitle: "Off-duty, all day", categories: ["Sneakers"], image: "/images/shoes/sneaker-white.jpg" },
-    { title: "Formal favourites", subtitle: "A sharper finish", categories: ["Formal"], image: "/images/shoes/brown-oxford.jpg" },
-    { title: "Easy sandals", subtitle: "Relaxed by design", categories: ["Sandals"], image: "/images/shoes/brown-sandals-detail.jpg" },
-    { title: "Flats & heels", subtitle: "A little more dressed up", categories: ["Flats", "Heels"], image: "/images/shoes/olive-heel.jpg" },
+    { title: "Everyday sneakers", subtitle: "Off-duty, all day", categories: ["Sneakers"], image: "/images/shoes/sneaker-white.webp" },
+    { title: "Formal favourites", subtitle: "A sharper finish", categories: ["Formal"], image: "/images/shoes/brown-oxford.webp" },
+    { title: "Easy sandals", subtitle: "Relaxed by design", categories: ["Sandals"], image: "/images/shoes/brown-sandals-detail.webp" },
+    { title: "Flats & heels", subtitle: "A little more dressed up", categories: ["Flats", "Heels"], image: "/images/shoes/olive-heel.webp" },
 ];
 
 function ProductCard({ product, saved, onToggleSave }) {
@@ -166,13 +166,13 @@ export default function Shop() {
                 <select value={priceBand} onChange={(event) => setPriceBand(event.target.value)} aria-label="Filter by price range" className="min-h-11 w-full border border-[#E5DAC7] bg-[#FFFEFC] px-3 text-xs text-[#49392B] outline-none focus:border-[#A7833C] focus:ring-2 focus:ring-[#C9A34C]/20">
                     <option value="all">All prices</option>
                     <option value="under5000">Under Rs 5,000</option>
-                    <option value="5000to7000">Rs 5,000–7,000</option>
+                    <option value="5000to7000">Rs 5,000â€“7,000</option>
                     <option value="over7000">Over Rs 7,000</option>
                 </select>
             </div>
 
             <div className="border-t border-[#F0E8DB] pt-5">
-                <FilterTitle>Size · UK</FilterTitle>
+                <FilterTitle>Size Â· UK</FilterTitle>
                 <div className="flex flex-wrap gap-2">
                     {availableSizes.map((size) => {
                         const selected = selectedSizes.includes(size);
@@ -204,7 +204,7 @@ export default function Shop() {
                         </nav>
 
                         <p className="flex items-center gap-2 text-[10px] font-bold tracking-[0.22em] text-[#977332]">
-                            <span className="h-px w-7 bg-[#B18A3A]" /> THE VIRSA EDIT · 01
+                            <span className="h-px w-7 bg-[#B18A3A]" /> THE VIRSA EDIT Â· 01
                         </p>
 
                         <h1 className="mt-5 max-w-xl text-[42px] font-semibold leading-[1.02] tracking-[-0.065em] text-[#33251B] sm:text-6xl lg:text-[68px]">
@@ -227,10 +227,10 @@ export default function Shop() {
                     <div className="relative mx-auto min-h-[275px] w-full max-w-[560px] sm:min-h-[345px]">
                         <div className="absolute inset-x-8 bottom-2 top-2 bg-[#E5D9C4] sm:inset-x-12" />
                         <div className="absolute right-3 top-0 h-[73%] w-[75%] overflow-hidden bg-[#E8E0D3] sm:right-8">
-                            <img src="/images/shoes/brown-oxford.jpg" alt="Brown footwear from the sample edit" loading="eager" className="size-full object-cover" />
+                            <img src="/images/shoes/brown-oxford.webp" alt="Brown footwear from the sample edit" loading="eager" className="size-full object-cover" />
                         </div>
                         <div className="absolute bottom-0 left-1 h-[54%] w-[43%] overflow-hidden border-[5px] border-[#F4EEE2] bg-[#E8E0D3] sm:left-5 sm:border-[7px]">
-                            <img src="/images/shoes/black-loafers.jpg" alt="Black loafers from the sample edit" loading="eager" className="size-full object-cover" />
+                            <img src="/images/shoes/black-loafers.webp" alt="Black loafers from the sample edit" loading="eager" className="size-full object-cover" />
                         </div>
                         <div className="absolute bottom-5 right-1 max-w-[170px] bg-[#FFFCF6] p-4 shadow-[0_12px_32px_rgba(61,42,29,0.12)] sm:bottom-8 sm:right-2">
                             <p className="text-[9px] font-bold tracking-[0.18em] text-[#977332]">THE DAILY EDIT</p>
@@ -322,7 +322,7 @@ export default function Shop() {
                                 <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#897762]">Active filters</span>
                                 {selectedCategories.map((category) => <button key={category} type="button" onClick={() => toggleCategory(category)} className="inline-flex min-h-7 items-center gap-1.5 border border-[#E8DECD] bg-white px-2.5 text-[10px] text-[#655441]">{category}<X size={11} aria-hidden="true" /></button>)}
                                 {selectedSizes.map((size) => <button key={size} type="button" onClick={() => toggleSize(size)} className="inline-flex min-h-7 items-center gap-1.5 border border-[#E8DECD] bg-white px-2.5 text-[10px] text-[#655441]">Size {size}<X size={11} aria-hidden="true" /></button>)}
-                                {query.trim() && <button type="button" onClick={() => setQuery("")} className="inline-flex min-h-7 items-center gap-1.5 border border-[#E8DECD] bg-white px-2.5 text-[10px] text-[#655441]">“{query.trim()}”<X size={11} aria-hidden="true" /></button>}
+                                {query.trim() && <button type="button" onClick={() => setQuery("")} className="inline-flex min-h-7 items-center gap-1.5 border border-[#E8DECD] bg-white px-2.5 text-[10px] text-[#655441]">â€œ{query.trim()}â€<X size={11} aria-hidden="true" /></button>}
                                 <button type="button" onClick={clearFilters} className="ml-auto text-[10px] font-bold text-[#8B672D] underline-offset-4 hover:underline">Clear all</button>
                             </div>
                         )}

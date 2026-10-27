@@ -14,37 +14,37 @@ const categories = [
     {
         name: "Everyday Sneakers",
         description: "Versatile styles for everyday plans.",
-        image: "/images/shoes/sneaker-white.jpg",
+        image: "/images/shoes/sneaker-white.webp",
         to: "/categories/sneakers",
     },
     {
         name: "Formal Footwear",
         description: "Classic styles for work and occasions.",
-        image: "/images/shoes/formal-classic.jpg",
+        image: "/images/shoes/formal-classic.webp",
         to: "/categories/formal",
     },
     {
         name: "Sports Styles",
         description: "Sport-inspired looks for active days.",
-        image: "/images/shoes/running-black.jpg",
+        image: "/images/shoes/running-black.webp",
         to: "/categories/sports",
     },
     {
         name: "Sandals",
         description: "Relaxed footwear for warmer days.",
-        image: "/images/shoes/leather-sandals.jpg",
+        image: "/images/shoes/leather-sandals.webp",
         to: "/categories/sandals",
     },
     {
         name: "Leather Classics",
         description: "Timeless silhouettes and refined styles.",
-        image: "/images/shoes/brown-dress.jpg",
+        image: "/images/shoes/brown-dress.webp",
         to: "/categories/formal",
     },
     {
         name: "Women's Styles",
         description: "Explore different shapes and silhouettes.",
-        image: "/images/shoes/women-sandals.jpg",
+        image: "/images/shoes/women-sandals.webp",
         to: "/categories/sandals",
     },
 ];
@@ -268,7 +268,7 @@ export default function Home() {
                         <div className="relative grid grid-cols-[1.1fr_0.9fr] items-end gap-3 sm:gap-4">
                             <div className="relative aspect-[4/5] overflow-hidden bg-slate-100">
                                 <SafeImage
-                                    src="/images/shoes/day5-editorial.jpg"
+                                    src="/images/shoes/day5-editorial.webp"
                                     alt="Footwear editorial image"
                                     loading="eager"
                                     fetchPriority="high"
@@ -278,7 +278,7 @@ export default function Home() {
                             <div className="space-y-3 sm:space-y-4">
                                 <div className="relative aspect-[4/4.4] overflow-hidden bg-slate-100">
                                     <SafeImage
-                                        src="/images/shoes/formal-classic.jpg"
+                                        src="/images/shoes/formal-classic.webp"
                                         alt="Classic formal footwear"
                                     />
                                 </div>
@@ -358,7 +358,7 @@ export default function Home() {
                     <div className="grid grid-cols-[1.1fr_0.9fr] items-end gap-3 sm:gap-5">
                         <div className="relative aspect-[4/5] overflow-hidden bg-slate-100">
                             <SafeImage
-                                src="/images/shoes/formal-dark.jpg"
+                                src="/images/shoes/formal-dark.webp"
                                 alt="Dark classic footwear"
                             />
                         </div>
@@ -366,7 +366,7 @@ export default function Home() {
                         <div className="space-y-3 sm:space-y-5">
                             <div className="relative aspect-[4/4.5] overflow-hidden bg-slate-100">
                                 <SafeImage
-                                    src="/images/shoes/women-sandals.jpg"
+                                    src="/images/shoes/women-sandals.webp"
                                     alt="Women's sandals"
                                 />
                             </div>

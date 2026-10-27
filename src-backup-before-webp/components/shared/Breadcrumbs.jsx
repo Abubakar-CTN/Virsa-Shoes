@@ -1,0 +1,70 @@
+import { ChevronRight, House } from "lucide-react";
+import { Link } from "react-router";
+
+function Breadcrumbs({
+    items = [],
+    showHome = true,
+    className = "",
+}) {
+    const breadcrumbs = showHome
+        ? [{ label: "Home", href: "/" }, ...items]
+        : items;
+
+    return (
+        <nav
+            aria-label="Breadcrumb"
+            className={`w-full ${className}`}
+        >
+            <ol className="flex flex-wrap items-center gap-2 text-sm">
+                {breadcrumbs.map((item, index) => {
+                    const isLast = index === breadcrumbs.length - 1;
+                    const isHome = index === 0 && item.href === "/";
+
+                    return (
+                        <li
+                            key={`${item.label}-${index}`}
+                            className="inline-flex items-center gap-2"
+                        >
+                            {index > 0 && (
+                                <ChevronRight
+                                    size={15}
+                                    className="shrink-0 text-slate-400"
+                                    aria-hidden="true"
+                                />
+                            )}
+
+                            {item.href && !isLast ? (
+                                <Link
+                                    to={item.href}
+                                    className="inline-flex items-center gap-1.5 text-slate-500 transition hover:text-[#5D3D14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+                                >
+                                    {isHome && <House size={15} aria-hidden="true" />}
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <span
+                                    aria-current={isLast ? "page" : undefined}
+                                    className={`max-w-48 truncate ${isLast
+                                            ? "font-semibold text-slate-900"
+                                            : "text-slate-500"
+                                        }`}
+                                >
+                                    {isHome && (
+                                        <House
+                                            size={15}
+                                            className="inline"
+                                            aria-hidden="true"
+                                        />
+                                    )}
+                                    {isHome ? "" : item.label}
+                                </span>
+                            )}
+                        </li>
+                    );
+                })}
+            </ol>
+        </nav>
+    );
+}
+
+export default Breadcrumbs;

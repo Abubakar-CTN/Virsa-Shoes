@@ -1,0 +1,23 @@
+ index.html                                         |   2 [32m+[m[31m-[m
+ src/features/account/components/AccountSidebar.jsx |  97 [32m++++[m
+ src/features/account/components/AddressCard.jsx    |  95 [32m++++[m
+ src/features/account/components/OrderCard.jsx      | 144 [32m++++++[m
+ src/features/account/components/ProfileForm.jsx    | 148 [32m++++++[m
+ src/features/account/pages/Addresses.jsx           | 530 [32m+++++++++++++++++++++[m
+ src/features/account/pages/OrderDetails.jsx        | 466 [32m++++++++++++++++++[m
+ src/features/account/pages/Orders.jsx              | 209 [32m++++++++[m
+ src/features/account/pages/Profile.jsx             | 107 [32m+++++[m
+ src/features/auth/components/PasswordInput.jsx     |  85 [32m++++[m
+ src/features/auth/pages/ForgotPassword.jsx         | 168 [32m+++++++[m
+ src/features/auth/pages/Login.jsx                  | 137 [32m+++[m[31m---[m
+ src/features/auth/pages/Register.jsx               | 327 [32m+++++++++++++[m
+ src/features/auth/pages/VerifyEmail.jsx            | 226 [32m+++++++++[m
+ .../auth/validation/forgotPasswordSchema.js        |   9 [32m+[m
+ src/features/auth/validation/loginSchema.js        |  15 [32m+[m
+ src/features/auth/validation/registerSchema.js     |  47 [32m++[m
+ src/features/auth/validation/verifyEmailSchema.js  |  14 [32m+[m
+ src/layouts/AuthLayout.jsx                         |  76 [32m++[m[31m-[m
+ src/routes/AuthRoutes.jsx                          | 113 [32m++[m[31m---[m
+ src/routes/StoreRouteElements.jsx                  |  56 [32m++[m[31m-[m
+ src/routes/StoreRoutes.jsx                         |  42 [32m+[m[31m-[m
+ 22 files changed, 2952 insertions(+), 161 deletions(-)
