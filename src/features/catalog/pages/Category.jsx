@@ -1,8 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Search } from "lucide-react";
 import { Link, useParams } from "react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import products from "../../../services/mock/products.js";
+import { getCatalogProducts } from "../../../services/catalogService.js";
+import { useWishlistStore } from "../../../store/wishlistStore.js";
 
 import ProductCard from "../components/ProductCard.jsx";
 import ProductGrid from "../components/ProductGrid.jsx";
@@ -13,6 +15,8 @@ import SortDropdown from "../components/SortDropdown.jsx";
 import useProductFilters from "../hooks/useProductFilters.js";
 
 import { filterAndSortProducts } from "../utils/productHelpers.js";
+
+const EMPTY_PRODUCTS = [];
 
 const categoryAliases = {
     sneakers: ["sneakers"],
@@ -45,7 +49,7 @@ function normalize(value) {
 function matchesCategory(product, slug) {
     if (["men", "women", "kids"].includes(slug)) {
         const gender = normalize(
-            product.gender ?? product.audience ?? product.targetAudience,
+            product.gender ?? product.audience ?? product.targetAudience
         );
 
         return gender === slug;
@@ -60,9 +64,32 @@ function matchesCategory(product, slug) {
 
 export default function Category() {
     const { slug = "" } = useParams();
+    const queryClient = useQueryClient();
+
+    const {
+        data: catalogData,
+        isPending,
+        isError,
+        refetch,
+    } = useQuery({
+        queryKey: ["catalog", "products"],
+        queryFn: ({ signal }) => getCatalogProducts({ signal }),
+        staleTime: 60 * 1000,
+    });
+
+    const products = Array.isArray(catalogData)
+        ? catalogData
+        : EMPTY_PRODUCTS;
+
+    const wishlistItems = useWishlistStore((state) =>
+        Array.isArray(state.items) ? state.items : EMPTY_PRODUCTS
+    );
+
+    const toggleWishlistItem = useWishlistStore(
+        (state) => state.toggleItem
+    );
 
     const [filtersOpen, setFiltersOpen] = useState(false);
-    const [savedIds, setSavedIds] = useState([]);
 
     const {
         filters,
@@ -73,38 +100,64 @@ export default function Category() {
         hasActiveFilters,
     } = useProductFilters();
 
+    // Keep the shared catalogue cache in sync with admin product updates.
+    useEffect(() => {
+        const refreshCatalogue = () => {
+            void queryClient.invalidateQueries({
+                queryKey: ["catalog", "products"],
+            });
+        };
+
+        window.addEventListener(
+            "virsa:products-updated",
+            refreshCatalogue
+        );
+
+        return () => {
+            window.removeEventListener(
+                "virsa:products-updated",
+                refreshCatalogue
+            );
+        };
+    }, [queryClient]);
+
+    const normalizedSlug = normalize(slug);
+
     const categoryProducts = useMemo(
         () =>
             products.filter((product) =>
-                matchesCategory(product, normalize(slug)),
+                matchesCategory(product, normalizedSlug)
             ),
-        [slug],
+        [products, normalizedSlug]
     );
 
     const filteredProducts = useMemo(
         () => filterAndSortProducts(categoryProducts, filters),
-        [categoryProducts, filters],
+        [categoryProducts, filters]
     );
 
     const title =
-        categoryTitles[normalize(slug)] ??
-        normalize(slug)
+        categoryTitles[normalizedSlug] ??
+        normalizedSlug
             .split("-")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
 
     function toggleSaved(id) {
-        setSavedIds((current) =>
-            current.includes(id)
-                ? current.filter((savedId) => savedId !== id)
-                : [...current, id],
-        );
+        const product = products.find((item) => item.id === id);
+
+        if (product) {
+            toggleWishlistItem(product);
+        }
     }
 
     return (
         <main className="min-h-screen bg-[#F8FAFC] text-[#0F172A]">
             <div className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-                <nav aria-label="Breadcrumb" className="mb-7 text-xs text-slate-500">
+                <nav
+                    aria-label="Breadcrumb"
+                    className="mb-7 text-xs text-slate-500"
+                >
                     <Link to="/" className="hover:text-[#6D28D9]">
                         Home
                     </Link>
@@ -136,11 +189,19 @@ export default function Category() {
                         to match your needs and personal taste.
                     </p>
 
-                    <p className="mt-4 text-sm text-slate-500" aria-live="polite">
+                    <p
+                        className="mt-4 text-sm text-slate-500"
+                        aria-live="polite"
+                    >
                         <span className="font-semibold text-[#0F172A]">
-                            {filteredProducts.length}
+                            {isPending && products.length === 0
+                                ? "…"
+                                : filteredProducts.length}
                         </span>{" "}
-                        {filteredProducts.length === 1 ? "product" : "products"} found
+                        {filteredProducts.length === 1
+                            ? "product"
+                            : "products"}{" "}
+                        found
                     </p>
                 </header>
 
@@ -148,6 +209,7 @@ export default function Category() {
                     <button
                         type="button"
                         onClick={() => setFiltersOpen(true)}
+                        aria-expanded={filtersOpen}
                         className="inline-flex min-h-11 items-center gap-2 border border-[#E2E8F0] bg-white px-4 text-sm font-semibold text-[#0F172A] hover:border-[#6D28D9] lg:hidden"
                     >
                         <span>Filters</span>
@@ -183,14 +245,61 @@ export default function Category() {
                         />
                     </aside>
 
-                    <section className="min-w-0" aria-label={`${title} products`}>
-                        {filteredProducts.length > 0 ? (
+                    <section
+                        className="min-w-0"
+                        aria-label={`${title} products`}
+                    >
+                        {isPending && products.length === 0 ? (
+                            <div
+                                role="status"
+                                aria-live="polite"
+                                className="flex min-h-72 items-center justify-center border border-[#E2E8F0] bg-white px-6 text-sm text-slate-600"
+                            >
+                                Loading category products...
+                            </div>
+                        ) : isError && products.length === 0 ? (
+                            <div
+                                role="alert"
+                                className="flex min-h-72 flex-col items-center justify-center border border-[#E2E8F0] bg-white px-6 text-center"
+                            >
+                                <Search
+                                    size={26}
+                                    className="text-[#6D28D9]"
+                                    aria-hidden="true"
+                                />
+
+                                <h2 className="mt-4 text-lg font-bold">
+                                    Couldn't load products
+                                </h2>
+
+                                <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                                    Please check your connection and try
+                                    loading the category again.
+                                </p>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        void refetch();
+                                    }}
+                                    className="mt-5 inline-flex min-h-11 items-center gap-2 bg-[#6D28D9] px-5 text-sm font-semibold text-white hover:bg-[#5B21B6]"
+                                >
+                                    <ArrowRight
+                                        size={15}
+                                        aria-hidden="true"
+                                    />
+                                    Try again
+                                </button>
+                            </div>
+                        ) : filteredProducts.length > 0 ? (
                             <ProductGrid>
                                 {filteredProducts.map((product) => (
                                     <ProductCard
                                         key={product.id}
                                         product={product}
-                                        saved={savedIds.includes(product.id)}
+                                        saved={wishlistItems.some(
+                                            (item) => item.id === product.id
+                                        )}
                                         onToggleSave={toggleSaved}
                                     />
                                 ))}

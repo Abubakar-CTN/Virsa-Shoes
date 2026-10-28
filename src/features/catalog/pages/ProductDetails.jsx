@@ -6,8 +6,9 @@ import {
 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import products from "../../../services/mock/products.js";
+import { getCatalogProducts } from "../../../services/catalogService.js";
 import { useCartStore } from "../../../store/cartStore.js";
 
 import ProductGallery from "../components/ProductGallery.jsx";
@@ -15,6 +16,8 @@ import ProductInfo from "../components/ProductInfo.jsx";
 import ProductReviews from "../components/ProductReviews.jsx";
 import RelatedProducts from "../components/RelatedProducts.jsx";
 import RecentlyViewed from "../components/RecentlyViewed.jsx";
+
+const EMPTY_PRODUCTS = [];
 
 function ProductNotFound() {
     return (
@@ -43,6 +46,43 @@ function ProductNotFound() {
                 <ArrowLeft size={16} aria-hidden="true" />
                 Back to shop
             </Link>
+        </main>
+    );
+}
+
+function ProductLoadError({ onRetry }) {
+    return (
+        <main className="mx-auto flex min-h-[55vh] max-w-3xl flex-col items-center justify-center px-5 py-16 text-center">
+            <div className="grid size-16 place-items-center bg-violet-50 text-violet-700">
+                <Footprints size={28} aria-hidden="true" />
+            </div>
+
+            <h1 className="mt-5 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">
+                Couldn't load this product
+            </h1>
+
+            <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
+                Product catalogue load nahi ho saka. Apna connection check
+                karein aur dobara try karein.
+            </p>
+
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+                <button
+                    type="button"
+                    onClick={onRetry}
+                    className="inline-flex min-h-11 items-center justify-center bg-violet-700 px-5 text-sm font-bold text-white transition hover:bg-violet-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
+                >
+                    Try again
+                </button>
+
+                <Link
+                    to="/shop"
+                    className="inline-flex min-h-11 items-center gap-2 border border-slate-200 px-5 text-sm font-bold text-slate-700 hover:border-violet-500 hover:text-violet-700"
+                >
+                    <ArrowLeft size={16} aria-hidden="true" />
+                    Back to shop
+                </Link>
+            </div>
         </main>
     );
 }
@@ -125,15 +165,54 @@ function getProductColorVariants(product) {
 export default function ProductDetails() {
     const { slug } = useParams();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
     const addItem = useCartStore((state) => state.addItem);
 
+    const {
+        data: catalogData,
+        isPending,
+        isError,
+        refetch,
+    } = useQuery({
+        queryKey: ["catalog", "products"],
+        queryFn: ({ signal }) => getCatalogProducts({ signal }),
+        staleTime: 60 * 1000,
+    });
+
+    const products = Array.isArray(catalogData)
+        ? catalogData
+        : EMPTY_PRODUCTS;
+
     const product = products.find((item) => item.slug === slug);
+
     const colorVariants = getProductColorVariants(product);
 
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedColor, setSelectedColor] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [recentlyViewed, setRecentlyViewed] = useState([]);
+
+    // Admin/catalogue updates invalidate the shared cached product list.
+    useEffect(() => {
+        const refreshCatalogue = () => {
+            void queryClient.invalidateQueries({
+                queryKey: ["catalog", "products"],
+            });
+        };
+
+        window.addEventListener(
+            "virsa:products-updated",
+            refreshCatalogue
+        );
+
+        return () => {
+            window.removeEventListener(
+                "virsa:products-updated",
+                refreshCatalogue
+            );
+        };
+    }, [queryClient]);
 
     // Reset selections and update browsing history when the product changes.
     // RouteMeta.jsx centrally manages the document title and page metadata.
@@ -184,7 +263,37 @@ export default function ProductDetails() {
         } catch {
             setRecentlyViewed([]);
         }
-    }, [product]);
+    }, [product, products]);
+
+    if (isPending && products.length === 0) {
+        return (
+            <main
+                className="flex min-h-[55vh] items-center justify-center px-5 py-16"
+                role="status"
+                aria-live="polite"
+            >
+                <div className="text-center">
+                    <div
+                        className="mx-auto size-9 animate-spin rounded-full border-2 border-violet-100 border-t-violet-700"
+                        aria-hidden="true"
+                    />
+                    <p className="mt-4 text-sm text-slate-600">
+                        Loading product details...
+                    </p>
+                </div>
+            </main>
+        );
+    }
+
+    if (isError && products.length === 0) {
+        return (
+            <ProductLoadError
+                onRetry={() => {
+                    void refetch();
+                }}
+            />
+        );
+    }
 
     if (!product) {
         return <ProductNotFound />;
@@ -368,7 +477,9 @@ export default function ProductDetails() {
                             </div>
 
                             <div className="flex justify-between gap-4 py-3">
-                                <dt className="text-slate-500">Available sizes</dt>
+                                <dt className="text-slate-500">
+                                    Available sizes
+                                </dt>
                                 <dd className="max-w-[60%] text-right font-semibold text-slate-900">
                                     {product.sizes?.join(", ") || "See options"}
                                 </dd>

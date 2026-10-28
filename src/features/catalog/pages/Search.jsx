@@ -1,9 +1,10 @@
-
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Search as SearchIcon } from "lucide-react";
 import { Link } from "react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import products from "../../../services/mock/products.js";
+import { getCatalogProducts } from "../../../services/catalogService.js";
+import { useWishlistStore } from "../../../store/wishlistStore.js";
 
 import ProductCard from "../components/ProductCard.jsx";
 import ProductGrid from "../components/ProductGrid.jsx";
@@ -17,7 +18,34 @@ import useProductFilters from "../hooks/useProductFilters.js";
 
 import { filterAndSortProducts } from "../utils/productHelpers.js";
 
+const EMPTY_PRODUCTS = [];
+
 export default function Search() {
+    const queryClient = useQueryClient();
+
+    const {
+        data: catalogData,
+        isPending,
+        isError,
+        refetch,
+    } = useQuery({
+        queryKey: ["catalog", "products"],
+        queryFn: ({ signal }) => getCatalogProducts({ signal }),
+        staleTime: 60 * 1000,
+    });
+
+    const products = Array.isArray(catalogData)
+        ? catalogData
+        : EMPTY_PRODUCTS;
+
+    const wishlistItems = useWishlistStore((state) =>
+        Array.isArray(state.items) ? state.items : EMPTY_PRODUCTS
+    );
+
+    const toggleWishlistItem = useWishlistStore(
+        (state) => state.toggleItem
+    );
+
     const {
         query,
         setQuery,
@@ -35,7 +63,27 @@ export default function Search() {
     } = useProductFilters();
 
     const [filtersOpen, setFiltersOpen] = useState(false);
-    const [savedIds, setSavedIds] = useState([]);
+
+    // Refresh the shared catalogue when products are changed elsewhere.
+    useEffect(() => {
+        const refreshCatalogue = () => {
+            void queryClient.invalidateQueries({
+                queryKey: ["catalog", "products"],
+            });
+        };
+
+        window.addEventListener(
+            "virsa:products-updated",
+            refreshCatalogue
+        );
+
+        return () => {
+            window.removeEventListener(
+                "virsa:products-updated",
+                refreshCatalogue
+            );
+        };
+    }, [queryClient]);
 
     const results = useMemo(
         () =>
@@ -43,7 +91,7 @@ export default function Search() {
                 ...filters,
                 query,
             }),
-        [filters, query],
+        [products, filters, query]
     );
 
     function handleSubmit(event) {
@@ -52,11 +100,11 @@ export default function Search() {
     }
 
     function toggleSaved(id) {
-        setSavedIds((current) =>
-            current.includes(id)
-                ? current.filter((savedId) => savedId !== id)
-                : [...current, id],
-        );
+        const product = products.find((item) => item.id === id);
+
+        if (product) {
+            toggleWishlistItem(product);
+        }
     }
 
     return (
@@ -141,6 +189,7 @@ export default function Search() {
                         onClick={() => setFiltersOpen(true)}
                         className="inline-flex min-h-11 items-center gap-2 border border-[#E2E8F0] px-4 text-sm font-semibold text-[#0F172A] transition-colors hover:border-[#6D28D9] hover:text-[#6D28D9] lg:hidden"
                         aria-expanded={filtersOpen}
+                        aria-controls="search-mobile-filters"
                     >
                         Filters
 
@@ -177,39 +226,88 @@ export default function Search() {
                     </aside>
 
                     <div className="min-w-0">
-                        <SearchResults
-                            query={query}
-                            resultCount={results.length}
-                            hasActiveFilters={hasActiveFilters}
-                            onClearSearch={clearSearch}
-                            onClearFilters={clearFilters}
-                        >
-                            <ProductGrid>
-                                {results.map((product) => (
-                                    <ProductCard
-                                        key={product.id}
-                                        product={product}
-                                        saved={savedIds.includes(product.id)}
-                                        onToggleSave={toggleSaved}
-                                    />
-                                ))}
-                            </ProductGrid>
-                        </SearchResults>
+                        {isPending && products.length === 0 ? (
+                            <div
+                                role="status"
+                                aria-live="polite"
+                                className="flex min-h-72 items-center justify-center border border-[#E2E8F0] bg-[#F8FAFC] px-6 text-sm text-slate-600"
+                            >
+                                Loading search results...
+                            </div>
+                        ) : isError && products.length === 0 ? (
+                            <div
+                                role="alert"
+                                className="flex min-h-72 flex-col items-center justify-center border border-[#E2E8F0] bg-[#F8FAFC] px-6 text-center"
+                            >
+                                <SearchIcon
+                                    size={26}
+                                    className="text-[#6D28D9]"
+                                    aria-hidden="true"
+                                />
+
+                                <h2 className="mt-4 text-lg font-bold">
+                                    Couldn't load search results
+                                </h2>
+
+                                <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                                    Please check your connection and try
+                                    loading the catalogue again.
+                                </p>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        void refetch();
+                                    }}
+                                    className="mt-5 inline-flex min-h-11 items-center gap-2 bg-[#6D28D9] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#5B21B6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D28D9] focus-visible:ring-offset-2"
+                                >
+                                    <ArrowRight size={15} aria-hidden="true" />
+                                    Try again
+                                </button>
+                            </div>
+                        ) : (
+                            <SearchResults
+                                query={query}
+                                resultCount={results.length}
+                                hasActiveFilters={hasActiveFilters}
+                                onClearSearch={clearSearch}
+                                onClearFilters={clearFilters}
+                            >
+                                <ProductGrid>
+                                    {results.map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            product={product}
+                                            saved={wishlistItems.some(
+                                                (item) =>
+                                                    item.id === product.id
+                                            )}
+                                            onToggleSave={toggleSaved}
+                                        />
+                                    ))}
+                                </ProductGrid>
+                            </SearchResults>
+                        )}
                     </div>
                 </div>
             </div>
 
             {/* Mobile filter drawer */}
-            <FilterDrawer
-                open={filtersOpen}
-                onClose={() => setFiltersOpen(false)}
-                products={products}
-                filters={filters}
-                setFilter={setFilter}
-                toggleFilter={toggleFilter}
-                clearFilters={clearFilters}
-                activeFiltersCount={activeFiltersCount}
-            />
+            <div
+                id="search-mobile-filters"
+                aria-hidden={!filtersOpen}
+            >
+                <FilterDrawer
+                    open={filtersOpen}
+                    onClose={() => setFiltersOpen(false)}
+                    products={products}
+                    filters={filters}
+                    setFilter={setFilter}
+                    toggleFilter={toggleFilter}
+                    clearFilters={clearFilters}
+                    activeFiltersCount={activeFiltersCount}
+                />
+            </div>
         </main>
     );
 }

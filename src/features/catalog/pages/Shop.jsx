@@ -1,5 +1,4 @@
-﻿
-import { useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import {
     ArrowRight,
     Search as SearchIcon,
@@ -7,8 +6,10 @@ import {
     X,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import products from "../../../services/mock/products.js";
+import { getCatalogProducts } from "../../../services/catalogService.js";
+import { useWishlistStore } from "../../../store/wishlistStore.js";
 
 import ProductCard from "../components/ProductCard.jsx";
 import ProductGrid from "../components/ProductGrid.jsx";
@@ -20,6 +21,8 @@ import useProductSearch from "../hooks/useProductSearch.js";
 import useProductFilters from "../hooks/useProductFilters.js";
 
 import { filterAndSortProducts } from "../utils/productHelpers.js";
+
+const EMPTY_PRODUCTS = [];
 
 const collectionDescriptions = {
     Sneakers: "Everyday comfort, from morning plans to late evenings.",
@@ -37,6 +40,30 @@ function clearArrayFilter(toggleFilter, filterName, value) {
 
 export default function Shop() {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    const {
+        data: catalogData,
+        isPending,
+        isError,
+        refetch,
+    } = useQuery({
+        queryKey: ["catalog", "products"],
+        queryFn: ({ signal }) => getCatalogProducts({ signal }),
+        staleTime: 60 * 1000,
+    });
+
+    const products = Array.isArray(catalogData)
+        ? catalogData
+        : EMPTY_PRODUCTS;
+
+    const wishlistItems = useWishlistStore((state) =>
+        Array.isArray(state.items) ? state.items : EMPTY_PRODUCTS
+    );
+
+    const toggleWishlistItem = useWishlistStore(
+        (state) => state.toggleItem
+    );
 
     const {
         query,
@@ -54,11 +81,35 @@ export default function Shop() {
     } = useProductFilters();
 
     const [filtersOpen, setFiltersOpen] = useState(false);
-    const [savedIds, setSavedIds] = useState([]);
+
+    // Keep the shared catalogue cache in sync with admin product updates.
+    useEffect(() => {
+        const refreshCatalogue = () => {
+            void queryClient.invalidateQueries({
+                queryKey: ["catalog", "products"],
+            });
+        };
+
+        window.addEventListener(
+            "virsa:products-updated",
+            refreshCatalogue
+        );
+
+        return () => {
+            window.removeEventListener(
+                "virsa:products-updated",
+                refreshCatalogue
+            );
+        };
+    }, [queryClient]);
 
     const categories = useMemo(() => {
         const uniqueCategories = [
-            ...new Set(products.map((product) => product.category).filter(Boolean)),
+            ...new Set(
+                products
+                    .map((product) => product.category)
+                    .filter(Boolean)
+            ),
         ];
 
         const categoryOrder = [
@@ -75,19 +126,22 @@ export default function Shop() {
             const indexA = categoryOrder.indexOf(a);
             const indexB = categoryOrder.indexOf(b);
 
-            if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+            if (indexA === -1 && indexB === -1) {
+                return a.localeCompare(b);
+            }
+
             if (indexA === -1) return 1;
             if (indexB === -1) return -1;
 
             return indexA - indexB;
         });
-    }, []);
+    }, [products]);
 
     const categoryTiles = useMemo(
         () =>
             categories.slice(0, 4).map((category) => {
                 const product = products.find(
-                    (item) => item.category === category,
+                    (item) => item.category === category
                 );
 
                 return {
@@ -100,7 +154,7 @@ export default function Shop() {
                         `Explore our ${category.toLowerCase()} collection.`,
                 };
             }),
-        [categories],
+        [categories, products]
     );
 
     const filteredProducts = useMemo(
@@ -109,7 +163,7 @@ export default function Shop() {
                 ...filters,
                 query,
             }),
-        [filters, query],
+        [products, filters, query]
     );
 
     function handleSearchSubmit(event) {
@@ -120,7 +174,7 @@ export default function Shop() {
         navigate(
             term
                 ? `/search?q=${encodeURIComponent(term)}`
-                : "/search",
+                : "/search"
         );
     }
 
@@ -133,11 +187,11 @@ export default function Shop() {
     }
 
     function toggleSaved(id) {
-        setSavedIds((current) =>
-            current.includes(id)
-                ? current.filter((savedId) => savedId !== id)
-                : [...current, id],
-        );
+        const product = products.find((item) => item.id === id);
+
+        if (product) {
+            toggleWishlistItem(product);
+        }
     }
 
     function clearEverything() {
@@ -228,7 +282,9 @@ export default function Shop() {
                         <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
                             <span>
                                 <strong className="text-[#0F172A]">
-                                    {products.length}
+                                    {isPending && products.length === 0
+                                        ? "…"
+                                        : products.length}
                                 </strong>{" "}
                                 sample styles
                             </span>
@@ -446,7 +502,7 @@ export default function Shop() {
                                             clearArrayFilter(
                                                 toggleFilter,
                                                 "categories",
-                                                category,
+                                                category
                                             )
                                         }
                                         className="inline-flex min-h-8 items-center gap-1.5 border border-[#E2E8F0] bg-white px-2.5 text-xs text-slate-700 hover:border-[#6D28D9] hover:text-[#6D28D9]"
@@ -464,7 +520,7 @@ export default function Shop() {
                                             clearArrayFilter(
                                                 toggleFilter,
                                                 "brands",
-                                                brand,
+                                                brand
                                             )
                                         }
                                         className="inline-flex min-h-8 items-center gap-1.5 border border-[#E2E8F0] bg-white px-2.5 text-xs text-slate-700 hover:border-[#6D28D9] hover:text-[#6D28D9]"
@@ -482,7 +538,7 @@ export default function Shop() {
                                             clearArrayFilter(
                                                 toggleFilter,
                                                 "colors",
-                                                color,
+                                                color
                                             )
                                         }
                                         className="inline-flex min-h-8 items-center gap-1.5 border border-[#E2E8F0] bg-white px-2.5 text-xs text-slate-700 hover:border-[#6D28D9] hover:text-[#6D28D9]"
@@ -500,7 +556,7 @@ export default function Shop() {
                                             clearArrayFilter(
                                                 toggleFilter,
                                                 "sizes",
-                                                size,
+                                                size
                                             )
                                         }
                                         className="inline-flex min-h-8 items-center gap-1.5 border border-[#E2E8F0] bg-white px-2.5 text-xs text-slate-700 hover:border-[#6D28D9] hover:text-[#6D28D9]"
@@ -594,13 +650,51 @@ export default function Shop() {
                             </div>
                         )}
 
-                        {filteredProducts.length > 0 ? (
+                        {isPending && products.length === 0 ? (
+                            <div
+                                role="status"
+                                aria-live="polite"
+                                className="flex min-h-72 items-center justify-center border border-[#E2E8F0] bg-[#F8FAFC] px-6 text-sm text-slate-600"
+                            >
+                                Loading footwear...
+                            </div>
+                        ) : isError && products.length === 0 ? (
+                            <div
+                                role="alert"
+                                className="flex min-h-72 flex-col items-center justify-center border border-[#E2E8F0] bg-[#F8FAFC] px-6 text-center"
+                            >
+                                <h3 className="text-lg font-bold">
+                                    Could not load products
+                                </h3>
+
+                                <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                                    Please check your connection and try
+                                    loading the catalogue again.
+                                </p>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        void refetch();
+                                    }}
+                                    className="mt-5 inline-flex min-h-11 items-center gap-2 bg-[#6D28D9] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#5B21B6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D28D9] focus-visible:ring-offset-2"
+                                >
+                                    <ArrowRight
+                                        size={15}
+                                        aria-hidden="true"
+                                    />
+                                    Try again
+                                </button>
+                            </div>
+                        ) : filteredProducts.length > 0 ? (
                             <ProductGrid>
                                 {filteredProducts.map((product) => (
                                     <ProductCard
                                         key={product.id}
                                         product={product}
-                                        saved={savedIds.includes(product.id)}
+                                        saved={wishlistItems.some(
+                                            (item) => item.id === product.id
+                                        )}
                                         onToggleSave={toggleSaved}
                                     />
                                 ))}
@@ -637,9 +731,10 @@ export default function Shop() {
 
                 <div className="border-t border-[#E2E8F0] pt-5">
                     <p className="text-xs leading-6 text-slate-500">
-                        This is a sample catalogue. Prices, ratings and stock
-                        values come from mock product data. Wishlist changes
-                        are temporary and will reset when the page reloads.
+                        Products are loaded through the configured catalogue
+                        service. Prices, ratings and stock depend on the
+                        active data source. Wishlist changes are saved
+                        persistently on this device.
                     </p>
                 </div>
             </section>
