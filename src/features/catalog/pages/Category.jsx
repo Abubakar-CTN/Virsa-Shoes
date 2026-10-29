@@ -13,7 +13,6 @@ import FilterDrawer from "../components/FilterDrawer.jsx";
 import SortDropdown from "../components/SortDropdown.jsx";
 
 import useProductFilters from "../hooks/useProductFilters.js";
-
 import { filterAndSortProducts } from "../utils/productHelpers.js";
 
 const EMPTY_PRODUCTS = [];
@@ -42,17 +41,191 @@ const categoryTitles = {
     everyday: "Everyday Footwear",
 };
 
+const categoryDescriptions = {
+    men: "Explore everyday sneakers, refined formal shoes, casual pairs and classic styles for your wardrobe.",
+    women: "Discover footwear for everyday wear, special occasions and everything in between.",
+    kids: "Explore footwear for growing feet, school days and everyday adventures.",
+    "school-shoes": "Explore footwear for the school routine.",
+    everyday: "Discover versatile footwear for everyday plans.",
+    sneakers: "Explore sneakers for everyday movement and casual styling.",
+    formal: "Find polished footwear for work and special occasions.",
+    casual: "Discover easy-to-wear styles for your daily routine.",
+    sports: "Explore sporty styles for active days.",
+    running: "Explore running-inspired styles from our current catalogue.",
+    sandals: "Discover open footwear styles for warmer days.",
+    flats: "Explore flats from our current collection.",
+    heels: "Discover occasion-ready heels from our current collection.",
+    loafers: "Explore classic loafer styles.",
+    slides: "Discover easy slip-on styles.",
+    peshawari: "Explore traditional Peshawari footwear.",
+};
+
+const menFallbackCategories = new Set([
+    "sneakers",
+    "formal",
+    "casual",
+    "sports",
+    "running",
+    "loafers",
+    "sandals",
+    "slides",
+    "peshawari",
+]);
+
+const womenFallbackCategories = new Set([
+    "heels",
+    "flats",
+]);
+
+const kidsFallbackCategories = new Set([
+    "school shoes",
+]);
+
 function normalize(value) {
     return String(value ?? "").trim().toLowerCase();
 }
 
+function normalizeGender(value) {
+    return normalize(value).replace(/[^a-z]/g, "");
+}
+
+function matchesGender(product, requestedGender) {
+    const audienceValue =
+        product.gender ??
+        product.audience ??
+        product.targetAudience;
+
+    const explicitGender = normalizeGender(audienceValue);
+
+    const knownGenderFields = [
+        "gender",
+        "audience",
+        "targetAudience",
+    ];
+
+    const hasExplicitAudience = knownGenderFields.some(
+        (field) =>
+            product[field] !== undefined &&
+            product[field] !== null &&
+            String(product[field]).trim() !== ""
+    );
+
+    if (hasExplicitAudience) {
+        if (requestedGender === "men") {
+            return [
+                "men",
+                "mens",
+                "man",
+                "male",
+                "unisex",
+                "boy",
+                "boys",
+            ].includes(explicitGender);
+        }
+
+        if (requestedGender === "women") {
+            return [
+                "women",
+                "womens",
+                "woman",
+                "female",
+                "ladies",
+                "lady",
+                "unisex",
+            ].includes(explicitGender);
+        }
+
+        if (requestedGender === "kids") {
+            return [
+                "kids",
+                "kid",
+                "children",
+                "child",
+                "boys",
+                "boy",
+                "girls",
+                "girl",
+                "junior",
+            ].includes(explicitGender);
+        }
+
+        return false;
+    }
+
+    /*
+     * Existing mock catalogue records may not contain gender metadata.
+     * For Men, use a conservative category fallback rather than returning
+     * an empty page. Exclude clearly labelled women's and children's items.
+     */
+    if (requestedGender === "men") {
+        const category = normalize(product.category);
+        const productText = normalize([
+            product.name,
+            product.slug,
+            product.category,
+        ].join(" "));
+
+        const explicitlyFeminineOrChild = [
+            /\bwomen\b/,
+            /\bwomens\b/,
+            /\bwoman\b/,
+            /\bladies\b/,
+            /\blady\b/,
+            /\bgirls?\b/,
+            /\bkids?\b/,
+            /\bchildren\b/,
+            /\bjunior\b/,
+            /\bplatform heel\b/,
+            /\bevening heel\b/,
+            /\bwomens flats\b/,
+        ].some((pattern) => pattern.test(productText));
+
+        if (explicitlyFeminineOrChild) {
+            return false;
+        }
+
+        return menFallbackCategories.has(category);
+    }
+
+    /*
+     * Do not guess women's or children's audience from ambiguous products.
+     * Add explicit audience metadata to the catalogue when those categories
+     * need reliable filtering.
+     */
+    if (requestedGender === "women") {
+        const category = normalize(product.category);
+
+        return (
+            womenFallbackCategories.has(category) ||
+            /\b(women|womens|woman|ladies|lady|girls|girl)\b/.test(
+                normalize([
+                    product.name,
+                    product.slug,
+                ].join(" "))
+            )
+        );
+    }
+
+    if (requestedGender === "kids") {
+        const category = normalize(product.category);
+
+        return (
+            kidsFallbackCategories.has(category) ||
+            /\b(kids|children|child|junior|school)\b/.test(
+                normalize([
+                    product.name,
+                    product.slug,
+                ].join(" "))
+            )
+        );
+    }
+
+    return false;
+}
+
 function matchesCategory(product, slug) {
     if (["men", "women", "kids"].includes(slug)) {
-        const gender = normalize(
-            product.gender ?? product.audience ?? product.targetAudience
-        );
-
-        return gender === slug;
+        return matchesGender(product, slug);
     }
 
     const acceptedCategories = categoryAliases[slug] ?? [
@@ -100,7 +273,6 @@ export default function Category() {
         hasActiveFilters,
     } = useProductFilters();
 
-    // Keep the shared catalogue cache in sync with admin product updates.
     useEffect(() => {
         const refreshCatalogue = () => {
             void queryClient.invalidateQueries({
@@ -140,8 +312,15 @@ export default function Category() {
         categoryTitles[normalizedSlug] ??
         normalizedSlug
             .split("-")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .map(
+                (word) =>
+                    word.charAt(0).toUpperCase() + word.slice(1)
+            )
             .join(" ");
+
+    const description =
+        categoryDescriptions[normalizedSlug] ??
+        "Discover footwear styles from the Virsa.Shoe catalogue.";
 
     function toggleSaved(id) {
         const product = products.find((item) => item.id === id);
@@ -158,17 +337,27 @@ export default function Category() {
                     aria-label="Breadcrumb"
                     className="mb-7 text-xs text-slate-500"
                 >
-                    <Link to="/" className="hover:text-[#6D28D9]">
+                    <Link
+                        to="/"
+                        className="hover:text-[#6D28D9]"
+                    >
                         Home
                     </Link>
 
-                    <span className="mx-2">/</span>
+                    <span className="mx-2" aria-hidden="true">
+                        /
+                    </span>
 
-                    <Link to="/shop" className="hover:text-[#6D28D9]">
+                    <Link
+                        to="/shop"
+                        className="hover:text-[#6D28D9]"
+                    >
                         Shop
                     </Link>
 
-                    <span className="mx-2">/</span>
+                    <span className="mx-2" aria-hidden="true">
+                        /
+                    </span>
 
                     <span className="font-medium text-[#0F172A]">
                         {title}
@@ -177,32 +366,44 @@ export default function Category() {
 
                 <header className="border-b border-[#E2E8F0] pb-7">
                     <p className="text-[10px] font-bold tracking-[0.18em] text-[#6D28D9]">
-                        EXPLORE THE COLLECTION
+                        VIRSA.SHOE COLLECTION
                     </p>
 
-                    <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+                    <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                         {title}
                     </h1>
 
-                    <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">
-                        Discover footwear for your everyday plans, with styles
-                        to match your needs and personal taste.
+                    <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+                        {description}
                     </p>
 
-                    <p
-                        className="mt-4 text-sm text-slate-500"
-                        aria-live="polite"
-                    >
-                        <span className="font-semibold text-[#0F172A]">
-                            {isPending && products.length === 0
-                                ? "…"
-                                : filteredProducts.length}
-                        </span>{" "}
-                        {filteredProducts.length === 1
-                            ? "product"
-                            : "products"}{" "}
-                        found
-                    </p>
+                    <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
+                        <p
+                            className="text-sm text-slate-500"
+                            aria-live="polite"
+                        >
+                            <span className="font-semibold text-[#0F172A]">
+                                {isPending && products.length === 0
+                                    ? "…"
+                                    : filteredProducts.length}
+                            </span>{" "}
+                            {filteredProducts.length === 1
+                                ? "product"
+                                : "products"}{" "}
+                            found
+                        </p>
+
+                        <Link
+                            to="/shop"
+                            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#6D28D9] hover:underline"
+                        >
+                            Shop all footwear
+                            <ArrowRight
+                                size={15}
+                                aria-hidden="true"
+                            />
+                        </Link>
+                    </div>
                 </header>
 
                 <div className="flex items-center justify-between gap-3 py-5">
@@ -210,7 +411,7 @@ export default function Category() {
                         type="button"
                         onClick={() => setFiltersOpen(true)}
                         aria-expanded={filtersOpen}
-                        className="inline-flex min-h-11 items-center gap-2 border border-[#E2E8F0] bg-white px-4 text-sm font-semibold text-[#0F172A] hover:border-[#6D28D9] lg:hidden"
+                        className="inline-flex min-h-11 items-center gap-2 border border-[#E2E8F0] bg-white px-4 text-sm font-semibold text-[#0F172A] transition-colors hover:border-[#6D28D9] hover:text-[#6D28D9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D28D9] lg:hidden"
                     >
                         <span>Filters</span>
 
@@ -228,7 +429,9 @@ export default function Category() {
                     <div className="ml-auto">
                         <SortDropdown
                             value={filters.sortBy}
-                            onChange={(value) => setFilter("sortBy", value)}
+                            onChange={(value) =>
+                                setFilter("sortBy", value)
+                            }
                         />
                     </div>
                 </div>
@@ -282,7 +485,7 @@ export default function Category() {
                                     onClick={() => {
                                         void refetch();
                                     }}
-                                    className="mt-5 inline-flex min-h-11 items-center gap-2 bg-[#6D28D9] px-5 text-sm font-semibold text-white hover:bg-[#5B21B6]"
+                                    className="mt-5 inline-flex min-h-11 items-center gap-2 bg-[#6D28D9] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#5B21B6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D28D9] focus-visible:ring-offset-2"
                                 >
                                     <ArrowRight
                                         size={15}
@@ -298,7 +501,8 @@ export default function Category() {
                                         key={product.id}
                                         product={product}
                                         saved={wishlistItems.some(
-                                            (item) => item.id === product.id
+                                            (item) =>
+                                                item.id === product.id
                                         )}
                                         onToggleSave={toggleSaved}
                                     />
@@ -316,18 +520,22 @@ export default function Category() {
                                     No products found
                                 </h2>
 
-                                <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
-                                    There are no matching products in this
-                                    category with your current filters.
+                                <p className="mt-2 max-w-md text-sm leading-6 text-slate-500">
+                                    No products match this collection and
+                                    the selected filters. You can reset
+                                    the filters or browse the full catalogue.
                                 </p>
 
                                 <button
                                     type="button"
                                     onClick={clearFilters}
-                                    className="mt-5 inline-flex min-h-11 items-center gap-2 bg-[#6D28D9] px-5 text-sm font-semibold text-white hover:bg-[#5B21B6]"
+                                    className="mt-5 inline-flex min-h-11 items-center gap-2 bg-[#6D28D9] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#5B21B6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D28D9] focus-visible:ring-offset-2"
                                 >
                                     Reset filters
-                                    <ArrowRight size={15} aria-hidden="true" />
+                                    <ArrowRight
+                                        size={15}
+                                        aria-hidden="true"
+                                    />
                                 </button>
 
                                 <Link
