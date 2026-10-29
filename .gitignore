@@ -34,3 +34,7 @@ test-results/
 # Temporary files
 *.tmp
 *.log
+# Backups and local reports
+*.bak
+*-backup
+lh*.json
