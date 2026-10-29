@@ -380,10 +380,12 @@ export default function ProductDetails() {
                 toast.success(
                     `Stock limit reached. Cart quantity is now ${result.quantity} for this size and colour.`
                 );
-                return;
+            } else {
+                toast.success(`${product.name} added to your bag.`);
             }
 
-            toast.success(`${product.name} added to your bag.`);
+            // Cart mein successful addition ke baad Cart page kholein.
+            navigate("/cart");
         } catch {
             toast.error("Something went wrong. Please try again.");
         }
