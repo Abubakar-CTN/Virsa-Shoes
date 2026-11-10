@@ -87,8 +87,8 @@ export default function Footer() {
                         © {new Date().getFullYear()} Virsa.Shoe. All rights reserved.
                     </p>
 
-                    <p className="font-medium tracking-[0.02em] text-slate-500">
-                        Design by Syed Abubakar
+                    <p className="mt-12 flex flex-col gap-3 border-t border-[#E6D8BC] pt-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+                        Design By Syed Abubakar
                     </p>
                 </div>
             </div>
