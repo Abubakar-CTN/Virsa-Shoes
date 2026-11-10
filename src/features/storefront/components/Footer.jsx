@@ -84,7 +84,7 @@ export default function Footer() {
 
                 <div className="mt-12 flex flex-col gap-3 border-t border-[#E6D8BC] pt-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
                     <p>
-                        © {new Date().getFullYear()} Virsa.Shoe. All Rights Reserved. <br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Design By Syed Abubakar
+                        © {new Date().getFullYear()} Virsa.Shoe. All Rights Reserved. <br />   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Design By Syed Abubakar
                     </p>
 
                     {/* <p className="font-medium tracking-[0.02em] text-slate-500">
