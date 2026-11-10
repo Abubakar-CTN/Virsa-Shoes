@@ -279,18 +279,7 @@ export default function Shop() {
                             </button>
                         </form>
 
-                        <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
-                            <span>
-                                <strong className="text-[#0F172A]">
-                                    {isPending && products.length === 0
-                                        ? "…"
-                                        : products.length}
-                                </strong>{" "}
-                                sample styles
-                            </span>
-
-                            <span className="h-3 w-px bg-[#CBD5E1]" />
-
+                        <div className="mt-5">
                             <Link
                                 to="/size-guide"
                                 className="font-medium text-[#6D28D9] hover:underline"
