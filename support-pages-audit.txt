@@ -1,0 +1,954 @@
+﻿VIRSA.SHOE - SUPPORT PAGES AUDIT
+Generated: 11/12/2026 22:49:52
+Project: C:\Users\Abubakar Syed najam\OneDrive\Desktop\Virsa.Shoe
+
+========== 1. GIT STATUS ==========
+
+
+========== 2. SUPPORT FILE INVENTORY ==========
+src\features\storefront\components\Footer.jsx | 3.96 KB
+src\features\storefront\pages\SizeGuide.jsx | 3.64 KB
+src\features\storefront\pages\StoreLocator.jsx | 2.92 KB
+src\features\storefront\pages\TrackOrder.jsx | 4.95 KB
+
+========== 3. SUPPORT ROUTE REFERENCES ==========
+src\components\shared\RouteMeta.jsx : Line 36 : "/about": {
+src\components\shared\RouteMeta.jsx : Line 41 : "/contact": {
+src\components\shared\RouteMeta.jsx : Line 46 : "/faq": {
+src\components\shared\RouteMeta.jsx : Line 51 : "/track-order": {
+src\components\shared\RouteMeta.jsx : Line 56 : "/size-guide": {
+src\components\shared\RouteMeta.jsx : Line 57 : title: "Footwear Size Guide | Virsa.Shoe",
+src\components\shared\RouteMeta.jsx : Line 59 : "Use the Virsa.Shoe size guide to help choose your footwear size.",
+src\components\shared\RouteMeta.jsx : Line 61 : "/store-locator": {
+src\components\shared\RouteMeta.jsx : Line 62 : title: "Store Locator | Virsa.Shoe",
+src\components\shared\RouteMeta.jsx : Line 81 : "/track-order",
+src\features\account\pages\OrderDetails.jsx : Line 455 : to="/contact"
+src\features\catalog\pages\Shop.jsx : Line 284 : to="/size-guide"
+src\features\owner\pages\SEO.jsx : Line 51 : path: "/contact",
+src\features\storefront\components\Day4FinishSections.jsx : Line 20 : description: "Use our size guide before choosing.",
+src\features\storefront\components\Day4FinishSections.jsx : Line 149 : function StoreLocatorSection() {
+src\features\storefront\components\Day4FinishSections.jsx : Line 177 : to="/store-locator"
+src\features\storefront\components\Day4FinishSections.jsx : Line 193 : <StoreLocatorSection />
+src\features\storefront\components\Footer.jsx : Line 19 : { label: "Frequently asked questions", to: "/faq" },
+src\features\storefront\components\Footer.jsx : Line 20 : { label: "Track your order", to: "/track-order" },
+src\features\storefront\components\Footer.jsx : Line 21 : { label: "Size guide", to: "/size-guide" },
+src\features\storefront\components\Footer.jsx : Line 22 : { label: "Store locator", to: "/store-locator" },
+src\features\storefront\components\Footer.jsx : Line 23 : { label: "Contact us", to: "/contact" },
+src\features\storefront\components\Footer.jsx : Line 24 : { label: "About Virsa.Shoe", to: "/about" },
+src\features\storefront\components\MobileMenu.jsx : Line 155 : <Link to="/track-order" onClick={onClose} className="flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+src\features\storefront\components\MobileMenu.jsx : Line 157 : Track order
+src\features\storefront\components\MobileMenu.jsx : Line 159 : <Link to="/size-guide" onClick={onClose} className="flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+src\features\storefront\components\MobileMenu.jsx : Line 161 : Size guide
+src\features\storefront\components\MobileMenu.jsx : Line 163 : <Link to="/store-locator" onClick={onClose} className="flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+src\features\storefront\components\MobileMenu.jsx : Line 165 : Store locator
+src\features\storefront\components\MobileMenu.jsx : Line 167 : <Link to="/faq" onClick={onClose} className="flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+src\features\storefront\components\MobileMenu.jsx : Line 169 : FAQs
+src\features\storefront\components\MobileMenu.jsx : Line 171 : <Link to="/contact" onClick={onClose} className="col-span-2 flex items-center gap-2 py-2 text-xs font-medium text-[#5D3D14] hover:text-[#78531F]">
+src\features\storefront\pages\Home.jsx : Line 54 : title: "Size guide",
+src\features\storefront\pages\Home.jsx : Line 56 : to: "/size-guide",
+src\features\storefront\pages\Home.jsx : Line 62 : to: "/track-order",
+src\features\storefront\pages\Home.jsx : Line 66 : title: "Help & FAQs",
+src\features\storefront\pages\Home.jsx : Line 68 : to: "/faq",
+src\features\storefront\pages\ProductDetails.jsx : Line 263 : to="/size-guide"
+src\features\storefront\pages\ProductDetails.jsx : Line 267 : Size guide
+src\features\storefront\pages\Shop.jsx : Line 349 : <Link to="/size-guide" className="inline-flex min-h-10 shrink-0 items-center gap-2 text-[10px] font-bold uppercase tracking-[0.08em] text-[#78531F] underline-offset-4 hover:underline">Need help with sizing? <ArrowRight size={13} aria-hidden="true" /></Link>
+src\features\storefront\pages\SizeGuide.jsx : Line 25 : export default function SizeGuide() {
+src\features\storefront\pages\SizeGuide.jsx : Line 39 : Shoe Size Guide
+src\features\storefront\pages\StoreLocator.jsx : Line 4 : export default function StoreLocator() {
+src\features\storefront\pages\StoreLocator.jsx : Line 18 : Store Locator
+src\features\storefront\pages\StoreLocator.jsx : Line 54 : to="/contact"
+src\features\storefront\pages\TrackOrder.jsx : Line 5 : export default function TrackOrder() {
+src\routes\StoreRouteElements.jsx : Line 104 : // Track Order
+src\routes\StoreRouteElements.jsx : Line 105 : const TrackOrderLazy = lazy(
+src\routes\StoreRouteElements.jsx : Line 106 : () => import("../features/storefront/pages/TrackOrder.jsx")
+src\routes\StoreRouteElements.jsx : Line 109 : export const TrackOrder = (props) => (
+src\routes\StoreRouteElements.jsx : Line 111 : <TrackOrderLazy {...props} />
+src\routes\StoreRouteElements.jsx : Line 115 : // Size Guide
+src\routes\StoreRouteElements.jsx : Line 116 : const SizeGuideLazy = lazy(
+src\routes\StoreRouteElements.jsx : Line 117 : () => import("../features/storefront/pages/SizeGuide.jsx")
+src\routes\StoreRouteElements.jsx : Line 120 : export const SizeGuide = (props) => (
+src\routes\StoreRouteElements.jsx : Line 122 : <SizeGuideLazy {...props} />
+src\routes\StoreRouteElements.jsx : Line 126 : // Store Locator
+src\routes\StoreRouteElements.jsx : Line 127 : const StoreLocatorLazy = lazy(
+src\routes\StoreRouteElements.jsx : Line 128 : () => import("../features/storefront/pages/StoreLocator.jsx")
+src\routes\StoreRouteElements.jsx : Line 131 : export const StoreLocator = (props) => (
+src\routes\StoreRouteElements.jsx : Line 133 : <StoreLocatorLazy {...props} />
+src\routes\StoreRoutes.jsx : Line 18 : SizeGuide,
+src\routes\StoreRoutes.jsx : Line 19 : StoreLocator,
+src\routes\StoreRoutes.jsx : Line 20 : TrackOrder,
+src\routes\StoreRoutes.jsx : Line 110 : path: "faq",
+src\routes\StoreRoutes.jsx : Line 121 : path: "track-order",
+src\routes\StoreRoutes.jsx : Line 122 : element: <TrackOrder />,
+src\routes\StoreRoutes.jsx : Line 125 : path: "size-guide",
+src\routes\StoreRoutes.jsx : Line 126 : element: <SizeGuide />,
+src\routes\StoreRoutes.jsx : Line 129 : path: "store-locator",
+src\routes\StoreRoutes.jsx : Line 130 : element: <StoreLocator />,
+
+========== 4. SUPPORT PAGE SOURCE CODE ==========
+
+----------------------------------------
+FILE: src\features\storefront\components\Footer.jsx
+----------------------------------------
+
+import { ArrowUpRight } from "lucide-react";
+import { Link } from "react-router";
+
+const footerGroups = [
+    {
+        title: "SHOP",
+        links: [
+            { label: "Shop all", to: "/shop" },
+            { label: "New arrivals", to: "/shop?sort=new" },
+            { label: "Men", to: "/categories/men" },
+            { label: "Women", to: "/categories/women" },
+            { label: "Kids", to: "/categories/kids" },
+        ],
+    },
+    {
+        title: "HELP & SUPPORT",
+        links: [
+            { label: "Frequently asked questions", to: "/faq" },
+            { label: "Track your order", to: "/track-order" },
+            { label: "Size guide", to: "/size-guide" },
+            { label: "Store locator", to: "/store-locator" },
+            { label: "Contact us", to: "/contact" },
+            { label: "About Virsa.Shoe", to: "/about" },
+        ],
+    },
+    {
+        title: "YOUR ACCOUNT",
+        links: [
+            { label: "My account", to: "/login" },
+            { label: "My wishlist", to: "/wishlist" },
+            { label: "Shopping cart", to: "/cart" },
+        ],
+    },
+];
+
+export default function Footer() {
+    return (
+        <footer className="mt-16 border-t border-[#E6D8BC] bg-white">
+            <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 sm:py-14 lg:px-10">
+                <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.35fr_1fr_1fr_1fr] lg:gap-12">
+                    <div>
+                        <Link
+                            to="/"
+                            className="inline-block text-[24px] font-extrabold tracking-[-0.055em] text-[#33251B]"
+                        >
+                            VIRSA<span className="text-[#78531F]">.SHOE</span>
+                        </Link>
+
+                        <p className="mt-4 max-w-xs text-sm leading-6 text-slate-600">
+                            Thoughtful footwear for everyday plans, familiar places and new experiences.
+                        </p>
+
+                        <Link
+                            to="/shop"
+                            className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-[#78531F] transition-colors hover:text-[#5D3D14]"
+                        >
+                            Explore the collection
+                            <ArrowUpRight size={15} aria-hidden="true" />
+                        </Link>
+                    </div>
+
+                    {footerGroups.map((group) => (
+                        <div key={group.title}>
+                            <h2 className="text-[10px] font-bold tracking-[0.15em] text-[#33251B]">
+                                {group.title}
+                            </h2>
+
+                            <ul className="mt-5 space-y-3">
+                                {group.links.map((link) => (
+                                    <li key={link.label}>
+                                        <Link
+                                            to={link.to}
+                                            className="text-sm text-slate-600 transition-colors hover:text-[#78531F]"
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mt-12 flex flex-col gap-3 border-t border-[#E6D8BC] pt-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+                    <p>
+                        Â© {new Date().getFullYear()} Virsa.Shoe. All Rights Reserved. <br />   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Design By Syed Abubakar
+                    </p>
+
+                    {/* <p className="font-medium tracking-[0.02em] text-slate-500">
+                        Design By Syed Abubakar
+                    </p> */}
+                </div>
+            </div>
+        </footer>
+    );
+}
+
+
+----------------------------------------
+FILE: src\features\storefront\pages\SizeGuide.jsx
+----------------------------------------
+import { Ruler, ArrowRight, Info } from "lucide-react";
+import { Link } from "react-router";
+
+const measurementSteps = [
+    {
+        number: "01",
+        title: "Place your foot",
+        description:
+            "Stand on a sheet of paper with your heel lightly touching a wall.",
+    },
+    {
+        number: "02",
+        title: "Measure the length",
+        description:
+            "Mark the tip of your longest toe and measure from the wall to that mark.",
+    },
+    {
+        number: "03",
+        title: "Measure both feet",
+        description:
+            "Use the measurement of your larger foot when comparing sizes.",
+    },
+];
+
+export default function SizeGuide() {
+    return (
+        <section className="bg-[#FBF8F1] px-4 py-14 sm:py-20">
+            <div className="mx-auto max-w-4xl">
+                <div className="text-center">
+                    <div className="mx-auto mb-5 grid size-14 place-items-center rounded-xl bg-[#F3EBDD] text-[#78531F]">
+                        <Ruler size={27} aria-hidden="true" />
+                    </div>
+
+                    <p className="text-xs font-bold tracking-[0.16em] text-[#78531F]">
+                        FIND YOUR FIT
+                    </p>
+
+                    <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[#33251B] sm:text-4xl">
+                        Shoe Size Guide
+                    </h1>
+
+                    <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-600">
+                        A comfortable fit starts with a careful measurement.
+                        Follow these steps before choosing your footwear size.
+                    </p>
+                </div>
+
+                <div className="mt-10 grid gap-4 md:grid-cols-3">
+                    {measurementSteps.map((step) => (
+                        <article
+                            key={step.number}
+                            className="rounded-xl border border-[#E6D8BC] bg-white p-6"
+                        >
+                            <span className="text-sm font-extrabold text-[#B28B3D]">
+                                {step.number}
+                            </span>
+                            <h2 className="mt-4 text-lg font-bold text-[#33251B]">
+                                {step.title}
+                            </h2>
+                            <p className="mt-3 text-sm leading-6 text-slate-600">
+                                {step.description}
+                            </p>
+                        </article>
+                    ))}
+                </div>
+
+                <div className="mt-6 flex gap-3 rounded-xl border border-[#E6D8BC] bg-white p-5">
+                    <Info
+                        size={21}
+                        className="mt-0.5 shrink-0 text-[#78531F]"
+                        aria-hidden="true"
+                    />
+                    <p className="text-sm leading-6 text-slate-600">
+                        Shoe sizing can vary by style. Check the available
+                        sizes and any fit information on the individual
+                        product page before ordering.
+                    </p>
+                </div>
+
+                <div className="mt-8 text-center">
+                    <Link
+                        to="/shop"
+                        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#78531F] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#5D3D14]"
+                    >
+                        Explore footwear
+                        <ArrowRight size={17} aria-hidden="true" />
+                    </Link>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+----------------------------------------
+FILE: src\features\storefront\pages\StoreLocator.jsx
+----------------------------------------
+import { MapPin, ArrowRight, Store } from "lucide-react";
+import { Link } from "react-router";
+
+export default function StoreLocator() {
+    return (
+        <section className="bg-[#FBF8F1] px-4 py-14 sm:py-20">
+            <div className="mx-auto max-w-3xl">
+                <div className="rounded-2xl border border-[#E6D8BC] bg-white p-6 text-center shadow-sm sm:p-12">
+                    <div className="mx-auto mb-6 grid size-16 place-items-center rounded-2xl bg-[#F3EBDD] text-[#78531F]">
+                        <MapPin size={30} aria-hidden="true" />
+                    </div>
+
+                    <p className="text-xs font-bold tracking-[0.16em] text-[#78531F]">
+                        FIND VIRSA
+                    </p>
+
+                    <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[#33251B] sm:text-4xl">
+                        Store Locator
+                    </h1>
+
+                    <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-slate-600">
+                        Find a Virsa.Shoe location when our verified store
+                        directory becomes available.
+                    </p>
+
+                    <div className="mx-auto mt-8 max-w-xl rounded-xl border border-dashed border-[#D5C5A5] bg-[#FBF8F1] p-6">
+                        <Store
+                            size={27}
+                            className="mx-auto text-[#78531F]"
+                            aria-hidden="true"
+                        />
+
+                        <h2 className="mt-4 text-lg font-bold text-[#33251B]">
+                            Store directory coming soon
+                        </h2>
+
+                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                            Verified addresses and opening hours have not been
+                            added to this demo yet. No store locations are
+                            being claimed here.
+                        </p>
+                    </div>
+
+                    <div className="mt-8 flex flex-wrap justify-center gap-3">
+                        <Link
+                            to="/shop"
+                            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#78531F] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#5D3D14]"
+                        >
+                            Shop online
+                            <ArrowRight size={16} aria-hidden="true" />
+                        </Link>
+
+                        <Link
+                            to="/contact"
+                            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-[#D5C5A5] px-5 py-3 text-sm font-semibold text-[#5D3D14] transition-colors hover:bg-[#FBF8F1]"
+                        >
+                            Contact information
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+----------------------------------------
+FILE: src\features\storefront\pages\TrackOrder.jsx
+----------------------------------------
+import { useState } from "react";
+import { PackageSearch, ArrowRight } from "lucide-react";
+import { Link } from "react-router";
+
+export default function TrackOrder() {
+    const [submitted, setSubmitted] = useState(false);
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        setSubmitted(true);
+    }
+
+    return (
+        <section className="bg-[#FBF8F1] px-4 py-14 sm:py-20">
+            <div className="mx-auto max-w-2xl">
+                <div className="rounded-2xl border border-[#E6D8BC] bg-white p-6 shadow-sm sm:p-10">
+                    <div className="mb-6 grid size-14 place-items-center rounded-xl bg-[#F3EBDD] text-[#78531F]">
+                        <PackageSearch size={28} aria-hidden="true" />
+                    </div>
+
+                    <p className="text-xs font-bold tracking-[0.16em] text-[#78531F]">
+                        ORDER SUPPORT
+                    </p>
+
+                    <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[#33251B] sm:text-4xl">
+                        Track your order
+                    </h1>
+
+                    <p className="mt-4 text-sm leading-6 text-slate-600">
+                        Enter your order number and checkout email to prepare
+                        your tracking request.
+                    </p>
+
+                    <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                        <div>
+                            <label
+                                htmlFor="order-number"
+                                className="mb-2 block text-sm font-semibold text-[#33251B]"
+                            >
+                                Order number
+                            </label>
+                            <input
+                                id="order-number"
+                                name="orderNumber"
+                                required
+                                placeholder="e.g. VIRSA-10001"
+                                className="w-full rounded-lg border border-[#D5C5A5] px-4 py-3 text-sm outline-none focus:border-[#78531F] focus:ring-2 focus:ring-[#78531F]/20"
+                            />
+                        </div>
+
+                        <div>
+                            <label
+                                htmlFor="order-email"
+                                className="mb-2 block text-sm font-semibold text-[#33251B]"
+                            >
+                                Email used at checkout
+                            </label>
+                            <input
+                                id="order-email"
+                                name="email"
+                                type="email"
+                                required
+                                placeholder="you@example.com"
+                                className="w-full rounded-lg border border-[#D5C5A5] px-4 py-3 text-sm outline-none focus:border-[#78531F] focus:ring-2 focus:ring-[#78531F]/20"
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#78531F] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#5D3D14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#78531F] focus-visible:ring-offset-2"
+                        >
+                            Check order status
+                            <ArrowRight size={17} aria-hidden="true" />
+                        </button>
+                    </form>
+
+                    {submitted && (
+                        <div
+                            role="status"
+                            className="mt-5 rounded-lg border border-[#E6D8BC] bg-[#FBF8F1] p-4 text-sm leading-6 text-[#5D3D14]"
+                        >
+                            Demo notice: live order tracking is not connected
+                            yet. No real order status has been retrieved.
+                        </div>
+                    )}
+
+                    <p className="mt-5 text-xs leading-5 text-slate-500">
+                        This is a demonstration form. Real tracking will be
+                        connected after the order backend is available.
+                    </p>
+
+                    <div className="mt-7 flex flex-wrap gap-4 border-t border-[#E6D8BC] pt-5">
+                        <Link
+                            to="/"
+                            className="text-sm font-semibold text-[#78531F] hover:text-[#5D3D14]"
+                        >
+                            Back to Home
+                        </Link>
+                        <Link
+                            to="/shop"
+                            className="text-sm font-semibold text-[#78531F] hover:text-[#5D3D14]"
+                        >
+                            Explore Shop
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+========== 5. ROUTE FILES ==========
+
+----------------------------------------
+FILE: src\routes\StoreRoutes.jsx
+----------------------------------------
+import { Navigate } from "react-router";
+
+import StoreLayout from "../layouts/StoreLayout.jsx";
+import PlaceholderPage from "../components/shared/PlaceholderPage.jsx";
+
+import {
+    Addresses,
+    Cart,
+    Category,
+    Checkout,
+    Home,
+    OrderDetails,
+    Orders,
+    ProductDetails,
+    Profile,
+    Search,
+    Shop,
+    SizeGuide,
+    StoreLocator,
+    TrackOrder,
+    Wishlist,
+} from "./StoreRouteElements.jsx";
+
+export const storeRoutes = {
+    path: "/",
+    element: <StoreLayout />,
+
+    children: [
+        {
+            index: true,
+            element: <Home />,
+        },
+        {
+            path: "shop",
+            element: <Shop />,
+        },
+        {
+            path: "categories/:slug",
+            element: <Category />,
+        },
+        {
+            path: "search",
+            element: <Search />,
+        },
+        {
+            path: "products/:slug",
+            element: <ProductDetails />,
+        },
+        {
+            path: "cart",
+            element: <Cart />,
+        },
+        {
+            path: "wishlist",
+            element: <Wishlist />,
+        },
+        {
+            path: "checkout",
+            element: <Checkout />,
+        },
+
+        // Account entry points
+        {
+            path: "account",
+            element: <Navigate to="/account/profile" replace />,
+        },
+        {
+            path: "customer",
+            element: <Navigate to="/account/profile" replace />,
+        },
+
+        // Customer Account
+        {
+            path: "account/profile",
+            element: <Profile />,
+        },
+        {
+            path: "account/addresses",
+            element: <Addresses />,
+        },
+        {
+            path: "account/orders",
+            element: <Orders />,
+        },
+        {
+            path: "account/orders/:orderId",
+            element: <OrderDetails />,
+        },
+
+        // Brand Information
+        {
+            path: "about",
+            element: (
+                <PlaceholderPage
+                    title="About Virsa.Shoe"
+                    description="Discover our brand and footwear philosophy."
+                />
+            ),
+        },
+        {
+            path: "contact",
+            element: (
+                <PlaceholderPage
+                    title="Contact Us"
+                    description="Customer support information will appear here."
+                />
+            ),
+        },
+        {
+            path: "faq",
+            element: (
+                <PlaceholderPage
+                    title="Frequently Asked Questions"
+                    description="Find answers about sizing, delivery, orders and returns."
+                />
+            ),
+        },
+
+        // Customer Services
+        {
+            path: "track-order",
+            element: <TrackOrder />,
+        },
+        {
+            path: "size-guide",
+            element: <SizeGuide />,
+        },
+        {
+            path: "store-locator",
+            element: <StoreLocator />,
+        },
+    ],
+};
+
+----------------------------------------
+FILE: src\routes\StoreRouteElements.jsx
+----------------------------------------
+import { lazy, Suspense } from "react";
+
+const RouteChunkFallback = () => (
+    <div
+        role="status"
+        aria-live="polite"
+        className="flex min-h-40 items-center justify-center bg-surface-muted px-4 text-sm text-text-secondary"
+    >
+        Loading Virsa.Shoe...
+    </div>
+);
+
+// Home
+export { default as Home } from "../features/storefront/pages/Home.jsx";
+
+// Customer Profile
+const ProfileLazy = lazy(
+    () => import("../features/account/pages/Profile.jsx")
+);
+
+export const Profile = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <ProfileLazy {...props} />
+    </Suspense>
+);
+
+// Customer Addresses
+const AddressesLazy = lazy(
+    () => import("../features/account/pages/Addresses.jsx")
+);
+
+export const Addresses = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <AddressesLazy {...props} />
+    </Suspense>
+);
+
+// Customer Orders
+const OrdersLazy = lazy(
+    () => import("../features/account/pages/Orders.jsx")
+);
+
+export const Orders = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <OrdersLazy {...props} />
+    </Suspense>
+);
+
+// Customer Order Details
+const OrderDetailsLazy = lazy(
+    () => import("../features/account/pages/OrderDetails.jsx")
+);
+
+export const OrderDetails = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <OrderDetailsLazy {...props} />
+    </Suspense>
+);
+
+// Cart
+const CartLazy = lazy(
+    () => import("../features/cart/pages/Cart.jsx")
+);
+
+export const Cart = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <CartLazy {...props} />
+    </Suspense>
+);
+
+// Checkout
+const CheckoutLazy = lazy(
+    () => import("../features/checkout/pages/Checkout.jsx")
+);
+
+export const Checkout = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <CheckoutLazy {...props} />
+    </Suspense>
+);
+
+// Product Details
+const ProductDetailsLazy = lazy(
+    () => import("../features/catalog/pages/ProductDetails.jsx")
+);
+
+export const ProductDetails = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <ProductDetailsLazy {...props} />
+    </Suspense>
+);
+
+// Wishlist
+const WishlistLazy = lazy(
+    () => import("../features/wishlist/pages/Wishlist.jsx")
+);
+
+export const Wishlist = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <WishlistLazy {...props} />
+    </Suspense>
+);
+
+// Track Order
+const TrackOrderLazy = lazy(
+    () => import("../features/storefront/pages/TrackOrder.jsx")
+);
+
+export const TrackOrder = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <TrackOrderLazy {...props} />
+    </Suspense>
+);
+
+// Size Guide
+const SizeGuideLazy = lazy(
+    () => import("../features/storefront/pages/SizeGuide.jsx")
+);
+
+export const SizeGuide = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <SizeGuideLazy {...props} />
+    </Suspense>
+);
+
+// Store Locator
+const StoreLocatorLazy = lazy(
+    () => import("../features/storefront/pages/StoreLocator.jsx")
+);
+
+export const StoreLocator = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <StoreLocatorLazy {...props} />
+    </Suspense>
+);
+
+// Shop
+const ShopLazy = lazy(
+    () => import("../features/catalog/pages/Shop.jsx")
+);
+
+export const Shop = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <ShopLazy {...props} />
+    </Suspense>
+);
+
+// Search
+const SearchLazy = lazy(
+    () => import("../features/catalog/pages/Search.jsx")
+);
+
+export const Search = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <SearchLazy {...props} />
+    </Suspense>
+);
+
+// Category
+const CategoryLazy = lazy(
+    () => import("../features/catalog/pages/Category.jsx")
+);
+
+export const Category = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <CategoryLazy {...props} />
+    </Suspense>
+);
+
+----------------------------------------
+FILE: src\routes\AppRoutes.jsx
+----------------------------------------
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
+
+import RouteMeta from "../components/shared/RouteMeta.jsx";
+
+import { storeRoutes } from "./StoreRoutes.jsx";
+import { authRoutes } from "./AuthRoutes.jsx";
+import { adminRoutes } from "./AdminRoutes.jsx";
+import { ownerRoutes } from "./OwnerRoutes.jsx";
+
+import NotFound from "../pages/NotFound.jsx";
+
+const router = createBrowserRouter([
+    {
+        element: <RouteMeta />,
+        children: [
+            storeRoutes,
+            ...authRoutes,
+            adminRoutes,
+            ownerRoutes,
+            {
+                path: "*",
+                element: <NotFound />,
+            },
+        ],
+    },
+]);
+
+function AppRoutes() {
+    return <RouterProvider router={router} />;
+}
+
+export default AppRoutes;
+
+----------------------------------------
+FILE: src\App.jsx
+----------------------------------------
+import AppRoutes from "./routes/AppRoutes.jsx";
+
+function App() {
+  return <AppRoutes />;
+}
+
+export default App;
+
+
+========== 6. NAVIGATION FILES ==========
+
+FILE: src\config\navigation.js
+export const storefrontNavigation = [
+    {
+        label: "NEW IN",
+        to: "/shop?sort=new",
+        groups: [
+            {
+                title: "JUST ARRIVED",
+                links: [
+                    { label: "Latest Arrivals", to: "/shop?sort=new" },
+                    { label: "Trending Styles", to: "/shop?sort=popular" },
+                    { label: "Everyday Sneakers", to: "/categories/sneakers" },
+                ],
+            },
+            {
+                title: "DISCOVER",
+                links: [
+                    { label: "Shop All Footwear", to: "/shop" },
+                    { label: "Casual Shoes", to: "/categories/casual" },
+                    { label: "Comfort Collection", to: "/categories/comfort" },
+                ],
+            },
+        ],
+    },
+    {
+        label: "MEN",
+        to: "/categories/men",
+        groups: [
+            {
+                title: "SHOP MEN",
+                links: [
+                    { label: "All Men's Shoes", to: "/categories/men" },
+                    { label: "Sneakers", to: "/categories/sneakers" },
+                    { label: "Formal Shoes", to: "/categories/formal" },
+                    { label: "Casual Shoes", to: "/categories/casual" },
+                ],
+            },
+            {
+                title: "MORE STYLES",
+                links: [
+                    { label: "Loafers", to: "/categories/loafers" },
+                    { label: "Sandals", to: "/categories/sandals" },
+                    { label: "Slides", to: "/categories/slides" },
+                    { label: "Peshawari", to: "/categories/peshawari" },
+                ],
+            },
+        ],
+    },
+    {
+        label: "WOMEN",
+        to: "/categories/women",
+        groups: [
+            {
+                title: "SHOP WOMEN",
+                links: [
+                    { label: "All Women's Shoes", to: "/categories/women" },
+                    { label: "Sneakers", to: "/categories/sneakers" },
+                    { label: "Flats", to: "/categories/flats" },
+                    { label: "Heels", to: "/categories/heels" },
+                ],
+            },
+            {
+                title: "EVERYDAY STYLE",
+                links: [
+                    { label: "Sandals", to: "/categories/sandals" },
+                    { label: "Casual Shoes", to: "/categories/casual" },
+                    { label: "Slides", to: "/categories/slides" },
+                    { label: "Shop All", to: "/shop" },
+                ],
+            },
+        ],
+    },
+    {
+        label: "KIDS",
+        to: "/categories/kids",
+        groups: [
+            {
+                title: "SHOP KIDS",
+                links: [
+                    { label: "All Kids' Shoes", to: "/categories/kids" },
+                    { label: "School Shoes", to: "/categories/school-shoes" },
+                    { label: "Kids' Sneakers", to: "/categories/sneakers" },
+                ],
+            },
+            {
+                title: "EVERYDAY COMFORT",
+                links: [
+                    { label: "Sandals", to: "/categories/sandals" },
+                    { label: "Slides", to: "/categories/slides" },
+                    { label: "Shop All Footwear", to: "/shop" },
+                ],
+            },
+        ],
+    },
+    {
+        label: "COLLECTIONS",
+        to: "/shop",
+        groups: [
+            {
+                title: "EXPLORE",
+                links: [
+                    { label: "Everyday Essentials", to: "/categories/everyday" },
+                    { label: "Work & Occasion", to: "/categories/formal" },
+                    { label: "Weekend Styles", to: "/categories/casual" },
+                ],
+            },
+            {
+                title: "SHOP BY STYLE",
+                links: [
+                    { label: "Sneakers", to: "/categories/sneakers" },
+                    { label: "Formal", to: "/categories/formal" },
+                    { label: "Casual", to: "/categories/casual" },
+                    { label: "Shop Everything", to: "/shop" },
+                ],
+            },
+        ],
+    },
+    {
+        label: "SALE",
+        to: "/shop?sale=true",
+        sale: true,
+    },
+];
+

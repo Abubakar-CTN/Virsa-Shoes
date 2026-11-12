@@ -1,13 +1,16 @@
+
 import { Navigate } from "react-router";
 
 import StoreLayout from "../layouts/StoreLayout.jsx";
-import PlaceholderPage from "../components/shared/PlaceholderPage.jsx";
 
 import {
+    About,
     Addresses,
     Cart,
     Category,
     Checkout,
+    Contact,
+    FAQ,
     Home,
     OrderDetails,
     Orders,
@@ -90,33 +93,18 @@ export const storeRoutes = {
         // Brand Information
         {
             path: "about",
-            element: (
-                <PlaceholderPage
-                    title="About Virsa.Shoe"
-                    description="Discover our brand and footwear philosophy."
-                />
-            ),
+            element: <About />,
         },
         {
             path: "contact",
-            element: (
-                <PlaceholderPage
-                    title="Contact Us"
-                    description="Customer support information will appear here."
-                />
-            ),
-        },
-        {
-            path: "faq",
-            element: (
-                <PlaceholderPage
-                    title="Frequently Asked Questions"
-                    description="Find answers about sizing, delivery, orders and returns."
-                />
-            ),
+            element: <Contact />,
         },
 
-        // Customer Services
+        // Help & Support
+        {
+            path: "faq",
+            element: <FAQ />,
+        },
         {
             path: "track-order",
             element: <TrackOrder />,

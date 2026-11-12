@@ -1,4 +1,5 @@
-﻿import { lazy, Suspense } from "react";
+﻿
+import { lazy, Suspense } from "react";
 
 const RouteChunkFallback = () => (
     <div
@@ -98,6 +99,39 @@ const WishlistLazy = lazy(
 export const Wishlist = (props) => (
     <Suspense fallback={<RouteChunkFallback />}>
         <WishlistLazy {...props} />
+    </Suspense>
+);
+
+// FAQ
+const FAQLazy = lazy(
+    () => import("../features/storefront/pages/FAQ.jsx")
+);
+
+export const FAQ = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <FAQLazy {...props} />
+    </Suspense>
+);
+
+// About Virsa.Shoe
+const AboutLazy = lazy(
+    () => import("../features/storefront/pages/About.jsx")
+);
+
+export const About = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <AboutLazy {...props} />
+    </Suspense>
+);
+
+// Contact Us
+const ContactLazy = lazy(
+    () => import("../features/storefront/pages/Contact.jsx")
+);
+
+export const Contact = (props) => (
+    <Suspense fallback={<RouteChunkFallback />}>
+        <ContactLazy {...props} />
     </Suspense>
 );
 
